@@ -18,27 +18,40 @@ Once the project moves into development, the press release can be used as a touc
  
 ## Heading ##
   > Name the product in a way the reader (i.e. your target customers) will understand.
+  Carcassonne for the Web
 
 ## Sub-Heading ##
   > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  Play Carcassonne online with your friends in real-time!
 
 ## Summary ##
   > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  Carcassonne for the Web allows you and your friends to quickly jump into a game of Carcassonne by simply visiting a URL. That's it.
+  Supporting between 2 to 5 players in real-time, Carcassonne for the Web is the easiest way to play this award-winning strategy board game.
 
 ## Problem ##
   > Describe the problem your product solves.
+  Carcassonne is an amazing board game, but like all board games it requires players to be physically present, manage scoring and other game mechanics
+  on their own, and then there's the setup and cleanup of the game pieces of course.
 
 ## Solution ##
   > Describe how your product elegantly solves the problem.
+  Carcassonne for the Web allows you to play with your friends anytime, anywhere, for free. Score tracking, validating players' moves, setup and cleanup...we do it all.
+  You can even play multiple games at once! Just open another tab and visit <url>!
 
 ## Quote from You ##
   > A quote from a spokesperson in your company.
+  "I always had a strong board gaming group back in my hometown, but when I moved to another state I still wanted to play one of my favorite games with my friends.
+  With Carcassonne for the Web, all it takes is a quick text message and we can get together and play a game within minutes, despite being separated by hundreds of miles."
 
 ## How to Get Started ##
   > Describe how easy it is to get started.
+  Just visit <url> to get started! It's that simple!
 
 ## Customer Quote ##
   > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  "This is SO much simpler than trying to get the gang together all at the same time, and the price (FREE!) is pretty tough to beat."
 
 ## Closing and Call to Action ##
   > Wrap it up and give pointers where the reader should go next.
+  Carcassonne veteran, capable of racking up 30+ points off a single farm? New to Carcassonne and want to learn the rules? Both of you: click here! <url>
