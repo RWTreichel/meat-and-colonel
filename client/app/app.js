@@ -1,9 +1,15 @@
-angular.module('Game', [
-
+angular.module('game', [
+  'game.home',
+  'game.grid',
+  'ngRoute'
 ])
 .config(function($routeProvider, $httpProvider) {
   $routeProvider
     .when('/', {
+      templateUrl: 'app/home/home.html',
+      controller: 'homeCtrl'
+    })
+    .when('/game', {
       templateUrl: 'app/grid/grid.html',
       controller: 'gridCtrl'
     });

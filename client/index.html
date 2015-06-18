@@ -1,11 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app='game'>
 <head>
   <meta charset="utf-8">
   <title>Carcassonne</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/grid.css">
 </head>
 <body>
   <div ng-view></div>
-  <img src="http://pit.dirty.ru/lepro/2/2014/04/08/122620-75a975380706957ec72c821924657766.jpg">
+<!--   <img src="http://pit.dirty.ru/lepro/2/2014/04/08/122620-75a975380706957ec72c821924657766.jpg"> -->
+
+  <script src='lib/angular/angular.min.js'></script>
+  <script src='lib/angular-route/angular-route.min.js'></script>
+
+  <script src='app/home/home.js'></script>
+  <script src='app/grid/grid.js'></script>
+  <script src='app/app.js'></script>
 </body>
 </html>
