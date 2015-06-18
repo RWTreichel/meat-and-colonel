@@ -6,7 +6,10 @@ var Board = function(size){
 };
 
 Board.prototype.placeTile = function(tile) {
-  // body...
+  // plan is for each active cell in the board to hold 
+  // a ref to an actual instance of a tile
+  // somehow..... 
 };
 
-var a = new Board(71);
+// var a = new Board(71);
+// console.log(a.grid);
