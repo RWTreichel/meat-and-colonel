@@ -6,7 +6,7 @@
 
   - __Product Owner__: Dick Treichel
   - __Scrum Master__: Stephan Tabor
-  - __Development Team Members__: Cody Scholberg, Amy Li
+  - __Development Team Members__: Amy Li, Cody Scholberg, Tyler Travers
 
 ## Table of Contents
 
