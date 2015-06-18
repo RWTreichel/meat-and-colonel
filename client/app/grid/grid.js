@@ -1,5 +1,5 @@
 // Create our grid module namespace
-var grid = angular.module('grid', []);
+var grid = angular.module('game.grid', []);
 
 // Create our grid controller
 grid.controller('gridCtrl', function($scope){

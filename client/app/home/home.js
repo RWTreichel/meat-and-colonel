@@ -1,4 +1,4 @@
-var home = angular.module('home', []);
+var home = angular.module('game.home', []);
 
 home.controller('homeCtrl', function($scope){
   $scope.init = function() {
