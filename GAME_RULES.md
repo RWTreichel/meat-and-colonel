@@ -30,3 +30,4 @@ Every turn consists of three steps:
 
 You can not put a follower down on a completed city if another player already has claimed it. In the case where you put down a farmer on an unclaimed green tile, and later on the board is expanded so that two farmers lay claim to the same farm, it is ok and both players will receive points at the end of the game.
 
+
