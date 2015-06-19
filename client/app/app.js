@@ -1,6 +1,7 @@
 angular.module('game', [
   'game.home',
   'game.grid',
+  'game.deck',
   'ngRoute'
 ])
 .config(function($routeProvider, $httpProvider) {
@@ -13,7 +14,7 @@ angular.module('game', [
       templateUrl: 'app/grid/grid.html',
       controller: 'gridCtrl'
     });
-})
+});
 // .run(function ($rootScope, $location, Auth) {
 //   // here inside the run phase of angular, our services and controllers
 //   // have just been registered and our app is ready
