@@ -147,5 +147,3 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, DeckService
   // Initialize game board
   $scope.init();
 });
-
-  
