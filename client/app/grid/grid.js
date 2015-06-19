@@ -10,5 +10,15 @@ grid.controller('gridCtrl', function($scope){
   $scope.init = function() {
     // Create our controller
   };
+  $scope.clickCell = function($event, x, y) {
+    // setCell(x, y);
+    console.log($event.target);
+  };
+
+  var setCell = function($event, x, y) {
+    // $scope.tile = {x: x, y: y};
+    // console.log($event.target);
+    // return angular.element($event.target);
+  };
 });
 
