@@ -108,6 +108,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, DeckService
     $scope.deck = DeckService.createNewDeck();
     DeckService.shuffle($scope.deck);
   };
+
   $scope.clickCell = function(event, x, y) {
     if (!cellAlreadyExists(x, y)) {
       // Draw from deck
