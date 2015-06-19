@@ -31,7 +31,7 @@ Tile.prototype.setCoordinates = function(x, y) {
   this._y = y;
 };
 
-Tile.prototype.getCoordinates = function(x, y) {
+Tile.prototype.getCoordinates = function() {
   return [this._x, this._y];
 };
 
@@ -39,3 +39,5 @@ Tile.prototype.getCoordinates = function(x, y) {
 Tile.prototype.addMeeple = function(meeple) {
   this.meeple = meeple;
 };
+
+module.exports = Tile;
