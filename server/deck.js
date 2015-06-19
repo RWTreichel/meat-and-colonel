@@ -17,20 +17,23 @@ var Deck = function(spec){
   }
 };
 
-// fisher yates shuffle yolo
+// classic fisher-yates shuffle
 // operates on this.deck
 Deck.prototype.shuffle = function() {
   if (this.deck.length === 0) {
-    console.log('you dun goofed');
+    console.log('you dun goofed, your deck is empty');
   }
   var currentIndex = this.deck.length, temporaryValue, randomIndex;
   while (0 !== currentIndex){
-    randomIndex = Math.floor( Math.random () * currentIndex);
+    randomIndex = Math.floor( Math.random () * currentIndex );
     currentIndex -= 1;
     temporaryValue = this.deck[currentIndex];
     this.deck[currentIndex] = this.deck[randomIndex];
     this.deck[randomIndex] = temporaryValue;
   }
+
+  // if group approves _ inclusion, replace all that with
+  // _.shuffle(this.deck);
 };
 
 // returns the card from the top of the deck
