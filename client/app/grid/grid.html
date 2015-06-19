@@ -1,5 +1,7 @@
 <div class='grid-container' ng-controller='gridCtrl'>
   <ul class='row' ng-repeat="i in range(72) track by $index">
-    <li class='cell' ng-repeat="i in range(72) track by $index"></li>
+    <li class='cell' ng-repeat="i in range(72) track by $index" ng-click='clickCell($event, $index, $parent.$index)'>
+      <div ng-if='tile'>{{ tile.x }}</div>
+    </li>
   </ul>
 </div>
