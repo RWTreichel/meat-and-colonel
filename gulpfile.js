@@ -15,7 +15,9 @@ var paths = {
     './client/app/app.js'
   ],
   stylesheets: [
-    './client/assets/css/**/*.css'
+    './client/assets/css/grid-reset.css',
+    './client/assets/css/grid.css',
+    './client/assets/css/deck.css'
   ]
 };
 
