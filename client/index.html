@@ -4,11 +4,20 @@
   <meta charset="utf-8">
   <title>Carcassonne</title>
   <link rel="stylesheet" href="assets/dist/main.css">
+  <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
 </head>
 <body>
   <div ng-view></div>
 <!--   <img src="http://pit.dirty.ru/lepro/2/2014/04/08/122620-75a975380706957ec72c821924657766.jpg"> -->
+
   <script src='app/grid/deckstub.js'></script>
+  <script>
+     var socket = io.connect('http://localhost:3000');
+     socket.on('currentTile', function (data) {
+       console.log(data);
+       //socket.emit('test2', { my: data });
+     }); 
+  </script>
   <script src='app/dist/main.js'></script>
 </body>
 </html>
