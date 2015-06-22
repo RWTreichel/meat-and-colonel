@@ -4,6 +4,7 @@ var cssMin = require('gulp-cssmin');
 var concat = require('gulp-concat');
 var jshint = require('gulp-jshint');
 var nodemon = require('gulp-nodemon');
+var sourcemap = require('gulp-sourcemaps');
 
 // We store the files we want to watch in an object for easy reference
 var paths = {
@@ -24,7 +25,9 @@ var paths = {
 
 gulp.task('scripts', function() {
   return gulp.src(paths.scripts)
-    .pipe(concat('main.js'))
+    .pipe(sourcemaps.init())
+      .pipe(concat('main.js'))
+    .pipe(sourcemaps.write())
     // Output to app/dist
     // TODO: UGLIFY AND RENAME FILE FOR MINIFY VERSION
     .pipe(gulp.dest('./client/app/dist'));
@@ -32,7 +35,9 @@ gulp.task('scripts', function() {
 
 gulp.task('stylesheets', function() {
   return gulp.src(paths.stylesheets)
-    .pipe(concat('main.css'))
+    .pipe(sourcemaps.init())
+      .pipe(concat('main.css'))
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('./client/assets/dist'));
 });
 
