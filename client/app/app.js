@@ -1,7 +1,7 @@
 angular.module('game', [
   'game.home',
   'game.grid',
-  'game.deck',
+  // 'game.deck',
   'ngRoute'
 ])
 .config(function($routeProvider, $httpProvider) {
@@ -15,6 +15,17 @@ angular.module('game', [
       controller: 'gridCtrl'
     });
 });
+// .run(function($rootScope, $location) {
+//   $rootScope.$on('$routeChangeStart', function(event, next, current) {
+//     if ($rootScope.user === null) {
+//       // no user name
+//       if (next.templateUrl === 'app/grid/grid.html') {
+//       } else {
+//         $location.path('/');
+//       }
+//     }
+//   });
+// });
 // .run(function ($rootScope, $location, Auth) {
 //   // here inside the run phase of angular, our services and controllers
 //   // have just been registered and our app is ready
