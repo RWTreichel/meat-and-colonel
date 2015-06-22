@@ -1,3 +1,7 @@
+<div class='game-container'>
+  
+
+
 <div class='grid-container' ng-controller='gridCtrl'>
   <ul class='row' ng-repeat="i in range(72) track by $index">
     <li class='cell' ng-repeat="i in range(72) track by $index" ng-click='clickCell($event, $index, $parent.$index)'>
@@ -8,3 +12,9 @@
 <div class="control-panel" ng-controller="deckCtrl">
   <img src="{{src}}">
 </div>
+
+
+
+</div>
+
+
