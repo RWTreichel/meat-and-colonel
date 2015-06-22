@@ -4,7 +4,7 @@ var cssMin = require('gulp-cssmin');
 var concat = require('gulp-concat');
 var jshint = require('gulp-jshint');
 var nodemon = require('gulp-nodemon');
-var sourcemap = require('gulp-sourcemaps');
+var sourcemaps = require('gulp-sourcemaps');
 
 // We store the files we want to watch in an object for easy reference
 var paths = {
