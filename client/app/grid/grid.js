@@ -56,6 +56,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
     }
   };
 
+  // These functions should be moved into a factory/service
   var updateGrid = function(x, y, tile) {
     $scope.grid[y][x] = tile;
     console.log($scope.grid[y]);
@@ -75,6 +76,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
     return tile;
   };
 
+  // Initialize game board
   $scope.init();
 });
 
