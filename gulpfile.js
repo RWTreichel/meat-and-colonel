@@ -12,6 +12,7 @@ var paths = {
     './client/lib/angular-route/angular-route.min.js',
     './client/app/home/home.js',
     './client/app/grid/grid.js',
+    './client/app/deck/deck.js',
     './client/app/app.js'
   ],
   stylesheets: [
