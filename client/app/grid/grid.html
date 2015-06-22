@@ -1,15 +1,9 @@
-<div class='game-container'>
+<div class='game-container' ng-controller='gridCtrl'>
   
-  <div class='grid-container' ng-controller='gridCtrl'>
+  <div class='grid-container' >
   
-    <div class='rotate'>
-      <button ng-click='rotate()'>Rotate: {{ orientation }}</button>
-      <!-- {{ rotation }} -->
-    </div>
-
     <ul class='row' ng-repeat="i in range(72) track by $index">
       <li class='cell' ng-repeat="i in range(72) track by $index" ng-click='clickCell($event, $index, $parent.$index)'>
-        <div ng-if='tile'>{{ tile.x }}</div>
       </li>
     </ul>
   </div>

@@ -115,6 +115,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, DeckService
       // Create our tile model
       var tile = new TileModel({x:x, y:y}, draw);
       tile.orientation = $scope.orientation;
+      $scope.src = tile.img;
       // We push a new tile onto the grid at xy
       updateGrid(x, y, tile);
       // We set the cell's tile background
@@ -147,3 +148,4 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, DeckService
   $scope.init();
 });
 
+  
