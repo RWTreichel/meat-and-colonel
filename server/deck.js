@@ -17,6 +17,7 @@ var Deck = function(spec){
       this.deck.push(new Tile ( key + i ));
     }
   }
+  this.startTile = this.deck.pop();
   Deck.prototype.shuffle.call(this);
 };
 

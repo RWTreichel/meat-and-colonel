@@ -13,7 +13,7 @@ var Meeples = function(){
   for (var j = 0; j < colors.length; j++) {
     var color = colors[j];
     this[color] = [];
-    for (var k = 0; k < 5; k++) {
+    for (var k = 0; k < 8; k++) {
       this[color].push( new Meeple(color, k) );
     }
   }
