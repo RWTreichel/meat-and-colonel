@@ -5,10 +5,10 @@
   // of a given card there is
 
 var deckSpec = {
+  d: 4,
   a: 2,
   b: 5,
   c: 1,
-  d: 4,
   e: 5,
   f: 2,
   g: 1,
