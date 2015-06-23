@@ -47,7 +47,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
   $scope.init = function() {
     // Create board
     $scope.grid = GridService.createEmptyGameBoard();
-    // angular.element(document).ready(function() {});
     placeInitialTile();
 
     socket.on('nextTurn', function(gamestate) {
@@ -57,7 +56,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
         $scope.currentTile = gamestate.nextTile;
         updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
         setCell(gamestate.lastTile);
-        // var tile = new TileModel({x:0, y:0}, $scope.currentTile.id);
       }
       $scope.src = getImage($scope.currentTile.id);
       $scope.$apply();
