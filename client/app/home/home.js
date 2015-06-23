@@ -1,6 +1,6 @@
 var home = angular.module('game.home', []);
 
-home.controller('homeCtrl', ['$scope', function($scope, $location){
+home.controller('homeCtrl', function($scope, $location){
 
   $scope.usernames = [];
   $scope.user = 'Player 1';
@@ -8,8 +8,10 @@ home.controller('homeCtrl', ['$scope', function($scope, $location){
   $scope.createUser = function() {
     if ($scope.user) {
       $scope.usernames.push(this.user);
+      console.log("New player created: ", this.user);
+      console.log('Players: ', $scope.usernames);
       $scope.user = '';
-      $location.path('/game'); // hmm, does not redirect to game
+      $location.path('game');
     }
     // $http.post('../../server/serverStuff.js', null, config)
     //   .success(function(data, status, headers, config) {
@@ -20,4 +22,4 @@ home.controller('homeCtrl', ['$scope', function($scope, $location){
     //   });
   };
 
-}]);
+});
