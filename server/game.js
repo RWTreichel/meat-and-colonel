@@ -34,6 +34,13 @@ Game.prototype.nextPlayer = function() {
   return this.players[ this.currentPlayer ];
 };
 
+Game.prototype.initialState = function() {
+  var gameState = {};
+  gameState.lastTile = null;
+  gameState.nextPlayer = this.players[0];
+  gameState.nextTile = this.deck.pop();
+};
+
 // generates game state for next turn
 Game.prototype.update = function(tile) {
   var gameState = {};
