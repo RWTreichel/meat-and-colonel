@@ -47,6 +47,7 @@ io.on('connection', function(socket) {
         password: userdata.password,
         socket: socket.id
       };
+      console.log(players);
     }
   });
 
@@ -80,7 +81,7 @@ io.on('connection', function(socket) {
   // potentially refactor to need 'ready' from all connected players
   socket.on('playersReady', function(data){
     // Makes sure there are between 2 to 5 players logged in
-    if (Object.keys(players).length >= 2 && Object.keys(players).length <= 5) {
+    if (Object.keys(players).length >= 1 && Object.keys(players).length <= 5) {
       game = new Game(72, spec, players);
     } else {
       console.log('Invalid number of players: ', Object.keys(players).length);
