@@ -110,14 +110,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, DeckService
 
     socket.on('nextTurn', function(gamestate) {
       updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
-
-      /*
-      ** Select DOM element based on it's id 
-      ** Given lastTile, parse it's x and y attributes and 
-      ** parse the dom for that element. Assign the background attribute
-      ** of that element
-      */
-      setCell( gamestate.lastTile );
+      setCell(gamestate.lastTile);
     });
   };
   $scope.clickCell = function(event, x, y) {
