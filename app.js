@@ -47,7 +47,8 @@ io.on('connection', function(socket) {
       players[ userdata.username ] = { 
         password: userdata.password,
         color: userdata.color, 
-        socket: socket.id
+        socket: socket.id,
+        ready: false
       };
       console.log(players);
     }
@@ -82,15 +83,45 @@ io.on('connection', function(socket) {
 
   // indicates that all parties are ready to play
   // potentially refactor to need 'ready' from all connected players
-  socket.on('playersReady', function(data){
-    // Makes sure there are between 2 to 5 players logged in
-    if (Object.keys(players).length >= 2 && Object.keys(players).length <= 5) {
-      game = new Game(72, spec, players);
-      var gameState = game.initialState();
-      gameState.nextPlayer = players[ gameState.nextPlayer ].socket;
-      io.emit('nextTurn', gameState);
+  socket.on('playerReady', function(data){
+
+    // on 'playersRead' emission the client needs to send their username;
+    var username = data;
+
+    // so if somehow the wrong username gets sent it won't crash the thing
+    if (players[username] === undefined){
+      return;
+    }
+
+    // mark each player as ready as they emit this. 
+    // when all players are ready emit an 'all players ready'
+    players[ username ].ready = true;
+
+    var allReady = true;
+    var readyCount = 0;
+
+    for(var player in players){
+      if (players[player].ready) {
+        readyCount++;
+      }
+      allReady = allReady && players[player].ready;
+    }
+
+    if (allReady) {
+      // Makes sure there are between 2 to 5 players logged in
+      // if there are, emit that, create the game, emit the first turn stuff;
+      if (Object.keys(players).length >= 2 && Object.keys(players).length <= 5) {
+        io.emit('allReady', {});
+        game = new Game(72, spec, players);
+        var gameState = game.initialState();
+        gameState.nextPlayer = players[ gameState.nextPlayer ].socket;
+        io.emit('nextTurn', gameState);
+      } else {
+        console.log('Invalid number of players: ', Object.keys(players).length);
+      }
     } else {
-      console.log('Invalid number of players: ', Object.keys(players).length);
+      // if everyone isn't ready emit the num that are
+      io.emit('numReady', {ready: readyCount, total: Object.keys(players).length});
     }
   });
 });
