@@ -107,6 +107,11 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, DeckService
     $scope.grid = GridService.createEmptyGameBoard();
     $scope.deck = DeckService.createNewDeck();
     DeckService.shuffle($scope.deck);
+
+    socket.on('nextTurn', function(gamestate) {
+      updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
+      setCell(gamestate.lastTile);
+    });
   };
 
   $scope.clickCell = function(event, x, y) {
@@ -121,6 +126,9 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, DeckService
       updateGrid(x, y, tile);
       // We set the cell's tile background
       setCell(event.target, tile);
+
+      // emit endturn
+      socket.emit('endTurn', tile);
     }
   };
 
@@ -134,11 +142,19 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, DeckService
     return $scope.grid[y][x] !== null; 
   };
 
-  var setCell = function(target, tile) {
-    angular.element(target).css('background-size', 'contain');
-    angular.element(target).css('background-image', 'url(' + tile.img + ')');
-    angular.element(target).css('transform', 'rotate(' + tile.orientation*90 + 'deg)');
+  var setCell = function(tile) {
+    var id = '#' + 'x-' + tile.x + '-y-' + tile.y;
+    var domElement = angular.element(document.querySelector(id));
+    domElement.css('background-size', 'contain');
+    domElement.css('background-image', 'url(' + tile.img + ')');
+    domElement.css('transform', 'rotate(' + tile.orientation*90 + 'deg)');
   };
+
+  // var setCell = function(target, tile) {
+  //   angular.element(target).css('background-size', 'contain');
+  //   angular.element(target).css('background-image', 'url(' + tile.img + ')');
+  //   angular.element(target).css('transform', 'rotate(' + tile.orientation*90 + 'deg)');
+  // };
 
   var getRandomTile = function() {
     var id = $scope.deck.pop();
