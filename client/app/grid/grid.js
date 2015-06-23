@@ -57,27 +57,33 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
         updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
         setCell(gamestate.lastTile);
       }
+      $scope.playerId = gamestate.nextPlayer; 
       $scope.src = getImage($scope.currentTile.id);
       $scope.$apply();
     });
   };
 
   $scope.clickCell = function(x, y) {
-    if (!cellAlreadyExists(x, y)) {
-      // Get out current tile generated from nextTurn
-      var draw = $scope.currentTile;
+    // Check if it's current player's turn
+    if ($scope.playerId === socket.id) {     
+      if (!cellAlreadyExists(x, y)) {
+        // Get out current tile generated from nextTurn
+        var draw = $scope.currentTile;
 
-      // Create our tile model
-      var tile = new TileModel({x:x, y:y}, draw.id);
-      tile.orientation = $scope.orientation;
-      // $scope.src = tile.img;
+        // Create our tile model
+        var tile = new TileModel({x:x, y:y}, draw.id);
+        tile.orientation = $scope.orientation;
+        // $scope.src = tile.img;
 
-      // We push a new tile onto the grid at xy
-      updateGrid(x, y, tile);
-      // Set the background image of grid cell
-      setCell(tile);
-      // emit endturn
-      socket.emit('endTurn', tile);
+        // We push a new tile onto the grid at xy
+        updateGrid(x, y, tile);
+        // Set the background image of grid cell
+        setCell(tile);
+        // emit endturn
+        socket.emit('endTurn', tile);
+      }
+    } else {
+      console.log('not your turn');
     }
   };
 
