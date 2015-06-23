@@ -10,6 +10,7 @@
 
   <form name="userForm" method="POST" ng-submit="createUser()" novalidate>
     <input type="text" name="user" ng-model="user" placeholder="username" required>
+    <input type="text" name="password" ng-model="password" placeholder="password" required>
     <button ng-disabled="userForm.$invalid">Let's Play!</button>
   </form>
 </div>

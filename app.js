@@ -35,7 +35,8 @@ io.on('connection', function(socket) {
       // check for password match
       if (userdata.password === players[userdata.username].password) {
         // Move on with valid login stuff...
-        players[userdata.username].socket = socket.id;        
+        console.log("Welcome back!");
+        players[userdata.username].socket = socket.id;
       } else {
         // Invalid login handling...
         console.log('Wrong password!');
@@ -62,7 +63,8 @@ io.on('connection', function(socket) {
 
    // verify that player ending turn, is actually the current player
     var name = game.players[ game.currentPlayer ];
-    if (players[name].socket === socket.id) {     
+
+    if (players[name].socket === socket.id) {
       var gameState = game.update(data); // return gamestate
 
       // makes 'nextPlayer' the socket id; client needs to check this

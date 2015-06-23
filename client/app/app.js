@@ -1,4 +1,4 @@
-angular.module('game', [
+var app = angular.module('game', [
   'game.home',
   'game.grid',
   'game.deck',
@@ -14,6 +14,31 @@ angular.module('game', [
       templateUrl: 'app/grid/grid.html',
       controller: 'gridCtrl'
     });
+});
+
+app.factory('socket', function ($rootScope) {
+  // TODO: Dynamic port allocation - process.env.PORT
+  var socket = io('http://localhost:3000');
+  return {
+    on: function (eventName, callback) {
+      socket.on(eventName, function () {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          callback.apply(socket, args);
+        });
+      });
+    },
+    emit: function (eventName, data, callback) {
+      socket.emit(eventName, data, function () {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          if (callback) {
+            callback.apply(socket, args);
+          }
+        });
+      })
+    }
+  };
 });
 // .run(function($rootScope, $location) {
 //   $rootScope.$on('$routeChangeStart', function(event, next, current) {
