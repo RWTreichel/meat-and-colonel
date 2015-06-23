@@ -84,6 +84,7 @@ io.on('connection', function(socket) {
     // Makes sure there are between 2 to 5 players logged in
     if (Object.keys(players).length >= 2 && Object.keys(players).length <= 5) {
       game = new Game(72, spec, players);
+      io.emit('nextTurn', game.initialState());
     } else {
       console.log('Invalid number of players: ', Object.keys(players).length);
     }
