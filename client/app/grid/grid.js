@@ -34,65 +34,8 @@ grid.service('GridService', function(TileModel) {
 
 });
 
-grid.service('DeckService', function(TileModel) {
-  this.deckSpec = {
-    a: 2,
-    b: 5,
-    c: 1,
-    d: 4,
-    e: 5,
-    f: 2,
-    g: 1,
-    h: 3,
-    i: 2,
-    j: 3,
-    k: 3,
-    l: 3,
-    m: 2,
-    n: 3,
-    o: 2,
-    p: 3,
-    q: 1,
-    r: 3,
-    s: 2,
-    t: 1,
-    u: 8,
-    v: 9,
-    w: 4,
-    x: 1
-  };
-
-  this.createNewDeck = function() {
-    var deck = [];
-
-    for (key in this.deckSpec) {
-      for (var i = 0; i < this.deckSpec[key]; i++) {
-        deck.push(key);
-      }
-    }
-
-    return deck;
-  };
-
-  this.shuffle = function(deck) {
-    if (deck.length === 0) {
-      console.log('you dun goofed, your deck is empty');
-    }
-    var currentIndex = deck.length, temporaryValue, randomIndex;
-    while (0 !== currentIndex){
-      randomIndex = Math.floor( Math.random () * currentIndex );
-      currentIndex -= 1;
-      temporaryValue = deck[currentIndex];
-      deck[currentIndex] = deck[randomIndex];
-      deck[randomIndex] = temporaryValue;
-    }
-  };
-
-
-});
-
 // Create our grid controller
-grid.controller('gridCtrl', function($scope, TileModel, GridService, DeckService){
+grid.controller('gridCtrl', function($scope, TileModel, GridService){
   // A function that returns an array of length n
   $scope.orientation = 0;
 
@@ -103,10 +46,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, DeckService
     $scope.orientation = ($scope.orientation + 1) % 4;
   };
   $scope.init = function() {
-    // Create board, deck, and then shuffle deck
+    // Create board
     $scope.grid = GridService.createEmptyGameBoard();
-    $scope.deck = DeckService.createNewDeck();
-    DeckService.shuffle($scope.deck);
 
     socket.on('nextTurn', function(gamestate) {
       updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
@@ -149,17 +90,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, DeckService
     domElement.css('background-size', 'contain');
     domElement.css('background-image', 'url(' + tile.img + ')');
     domElement.css('transform', 'rotate(' + tile.orientation*90 + 'deg)');
-  };
-
-  // var setCell = function(target, tile) {
-  //   angular.element(target).css('background-size', 'contain');
-  //   angular.element(target).css('background-image', 'url(' + tile.img + ')');
-  //   angular.element(target).css('transform', 'rotate(' + tile.orientation*90 + 'deg)');
-  // };
-
-  var getRandomTile = function() {
-    var id = $scope.deck.pop();
-    return id;
   };
 
   // Initialize game board
