@@ -39,6 +39,7 @@ Game.prototype.initialState = function() {
   gameState.lastTile = null;
   gameState.nextPlayer = this.players[0];
   gameState.nextTile = this.deck.pop();
+  return gameState;
 };
 
 // generates game state for next turn

@@ -68,7 +68,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
       var draw = $scope.currentTile;
 
       // Create our tile model
-      var tile = new TileModel({x:x, y:y}, draw);
+      var tile = new TileModel({x:x, y:y}, draw.id);
       tile.orientation = $scope.orientation;
       // $scope.src = tile.img;
 
