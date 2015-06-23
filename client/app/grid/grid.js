@@ -47,6 +47,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
   $scope.init = function() {
     // Create board
     $scope.grid = GridService.createEmptyGameBoard();
+    // angular.element(document).ready(function() {});
     placeInitialTile();
 
     socket.on('nextTurn', function(gamestate) {
@@ -59,6 +60,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
         // var tile = new TileModel({x:0, y:0}, $scope.currentTile.id);
       }
       $scope.src = getImage($scope.currentTile.id);
+      $scope.$apply();
     });
   };
 
@@ -84,7 +86,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
 
   var getImage = function(id) {
     // Grab an image from our asset folder to set as img attribute
-    return 'assets/img/Tiles/' + id.toUpperCase() + '.png'
+    return 'assets/img/Tiles/' + id.toUpperCase() + '.png';
   };
 
   // These functions should be moved into a factory/service
@@ -108,8 +110,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
   };
 
   var placeInitialTile = function() {
-    // var x = $scope.grid.length/2, y = $scope.grid.length/2;
-    var x = 0, y = 0;
+    var x = $scope.grid.length/2, y = $scope.grid.length/2;
+    // var x = 0, y = 0;
     var DTile = new TileModel({x: x, y: y}, 'd');
     updateGrid(x, y, DTile);
     setCell(DTile);
