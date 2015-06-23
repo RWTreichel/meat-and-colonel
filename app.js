@@ -124,6 +124,16 @@ io.on('connection', function(socket) {
       io.emit('numReady', {ready: readyCount, total: Object.keys(players).length});
     }
   });
+
+  // send num of meeps and meep color to client side
+  socket.on('meepDataReq', function(data) {
+    // client side sends current username
+    console.log("XXXXXXX", data);
+    var numMeeps = players[data.username].numMeeps;
+    // var meepColor = players[data.username].color;
+
+    socket.emit('meepDataRes', { numMeeps: numMeeps });
+  });
 });
 
 server.listen(app.get('port'), function() {
