@@ -11,6 +11,7 @@
   <form name="userForm" method="POST" ng-submit="createUser()" novalidate>
     <input type="text" name="user" ng-model="user" placeholder="username" required>
     <input type="text" name="password" ng-model="password" placeholder="password" required>
+    <select ng-model="color" ng-init="color = color || options[0].value" ng-options="option.value as option.name for option in options"></select>
     <button ng-disabled="userForm.$invalid">Let's Play!</button>
   </form>
 </div>

@@ -46,6 +46,7 @@ io.on('connection', function(socket) {
       // their info on the players object
       players[ userdata.username ] = { 
         password: userdata.password,
+        color: userdata.color, 
         socket: socket.id
       };
       console.log(players);
