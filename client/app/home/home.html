@@ -1,11 +1,15 @@
-<div ng-controller="homeCtrl">
+<div class="container" ng-controller="homeCtrl">
   <h1>Carcassonne</h1>
   <p>Carcassonne, the world-famous French city, known for its imposing fortifications erected during the Antiquity and the Middle Ages. This fortress, surrounded by magnificent walls, still stands today as one of the most unique French cities.</p>
 
   <p>In this game, players must develop the area around Carcassonne. They will place their followers onto roads and into cities, monasteries and fields. Only those who make the most judicious placements will gain the points required to win the game.</p>
 
-  <form>
-    <input type="text" name="username" placeholder="username">
-    <button>Let's Play!</button>
+<!--   <div class="wrap">
+    <a class="btn" href="#/game">Let's Play!</a>
+  </div> -->
+
+  <form name="userForm" method="POST" ng-submit="createUser()" novalidate>
+    <input type="text" name="user" ng-model="user" placeholder="username" required>
+    <button ng-disabled="userForm.$invalid">Let's Play!</button>
   </form>
 </div>
