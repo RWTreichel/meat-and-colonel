@@ -1,7 +1,7 @@
 angular.module('game', [
   'game.home',
   'game.grid',
-  // 'game.deck',
+  'game.deck',
   'ngRoute'
 ])
 .config(function($routeProvider, $httpProvider) {
