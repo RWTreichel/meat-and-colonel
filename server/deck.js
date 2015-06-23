@@ -1,20 +1,20 @@
 var Tile = require('./tile');
 // var spec = require('./deckSpec');
 
-
 // this is what a deck should look like
-  // [ {id: a0, orientation: 0}, {id: a1, orientation: 0}, ... ] 
+  // [ {id: u, orientation: 0, features: {...}, x: undefined, y: undefined}, 
+    // {id: c, orientation: 0, features: {...}, x: undefined, y: undefined}, ... ] 
 
 // takes a `spec` argument
-// the spec is an object, it contains letter keys (i.e. a, b, c)
-  // and its values are integers representing the number of 
-  // each of that card in the deck. 
-// if that is confusing just look at the `cards` object below and it might make sense...
+// the spec is an object, it contains a letter keys which represent the type of card
+  // a quantity property which is the number of cards for each type
+  // and a features property, which describes the features on each direction of the tile
+// if that is confusing, require('./deckSpec') and make a deck. 
 var Deck = function(spec){
   this.deck = [];
   for (var key in spec){
-    for (var i = 0; i < spec[key]; i++) {
-      this.deck.push(new Tile ( key + i ));
+    for (var i = 0; i < spec[key].quantity; i++) {
+      this.deck.push(new Tile ( key, spec[key].features ));
     }
   }
   this.startTile = this.deck.pop();
@@ -35,9 +35,6 @@ Deck.prototype.shuffle = function() {
     this.deck[currentIndex] = this.deck[randomIndex];
     this.deck[randomIndex] = temporaryValue;
   }
-
-  // if group approves _ inclusion, replace all that with
-  // _.shuffle(this.deck);
 };
 
 // removes and returns the card from the top of the deck
