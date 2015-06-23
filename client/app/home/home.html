@@ -4,13 +4,12 @@
 
   <p>In this game, players must develop the area around Carcassonne. They will place their followers onto roads and into cities, monasteries and fields. Only those who make the most judicious placements will gain the points required to win the game.</p>
 
-  <div class="wrap">
+<!--   <div class="wrap">
     <a class="btn" href="#/game">Let's Play!</a>
-  </div>
+  </div> -->
 
-<!-- Commenting this out until we know how we're saving the player names. -->
-<!--   <form ng-submit="enter()">
-    <input type="text" name="username" ng-model="game.username" placeholder="username">
-    <button>Let's Play!</button>
-  </form> -->
+  <form name="userForm" method="POST" ng-submit="createUser()" novalidate>
+    <input type="text" name="user" ng-model="user" placeholder="username" required>
+    <button ng-disabled="userForm.$invalid">Let's Play!</button>
+  </form>
 </div>

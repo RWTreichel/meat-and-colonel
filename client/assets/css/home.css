@@ -8,8 +8,7 @@
       -ms-transform:   translate(-50%,-50%);
        -o-transform:   translate(-50%,-50%);
           transform:   translate(-50%,-50%);
-  width: 450px;
-  background-color: blue;
+  width: 500px;
 }
 
 .wrap {
@@ -19,10 +18,7 @@
 
 .btn {
   border: 1px solid black;
-  padding: 2px;
-}
-
-a {
+  padding: 5px;
   text-decoration: none;
 }
 
