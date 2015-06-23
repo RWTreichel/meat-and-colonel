@@ -34,9 +34,7 @@ grid.service('GridService', function(TileModel) {
 
 });
 
-// Create our grid controller
 grid.controller('gridCtrl', function($scope, TileModel, GridService){
-  // A function that returns an array of length n
   $scope.orientation = 0;
 
   $scope.range = function(n) {
@@ -58,17 +56,18 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
 
   $scope.clickCell = function(event, x, y) {
     if (!cellAlreadyExists(x, y)) {
-      // Draw from deck
-      var draw = getRandomTile();
+      // Get out current tile generated from nextTurn
+      var draw = $scope.currentTile;
+
       // Create our tile model
       var tile = new TileModel({x:x, y:y}, draw);
       tile.orientation = $scope.orientation;
       $scope.src = tile.img;
+
       // We push a new tile onto the grid at xy
       updateGrid(x, y, tile);
-      // We set the cell's tile background
-      setCell(event.target, tile);
-
+      // Set the background image of grid cell
+      setCell(tile);
       // emit endturn
       socket.emit('endTurn', tile);
     }
