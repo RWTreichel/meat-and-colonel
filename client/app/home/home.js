@@ -1,25 +1,16 @@
 var home = angular.module('game.home', []);
 
-home.controller('homeCtrl', function($scope, $location){
+home.controller('homeCtrl', function($scope, $location, socket){
 
-  $scope.usernames = [];
   $scope.user = 'Player 1';
+  $scope.password = 'Carcassonne';
 
   $scope.createUser = function() {
     if ($scope.user) {
-      $scope.usernames.push(this.user);
-      console.log("New player created: ", this.user);
-      console.log('Players: ', $scope.usernames);
+      socket.emit('login', {username: $scope.user, password: $scope.password});
       $scope.user = '';
+      $scope.password = '';
       $location.path('game');
     }
-    // $http.post('../../server/serverStuff.js', null, config)
-    //   .success(function(data, status, headers, config) {
-    //     $scope[username] = data;
-    //   })
-    //   .error(function(data, status, headers, config) {
-    //     $scope[username] = "ERROR";
-    //   });
   };
-
 });
