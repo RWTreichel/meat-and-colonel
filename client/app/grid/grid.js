@@ -112,12 +112,11 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, DeckService
       updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
 
       /*
-      ** Select DOM element based on it's data attribute 
+      ** Select DOM element based on it's id 
       ** Given lastTile, parse it's x and y attributes and 
       ** parse the dom for that element. Assign the background attribute
       ** of that element
       */
-
       setCell( gamestate.lastTile );
     });
   };
@@ -150,7 +149,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, DeckService
   };
 
   var setCell = function(tile) {
-    var domElement = angular.element(document.querySelector('#' + 'x-' + tile.x + '-y-' + tile.y ));
+    var id = '#' + 'x-' + tile.x + '-y-' + tile.y;
+    var domElement = angular.element(document.querySelector(id));
     domElement.css('background-size', 'contain');
     domElement.css('background-image', 'url(' + tile.img + ')');
     domElement.css('transform', 'rotate(' + tile.orientation*90 + 'deg)');
