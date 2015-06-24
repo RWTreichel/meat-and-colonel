@@ -63,11 +63,11 @@ gulp.task('watch', function() {
 gulp.task('develop', function() {
   nodemon({
     script: 'app.js',
-    ext: 'html js',
+    ext: 'html js css',
     tasks: ['scripts', 'stylesheets']
   }).on('restart', function() {
     console.log('restarted nodemon');
   });
 });
 
-gulp.task('default', ['develop']);
+gulp.task('default', ['develop', 'watch']);

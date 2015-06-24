@@ -33,9 +33,9 @@ grid.factory('TileModel', function() {
 });
 
 grid.service('GridService', function(TileModel) {
-  this.createEmptyGameBoard = function() {
+  this.createEmptyGameBoard = function(boardSize) {
     var grid = [];
-    var size = 72;
+    var size = boardSize;
     for (var x = 0; x < size; x++) {
       grid[x] = [];
       for (var y = 0; y < size; y++) {
@@ -65,7 +65,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
 
   $scope.init = function() {
     // Create board
-    $scope.grid = GridService.createEmptyGameBoard();
+    $scope.grid = GridService.createEmptyGameBoard(13);
     placeInitialTile();
 
     socket.on('nextTurn', function(gamestate) {
@@ -99,6 +99,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
           setCell(tile);
           // emit endturn
           $scope.orientation = 0;
+
+          // Call function place meeples
           socket.emit('endTurn', tile);
         } else {
           console.log('Not a valid placement.')
@@ -177,7 +179,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
   };
 
   var placeInitialTile = function() {
-    var x = $scope.grid.length/2, y = $scope.grid.length/2;
+    var x = Math.floor($scope.grid.length/2), y = Math.floor($scope.grid.length/2);
     // var x = 0, y = 0;
     var DTile = new TileModel({
       x: x, 
