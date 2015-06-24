@@ -11,10 +11,10 @@ grid.factory('TileModel', function() {
     this.orientation = tilespec.orientation;
     this.meeples = null;
     this.features = tilespec.features;
-  }
+  };
   Tile.prototype.getImage = function(id) {
     // Grab an image from our asset folder to set as img attribute
-    return 'assets/img/Tiles/' + id.toUpperCase() + '.png'
+    return 'assets/img/Tiles/' + id.toUpperCase() + '.png';
   };
   Tile.prototype.rotateRight = function() {
     this.orientation = (this.orientation + 1) % 4;
@@ -33,7 +33,6 @@ grid.factory('TileModel', function() {
 });
 
 grid.service('GridService', function(TileModel) {
-  
   this.createEmptyGameBoard = function() {
     var grid = [];
     var size = 72;
@@ -45,7 +44,6 @@ grid.service('GridService', function(TileModel) {
     }
     return grid;
   };
-
 });
 
 grid.controller('gridCtrl', function($scope, TileModel, GridService){
@@ -55,10 +53,16 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
   $scope.range = function(n) {
     return new Array(n);
   };
+
   $scope.rotate = function() {
-    $scope.orientation = ($scope.orientation + 1) % 4;
-    $scope.currentTile.rotateRight();
+    if ($scope.playerId === socket.id) {
+      $scope.orientation = ($scope.orientation + 1) % 4;
+      $scope.currentTile.rotateRight();
+      // console.log($scope.currentTile);
+    }
+    // console.log($scope.grid[$scope.currentTile.y][$scope.currentTile.x]);
   };
+
   $scope.init = function() {
     // Create board
     $scope.grid = GridService.createEmptyGameBoard();
@@ -111,34 +115,50 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
   };
 
   var validPlacement = function(tile) {
-    var canPlace = 0;
+    var canPlace = 0, northernTile, southernTile, easternTile, westernTile;
 
-    try {
-      var northernTile = $scope.grid[tile.y-1][tile.x];
-      var easternTile = $scope.grid[tile.y][tile.x+1];
-      var westernTile = $scope.grid[tile.y][tile.x-1];
-      var southernTile = $scope.grid[tile.y+1][tile.x];
-    } catch (err) {
-      console.log('tile issues', err);
+    ($scope.grid[tile.y-1] !== undefined) &&
+      (northernTile = $scope.grid[tile.y-1][tile.x]);
+
+    ($scope.grid[tile.y][tile.x+1] !== undefined) &&
+      (easternTile = $scope.grid[tile.y][tile.x+1]);
+
+    ($scope.grid[tile.y][tile.x-1] !== undefined) &&
+      (westernTile = $scope.grid[tile.y][tile.x-1]);
+
+    ($scope.grid[tile.y+1] !== undefined) &&
+      (southernTile = $scope.grid[tile.y+1][tile.x]);
+
+    if (
+      (northernTile !== undefined) && 
+      ((northernTile === null) || (tile.features.n === northernTile.features.s)) ) {
+        canPlace += 1;
+    }
+    if ( 
+      (easternTile !== undefined) &&
+      ((easternTile === null) || (tile.features.e === easternTile.features.w)) ) {
+        canPlace += 1;
+    }
+    if ( 
+      (southernTile !== undefined) &&
+      ((southernTile === null) || (tile.features.s === southernTile.features.n)) ) {
+        canPlace += 1;
+    }
+    if ( 
+      (westernTile !== undefined) &&
+      ((westernTile === null) || (tile.features.w === westernTile.features.e)) ) {
+        canPlace += 1;
     }
 
-    if ( (northernTile === null) || (tile.features.n === northernTile.features.s)) {
-      canPlace += 1;
+    if ( 
+      northernTile === null &&
+      easternTile  === null &&
+      westernTile  === null &&
+      southernTile === null ) {
+        return false;
+    } else {
+      return canPlace === 4;
     }
-    if ( (easternTile === null) || (tile.features.e === easternTile.features.w)) {
-      canPlace += 1;
-    }
-    if ( (southernTile === null) || (tile.features.s === southernTile.features.n)) {
-      canPlace += 1;
-    }
-    if ( (westernTile === null) || (tile.features.w === westernTile.features.e)) {
-      canPlace += 1;
-    }
-    return canPlace === 4;
-    // console.log('North', northernTile);
-    // console.log('East', easternTile);
-    // console.log('West', westernTile);
-    // console.log('South', southernTile);
   };
 
   // These functions should be moved into a factory/service
@@ -169,7 +189,10 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
       y: y, 
       id: 'd', 
       features: {
-
+        n: 'city',
+        e: 'road',
+        w: 'road',
+        s: 'grass'
       }, 
       orientation: 0
     });
