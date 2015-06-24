@@ -17,18 +17,18 @@ var app = angular.module('game', [
     });
 });
 
-app.factory('socket', function () {
-  // TODO: Dynamic port allocation - process.env.PORT
-  var socket = io('http://localhost:3000');
+// app.factory('socket', function () {
+//   // TODO: Dynamic port allocation - process.env.PORT
+//   var socket = io('http://localhost:3000');
   
-  return {
-    on: function(eventName, callback) {
-      socket.on(eventName, callback);
-    },
-    emit: function(eventName, data) {
-      socket.emit(eventName, data);
-    }
-  };
+//   return {
+//     on: function(eventName, callback) {
+//       socket.on(eventName, callback);
+//     },
+//     emit: function(eventName, data) {
+//       socket.emit(eventName, data);
+//     }
+//   };
   // return {
   //   on: function (eventName, callback) {
   //     socket.on(eventName, function () {
@@ -49,7 +49,7 @@ app.factory('socket', function () {
   //     })
   //   }
   // };
-});
+// });
 
 app.service('Player', function() {
   this.playerData = {};
