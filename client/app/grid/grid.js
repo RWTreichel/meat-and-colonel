@@ -4,7 +4,6 @@ var grid = angular.module('game.grid', []);
 // Returns a tile object
 grid.factory('TileModel', function() {
   var Tile = function(tilespec) {
-    console.log(tilespec);
     this.x = tilespec.x || null;
     this.y = tilespec.y || null;
     this.img = this.getImage(tilespec.id);
@@ -58,6 +57,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
   };
   $scope.rotate = function() {
     $scope.orientation = ($scope.orientation + 1) % 4;
+    $scope.currentTile.rotateRight();
   };
   $scope.init = function() {
     // Create board
@@ -87,14 +87,18 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
         var tile = $scope.currentTile;
         tile.x = x;
         tile.y = y;
-        tile.orientation = $scope.orientation;
-
-        // We push a new tile onto the grid at xy
-        updateGrid(x, y, tile);
-        // Set the background image of grid cell
-        setCell(tile);
-        // emit endturn
-        socket.emit('endTurn', tile);
+        
+        if (validPlacement(tile)) {
+          // We push a new tile onto the grid at xy
+          updateGrid(x, y, tile);
+          // Set the background image of grid cell
+          setCell(tile);
+          // emit endturn
+          $scope.orientation = 0;
+          socket.emit('endTurn', tile);
+        } else {
+          console.log('Not a valid placement.')
+        }
       }
     } else {
       console.log('not your turn');
@@ -106,10 +110,41 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
     return 'assets/img/Tiles/' + id.toUpperCase() + '.png';
   };
 
+  var validPlacement = function(tile) {
+    var canPlace = 0;
+
+    try {
+      var northernTile = $scope.grid[tile.y-1][tile.x];
+      var easternTile = $scope.grid[tile.y][tile.x+1];
+      var westernTile = $scope.grid[tile.y][tile.x-1];
+      var southernTile = $scope.grid[tile.y+1][tile.x];
+    } catch (err) {
+      console.log('tile issues', err);
+    }
+
+    if ( (northernTile === null) || (tile.features.n === northernTile.features.s)) {
+      canPlace += 1;
+    }
+    if ( (easternTile === null) || (tile.features.e === easternTile.features.w)) {
+      canPlace += 1;
+    }
+    if ( (southernTile === null) || (tile.features.s === southernTile.features.n)) {
+      canPlace += 1;
+    }
+    if ( (westernTile === null) || (tile.features.w === westernTile.features.e)) {
+      canPlace += 1;
+    }
+    return canPlace === 4;
+    // console.log('North', northernTile);
+    // console.log('East', easternTile);
+    // console.log('West', westernTile);
+    // console.log('South', southernTile);
+  };
+
   // These functions should be moved into a factory/service
   var updateGrid = function(x, y, tile) {
     $scope.grid[y][x] = tile;
-    console.log($scope.grid[y]);
+    // console.log($scope.grid[y]);
   };
 
   var cellAlreadyExists = function(x, y) {
@@ -129,7 +164,15 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
   var placeInitialTile = function() {
     var x = $scope.grid.length/2, y = $scope.grid.length/2;
     // var x = 0, y = 0;
-    var DTile = new TileModel({x: x, y: y, id: 'd', features: {}, orientation: 0});
+    var DTile = new TileModel({
+      x: x, 
+      y: y, 
+      id: 'd', 
+      features: {
+
+      }, 
+      orientation: 0
+    });
     updateGrid(x, y, DTile);
     setCell(DTile);
   };
