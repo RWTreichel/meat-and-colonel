@@ -2,8 +2,10 @@ var home = angular.module('game.home', []);
 
 home.controller('homeCtrl', function($scope, $location, Player){
 
-  $scope.user = 'Player 1';
+  // $scope.user = 'Player 1';
   $scope.password = 'Carcassonne';
+  $scope.user = Math.random().toString();
+  $scope.rndNumber = Math.floor((Math.random() * 4) + 1);
 
   $scope.options = [
     {
