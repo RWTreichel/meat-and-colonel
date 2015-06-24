@@ -35,8 +35,11 @@ meeple.controller('meepleCtrl', function($scope, Player){
   };
 
   $scope.decrement = function() {
-    $scope.numMeeps--;
-    console.log($scope.numMeeps);
+    if ($scope.numMeeps > 0) {
+      $scope.numMeeps--;  
+    }
+    
+    console.log('meeps: ', $scope.numMeeps);
   };
 
   $scope.init();
