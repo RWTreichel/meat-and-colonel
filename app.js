@@ -47,6 +47,7 @@ io.on('connection', function(socket) {
       players[ userdata.username ] = { 
         password: userdata.password,
         color: userdata.color, 
+        numMeeps: 7, 
         socket: socket.id,
         ready: false
       };
@@ -111,6 +112,7 @@ io.on('connection', function(socket) {
       // Makes sure there are between 2 to 5 players logged in
       // if there are, emit that, create the game, emit the first turn stuff;
       if (Object.keys(players).length >= 2 && Object.keys(players).length <= 5) {
+        console.log('All players ready!');
         io.emit('allReady', {});
         game = new Game(72, spec, players);
         var gameState = game.initialState();

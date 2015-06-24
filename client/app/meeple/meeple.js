@@ -14,7 +14,7 @@ var meeple = angular.module('game.meeple', []);
 // });
 
 // Create our meeple controller
-meeple.controller('meepleCtrl', function($scope, socket, Player){
+meeple.controller('meepleCtrl', function($scope, Player){
   angular.element(document).ready(function() {
     $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';
     $scope.numMeeps = 0;    
@@ -26,6 +26,7 @@ meeple.controller('meepleCtrl', function($scope, socket, Player){
     // grab current player's meeple color & num of meeples from server
     socket.on('meepDataRes', function(data) {
       $scope.numMeeps = data.numMeeps;
+      console.log('~~~~~', data);
       console.log('XXX', data.numMeeps);
       console.log('>>>', $scope.numMeeps);
     });

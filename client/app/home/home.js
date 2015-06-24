@@ -1,6 +1,6 @@
 var home = angular.module('game.home', []);
 
-home.controller('homeCtrl', function($scope, $location, socket, Player){
+home.controller('homeCtrl', function($scope, $location, Player){
 
   $scope.user = 'Player 1';
   $scope.password = 'Carcassonne';
@@ -35,7 +35,7 @@ home.controller('homeCtrl', function($scope, $location, socket, Player){
       Player.setColor($scope.color);
       
       socket.emit('login', {username: $scope.user, password: $scope.password, color: $scope.color});
-      socket.emit('playersReady', {});
+      socket.emit('playerReady', $scope.user);
       $scope.user = '';
       $scope.password = '';
       $location.path('game');
