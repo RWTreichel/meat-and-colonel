@@ -76,7 +76,7 @@ io.on('connection', function(socket) {
 
       // makes 'nextPlayer' the socket id; client needs to check this
       // to decide if it is their turn;
-      gameState.nextPlayer = players[ gameState.nextPlayer ].socket;
+      gameState.playerSocket = players[ gameState.nextPlayer ].socket;
 
       // emit next turn to all connected sockets
       io.emit('nextTurn', gameState);
@@ -115,7 +115,7 @@ io.on('connection', function(socket) {
         io.emit('allReady', {});
         game = new Game(72, spec, players);
         var gameState = game.initialState();
-        gameState.nextPlayer = players[ gameState.nextPlayer ].socket;
+        gameState.playerSocket = players[ gameState.nextPlayer ].socket;
         io.emit('nextTurn', gameState);
       } else {
         console.log('Invalid number of players: ', Object.keys(players).length);

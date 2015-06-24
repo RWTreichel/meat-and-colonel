@@ -73,20 +73,19 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService) {
     angular.element(document.querySelector('.grid-container')).css('width', gridSize * 52 + 'px');
 
     socket.on('nextTurn', function(gamestate) {
-      console.log("Next turn is running.");
       if (!gamestate.lastTile) {
-        console.log("Gamestate.lastTile was falsey");
-        console.log("Next Tile:", gamestate.nextTile);
         $scope.currentTile = new TileModel(gamestate.nextTile);
       } else {
-        console.log("Gamestate.lastTile was truthy");
-        console.log("Next Tile:", gamestate.nextTile);
         $scope.currentTile = new TileModel(gamestate.nextTile);
         updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
         setCell(gamestate.lastTile);
       }
+
+      $scope.currentPlayer;
+      console.log('Running deckCtrl nextTurn...', gamestate.nextPlayer);
+      $scope.currentPlayer = gamestate.nextPlayer;
       // Create a tile model
-      $scope.playerId = gamestate.nextPlayer; 
+      $scope.playerId = gamestate.playerSocket; 
       $scope.src = $scope.currentTile.img;
       $scope.$apply();
     });

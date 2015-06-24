@@ -4,6 +4,6 @@
     <button ng-click='rotate()'>Rotate: {{ orientation }}</button>
     <button class='endturn' ng-click='endTurn()'>End Turn</button>
   </div>
-
+  <p ng-model="currentPlayer">{{currentPlayer}}'s turn</p>
   <div ng-include src="'app/meeple/meeple.html'"></div>
 </div>
