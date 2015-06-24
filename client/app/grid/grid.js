@@ -112,7 +112,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       $scope.tilePlaced = false;
       meeplePlaced = false;
       // Need to pass state of meeple placement to others
-      socket.emit('endTurn', $scope.currentTile);
+      socket.emit('endTurn', $scope.currentTile); 
     } else {
       console.log('Cannot end your turn');
     }
@@ -121,12 +121,16 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   var setMeeple = function(event, x, y) {
     if ($scope.numMeeps > 0) {
       if (!meeplePlaced) {
-        var meepClass = 'meep-x-' + x + '-y-' + y;
-        angular.element(event.target).append('<img class="'+meepClass+'" src="'+ $scope.meepmeep +'">');
-        $scope.currentMeeple = angular.element(document.querySelector('.'+meepClass));
-        $scope.numMeeps--;
-        socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: $scope.numMeeps });
-        meeplePlaced = true;
+        if ($scope.currentTile.x === x && $scope.currentTile.y === y) {
+          var meepClass = 'meep-x-' + x + '-y-' + y;
+          angular.element(event.target).append('<img class="'+meepClass+'" src="'+ $scope.meepmeep +'">');
+          $scope.currentMeeple = angular.element(document.querySelector('.'+meepClass));
+          $scope.numMeeps--;
+          socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: $scope.numMeeps });
+          meeplePlaced = true;
+        } else {
+          console.log('Can only place meeple on last tile');
+        }
       } else {
         console.log('meeple alrdy placed');
       }
