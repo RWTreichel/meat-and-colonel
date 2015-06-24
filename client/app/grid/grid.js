@@ -3,23 +3,36 @@ var grid = angular.module('game.grid', []);
 
 // Returns a tile object
 grid.factory('TileModel', function() {
-  var Tile = function(pos, id, val) {
-    this.x = pos.x;
-    this.y = pos.y;
-    this.img = this.getImage(id);
-    this.val = val || 2;
-    this.orientation = 0;
+  var Tile = function(tilespec) {
+    this.x = tilespec.x || null;
+    this.y = tilespec.y || null;
+    this.img = this.getImage(tilespec.id);
+    this.val = tilespec.val || 2;
+    this.orientation = tilespec.orientation;
     this.meeples = null;
-  }
+    this.features = tilespec.features;
+  };
   Tile.prototype.getImage = function(id) {
     // Grab an image from our asset folder to set as img attribute
-    return 'assets/img/Tiles/' + id.toUpperCase() + '.png'
+    return 'assets/img/Tiles/' + id.toUpperCase() + '.png';
+  };
+  Tile.prototype.rotateRight = function() {
+    this.orientation = (this.orientation + 1) % 4;
+
+    var temp = {};
+    for (var key in this.features){
+      temp[key] = this.features[key];
+    }
+
+    this.features.n = temp.w;
+    this.features.e = temp.n;
+    this.features.s = temp.e;
+    this.features.w = temp.s;
   };
   return Tile;
 });
 
 grid.service('GridService', function(TileModel) {
-  
   this.createEmptyGameBoard = function() {
     var grid = [];
     var size = 72;
@@ -31,7 +44,6 @@ grid.service('GridService', function(TileModel) {
     }
     return grid;
   };
-
 });
 
 grid.controller('gridCtrl', function($scope, TileModel, GridService){
@@ -41,9 +53,16 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
   $scope.range = function(n) {
     return new Array(n);
   };
+
   $scope.rotate = function() {
-    $scope.orientation = ($scope.orientation + 1) % 4;
+    if ($scope.playerId === socket.id) {
+      $scope.orientation = ($scope.orientation + 1) % 4;
+      $scope.currentTile.rotateRight();
+      // console.log($scope.currentTile);
+    }
+    // console.log($scope.grid[$scope.currentTile.y][$scope.currentTile.x]);
   };
+
   $scope.init = function() {
     // Create board
     $scope.grid = GridService.createEmptyGameBoard();
@@ -51,14 +70,15 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
 
     socket.on('nextTurn', function(gamestate) {
       if (!gamestate.lastTile) {
-        $scope.currentTile = gamestate.nextTile;
+        $scope.currentTile = new TileModel(gamestate.nextTile);
       } else {      
-        $scope.currentTile = gamestate.nextTile;
+        $scope.currentTile = new TileModel(gamestate.nextTile);
         updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
         setCell(gamestate.lastTile);
       }
+      // Create a tile model
       $scope.playerId = gamestate.nextPlayer; 
-      $scope.src = getImage($scope.currentTile.id);
+      $scope.src = $scope.currentTile.img;
       $scope.$apply();
     });
   };
@@ -68,35 +88,78 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
     if ($scope.playerId === socket.id) {     
       if (!cellAlreadyExists(x, y)) {
         // Get out current tile generated from nextTurn
-        var draw = $scope.currentTile;
-
-        // Create our tile model
-        var tile = new TileModel({x:x, y:y}, draw.id);
-        tile.orientation = $scope.orientation;
-        // $scope.src = tile.img;
-
-        // We push a new tile onto the grid at xy
-        updateGrid(x, y, tile);
-        // Set the background image of grid cell
-        setCell(tile);
-        // emit endturn
-        socket.emit('endTurn', tile);
+        var tile = $scope.currentTile;
+        tile.x = x;
+        tile.y = y;
+        
+        if (validPlacement(tile)) {
+          // We push a new tile onto the grid at xy
+          updateGrid(x, y, tile);
+          // Set the background image of grid cell
+          setCell(tile);
+          // emit endturn
+          $scope.orientation = 0;
+          socket.emit('endTurn', tile);
+        } else {
+          console.log('Not a valid placement.')
+        }
       }
     } else {
       console.log('not your turn');
     }
   };
 
+  var validPlacement = function(tile) {
+    var canPlace = 0, northernTile, southernTile, easternTile, westernTile;
 
-  var getImage = function(id) {
-    // Grab an image from our asset folder to set as img attribute
-    return 'assets/img/Tiles/' + id.toUpperCase() + '.png';
+    ($scope.grid[tile.y-1] !== undefined) &&
+      (northernTile = $scope.grid[tile.y-1][tile.x]);
+
+    ($scope.grid[tile.y][tile.x+1] !== undefined) &&
+      (easternTile = $scope.grid[tile.y][tile.x+1]);
+
+    ($scope.grid[tile.y][tile.x-1] !== undefined) &&
+      (westernTile = $scope.grid[tile.y][tile.x-1]);
+
+    ($scope.grid[tile.y+1] !== undefined) &&
+      (southernTile = $scope.grid[tile.y+1][tile.x]);
+
+    if (
+      (northernTile !== undefined) && 
+      ((northernTile === null) || (tile.features.n === northernTile.features.s)) ) {
+        canPlace += 1;
+    }
+    if ( 
+      (easternTile !== undefined) &&
+      ((easternTile === null) || (tile.features.e === easternTile.features.w)) ) {
+        canPlace += 1;
+    }
+    if ( 
+      (southernTile !== undefined) &&
+      ((southernTile === null) || (tile.features.s === southernTile.features.n)) ) {
+        canPlace += 1;
+    }
+    if ( 
+      (westernTile !== undefined) &&
+      ((westernTile === null) || (tile.features.w === westernTile.features.e)) ) {
+        canPlace += 1;
+    }
+
+    if ( 
+      northernTile === null &&
+      easternTile  === null &&
+      westernTile  === null &&
+      southernTile === null ) {
+        return false;
+    } else {
+      return canPlace === 4;
+    }
   };
 
   // These functions should be moved into a factory/service
   var updateGrid = function(x, y, tile) {
     $scope.grid[y][x] = tile;
-    console.log($scope.grid[y]);
+    // console.log($scope.grid[y]);
   };
 
   var cellAlreadyExists = function(x, y) {
@@ -116,7 +179,18 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
   var placeInitialTile = function() {
     var x = $scope.grid.length/2, y = $scope.grid.length/2;
     // var x = 0, y = 0;
-    var DTile = new TileModel({x: x, y: y}, 'd');
+    var DTile = new TileModel({
+      x: x, 
+      y: y, 
+      id: 'd', 
+      features: {
+        n: 'city',
+        e: 'road',
+        w: 'road',
+        s: 'grass'
+      }, 
+      orientation: 0
+    });
     updateGrid(x, y, DTile);
     setCell(DTile);
   };
