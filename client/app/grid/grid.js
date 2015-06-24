@@ -3,17 +3,32 @@ var grid = angular.module('game.grid', []);
 
 // Returns a tile object
 grid.factory('TileModel', function() {
-  var Tile = function(pos, id, val) {
-    this.x = pos.x;
-    this.y = pos.y;
-    this.img = this.getImage(id);
-    this.val = val || 2;
-    this.orientation = 0;
+  var Tile = function(tilespec) {
+    console.log(tilespec);
+    this.x = tilespec.x || null;
+    this.y = tilespec.y || null;
+    this.img = this.getImage(tilespec.id);
+    this.val = tilespec.val || 2;
+    this.orientation = tilespec.orientation;
     this.meeples = null;
+    this.features = tilespec.features;
   }
   Tile.prototype.getImage = function(id) {
     // Grab an image from our asset folder to set as img attribute
     return 'assets/img/Tiles/' + id.toUpperCase() + '.png'
+  };
+  Tile.prototype.rotateRight = function() {
+    this.orientation = (this.orientation + 1) % 4;
+
+    var temp = {};
+    for (var key in this.features){
+      temp[key] = this.features[key];
+    }
+
+    this.features.n = temp.w;
+    this.features.e = temp.n;
+    this.features.s = temp.e;
+    this.features.w = temp.s;
   };
   return Tile;
 });
@@ -51,15 +66,15 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
 
     socket.on('nextTurn', function(gamestate) {
       if (!gamestate.lastTile) {
-        $scope.currentTile = gamestate.nextTile;
+        $scope.currentTile = new TileModel(gamestate.nextTile);
       } else {      
-        $scope.currentTile = gamestate.nextTile;
+        $scope.currentTile = new TileModel(gamestate.nextTile);
         updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
         setCell(gamestate.lastTile);
       }
-      console.log('Current tile: ', $scope.currentTile);
+      // Create a tile model
       $scope.playerId = gamestate.nextPlayer; 
-      $scope.src = getImage($scope.currentTile.id);
+      $scope.src = $scope.currentTile.img;
       $scope.$apply();
     });
   };
@@ -69,12 +84,10 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
     if ($scope.playerId === socket.id) {     
       if (!cellAlreadyExists(x, y)) {
         // Get out current tile generated from nextTurn
-        var draw = $scope.currentTile;
-
-        // Create our tile model
-        var tile = new TileModel({x:x, y:y}, draw.id);
+        var tile = $scope.currentTile;
+        tile.x = x;
+        tile.y = y;
         tile.orientation = $scope.orientation;
-        // $scope.src = tile.img;
 
         // We push a new tile onto the grid at xy
         updateGrid(x, y, tile);
@@ -87,7 +100,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
       console.log('not your turn');
     }
   };
-
 
   var getImage = function(id) {
     // Grab an image from our asset folder to set as img attribute
@@ -117,7 +129,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
   var placeInitialTile = function() {
     var x = $scope.grid.length/2, y = $scope.grid.length/2;
     // var x = 0, y = 0;
-    var DTile = new TileModel({x: x, y: y}, 'd');
+    var DTile = new TileModel({x: x, y: y, id: 'd', features: {}, orientation: 0});
     updateGrid(x, y, DTile);
     setCell(DTile);
   };
