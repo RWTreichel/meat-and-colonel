@@ -51,6 +51,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   $scope.orientation = 0;
   $scope.src = null;
   $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';   
+  var meeplePlaced = false;
 
   $scope.range = function() {
     return new Array(gridSize);
@@ -109,6 +110,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   $scope.endTurn = function() {
     if ($scope.currentTile.x !== null) {
       $scope.tilePlaced = false;
+      meeplePlaced = false;
       // Need to pass state of meeple placement to others
       socket.emit('endTurn', $scope.currentTile);
     } else {
@@ -117,15 +119,17 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   };
 
   var setMeeple = function(event, x, y) {
-    console.log('Entering setMeeple', $scope.numMeeps);
     if ($scope.numMeeps > 0) {
-      var meepClass = 'meep-x-' + x + '-y-' + y;
-      angular.element(event.target).append('<img class="'+meepClass+'" src="'+ $scope.meepmeep +'">');
-      $scope.currentMeeple = angular.element(document.querySelector('.'+meepClass));
-      console.log($scope.currentMeeple);
-      $scope.numMeeps--;
-      socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: $scope.numMeeps });
-      console.log('Exiting setMeeple', $scope.numMeeps);
+      if (!meeplePlaced) {
+        var meepClass = 'meep-x-' + x + '-y-' + y;
+        angular.element(event.target).append('<img class="'+meepClass+'" src="'+ $scope.meepmeep +'">');
+        $scope.currentMeeple = angular.element(document.querySelector('.'+meepClass));
+        $scope.numMeeps--;
+        socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: $scope.numMeeps });
+        meeplePlaced = true;
+      } else {
+        console.log('meeple alrdy placed');
+      }
     } else {
       console.log('All outta meeps');
     }
@@ -134,8 +138,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   $scope.cycleMeeple = function(item) {
     if ($scope.currentMeeple) {
       var itemID = angular.element(item.target).attr('id');
-      // var itemID = angular.element(item).attr('id');
-      console.log(itemID);
       $scope.currentMeeple.attr('class', itemID);
     }
   };
