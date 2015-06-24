@@ -10,7 +10,7 @@ var session = require('express-session')({
 var sharedSession = require('express-socket.io-session');
 var Game = require('./server/game.js');
 var spec = require('./server/deckSpec');
-var game;
+var game, readyCount = 0;
 
 app.set('port', (process.env.PORT || 3000));
 
@@ -52,6 +52,7 @@ io.on('connection', function(socket) {
       };
       console.log(players);
     }
+    io.emit('numReady', {ready: readyCount, total: Object.keys(players).length});
   });
 
   socket.on('logout', function(userdata) {
@@ -59,6 +60,8 @@ io.on('connection', function(socket) {
       delete socket.handshake.session.userdata;
       // Save the data to the session store
       socket.handshake.session.save();
+        io.emit('numReady', {ready: readyCount, total: Object.keys(players).length});
+
     }
   });
 
@@ -95,15 +98,12 @@ io.on('connection', function(socket) {
 
     // mark each player as ready as they emit this. 
     // when all players are ready emit an 'all players ready'
+
     players[ username ].ready = true;
+    readyCount++;
 
     var allReady = true;
-    var readyCount = 0;
-
     for(var player in players){
-      if (players[player].ready) {
-        readyCount++;
-      }
       allReady = allReady && players[player].ready;
     }
 
