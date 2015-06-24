@@ -15,16 +15,13 @@ var meeple = angular.module('game.meeple', []);
 
 // Create our meeple controller
 meeple.controller('meepleCtrl', function($scope, Player){
-  angular.element(document).ready(function() {
-    $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';   
-  });
 
   $scope.init = function() {
     // grab current player's meeple color & num of meeples from server
     socket.on('meepDataRes', function(data) {
       $scope.numMeeps = data.numMeeps;
     });
-
+    $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';   
     // send current player's username to server
     socket.emit('meepDataReq', { username: Player.getUsername() });
   };
