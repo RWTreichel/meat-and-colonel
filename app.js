@@ -47,6 +47,7 @@ io.on('connection', function(socket) {
       players[ userdata.username ] = { 
         password: userdata.password,
         color: userdata.color, 
+        numMeeps: 7, 
         socket: socket.id,
         ready: false
       };
@@ -123,6 +124,15 @@ io.on('connection', function(socket) {
       // if everyone isn't ready emit the num that are
       io.emit('numReady', {ready: readyCount, total: Object.keys(players).length});
     }
+  });
+
+  // send num of meeps and meep color to client side
+  socket.on('meepDataReq', function(data) {
+    // client side sends current username
+    var numMeeps = players[data.username].numMeeps;
+    // var meepColor = players[data.username].color;
+
+    socket.emit('meepDataRes', { numMeeps: numMeeps });
   });
 });
 
