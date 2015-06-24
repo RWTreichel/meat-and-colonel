@@ -27,7 +27,6 @@ meeple.controller('meepleCtrl', function($scope, Player){
   //   scope.$apply();
   // });
 
-
   $scope.init = function() {
     // grab current player's meeple color & num of meeples from server
     socket.on('meepDataRes', function(data) {
@@ -45,6 +44,11 @@ meeple.controller('meepleCtrl', function($scope, Player){
 
   $scope.range = function(n) {
     return new Array(n);
+  };
+
+  $scope.decrement = function() {
+    $scope.numMeeps--;
+    console.log($scope.numMeeps);
   };
 
   $scope.init();
