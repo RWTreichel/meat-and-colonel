@@ -16,8 +16,7 @@ var meeple = angular.module('game.meeple', []);
 // Create our meeple controller
 meeple.controller('meepleCtrl', function($scope, Player){
   angular.element(document).ready(function() {
-    $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';
-    $scope.numMeeps = 0;    
+    $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';   
   });
 
   $scope.init = function() {
