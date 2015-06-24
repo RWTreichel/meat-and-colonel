@@ -109,11 +109,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
     }
   };
 
-  var getImage = function(id) {
-    // Grab an image from our asset folder to set as img attribute
-    return 'assets/img/Tiles/' + id.toUpperCase() + '.png';
-  };
-
   var validPlacement = function(tile) {
     var canPlace = 0, northernTile, southernTile, easternTile, westernTile;
 
