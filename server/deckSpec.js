@@ -7,14 +7,19 @@
 
 // deck spec v3, now has land features
 
+
+// I
+// K
+// L
+
 var deckSpec = {
   d: {
     quantity: 4,
     features: {
-      n: 'road',
-      s: 'road',
-      e: 'city',
-      w: 'grass'
+      n: 'city',
+      s: 'grass',
+      e: 'road',
+      w: 'road'
     }
   },
   a: {
@@ -65,10 +70,10 @@ var deckSpec = {
   g: {
     quantity: 1,
     features: {
-      n: 'city',
-      s: 'city',
-      e: 'grass',
-      w: 'grass'
+      n: 'grass',
+      s: 'grass',
+      e: 'city',
+      w: 'city'
     }
   },
   h: {
@@ -83,8 +88,8 @@ var deckSpec = {
   i: {
     quantity: 2,
     features: {
-      n: 'grass',
-      s: 'city',
+      n: 'city',
+      s: 'grass',
       e: 'city',
       w: 'grass'
     }
@@ -101,18 +106,18 @@ var deckSpec = {
   k: {
     quantity: 3,
     features: {
-      n: 'road',
-      s: 'grass',
-      e: 'city',
+      n: 'city',
+      s: 'road',
+      e: 'grass',
       w: 'road'
     }
   },
   l: {
     quantity: 3,
     features: {
-      n: 'road',
+      n: 'city',
       s: 'road',
-      e: 'city',
+      e: 'road',
       w: 'road'
     }
   },
@@ -139,8 +144,8 @@ var deckSpec = {
     features: {
       n: 'city',
       s: 'road',
-      e: 'city',
-      w: 'road'
+      e: 'road',
+      w: 'city'
     }
   },
   p: {
@@ -148,8 +153,8 @@ var deckSpec = {
     features: {
       n: 'city',
       s: 'road',
-      e: 'city',
-      w: 'road'
+      e: 'road',
+      w: 'city'
     }
   },
   q: {
