@@ -46,12 +46,13 @@ grid.service('GridService', function(TileModel) {
   };
 });
 
-grid.controller('gridCtrl', function($scope, TileModel, GridService){
+grid.controller('gridCtrl', function($scope, TileModel, GridService) {
+  var gridSize = 13;
   $scope.orientation = 0;
   $scope.src = null;
 
-  $scope.range = function(n) {
-    return new Array(n);
+  $scope.range = function() {
+    return new Array(gridSize);
   };
 
   $scope.rotate = function() {
@@ -65,8 +66,11 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService){
 
   $scope.init = function() {
     // Create board
-    $scope.grid = GridService.createEmptyGameBoard(13);
+    $scope.grid = GridService.createEmptyGameBoard(gridSize);
     placeInitialTile();
+
+    // Dynamically size grid
+    angular.element(document.querySelector('.grid-container')).css('width', gridSize * 52 + 'px');
 
     socket.on('nextTurn', function(gamestate) {
       if (!gamestate.lastTile) {
