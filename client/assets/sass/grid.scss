@@ -1,9 +1,3 @@
-$cell-size: 52px;
-$grid-size: 19;
-
-.grid-container {
-  width: $cell-size * $grid-size;
-}
 .row {
   display: inline;
   position: relative;
