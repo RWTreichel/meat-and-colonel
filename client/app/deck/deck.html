@@ -4,6 +4,13 @@
     <button ng-click='rotate()'>Rotate: {{ orientation }}</button>
     <button class='endturn' ng-click='endTurn()'>End Turn</button>
   </div>
-  <p ng-model="currentPlayer">{{currentPlayer}}'s turn</p>
+
+  <div class='button-grid'>
+    <button id='pos-1' ng-click='cycleMeeple($event)'></button><button id='pos-2' ng-click='cycleMeeple($event)'></button><button id='pos-3' ng-click='cycleMeeple($event)'></button><br>
+    <button id='pos-4' ng-click='cycleMeeple($event)'></button><button id='pos-5' ng-click='cycleMeeple($event)'></button><button id='pos-6' ng-click='cycleMeeple($event)'></button><br>
+    <button id='pos-7' ng-click='cycleMeeple($event)'></button><button id='pos-8' ng-click='cycleMeeple($event)'></button><button id='pos-9' ng-click='cycleMeeple($event)'></button><br>
+  </div>
+
+
   <div ng-include src="'app/meeple/meeple.html'"></div>
 </div>

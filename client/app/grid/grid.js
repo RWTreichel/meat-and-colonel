@@ -46,10 +46,11 @@ grid.service('GridService', function(TileModel) {
   };
 });
 
-grid.controller('gridCtrl', function($scope, TileModel, GridService) {
+grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   var gridSize = 13;
   $scope.orientation = 0;
   $scope.src = null;
+  $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';   
 
   $scope.range = function() {
     return new Array(gridSize);
@@ -90,11 +91,16 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService) {
       $scope.src = $scope.currentTile.img;
       $scope.$apply();
     });
+
+    socket.on('meepDataRes', function(data) {
+      $scope.numMeeps = data.numMeeps;
+    });
+    socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: 7 });
   };
 
-  $scope.clickCell = function(x, y) {
+  $scope.clickCell = function(event, x, y) {
     if ($scope.tilePlaced) {
-      setMeeple();
+      setMeeple(event, x, y);
     } else {
       setTile(x, y);
     }
@@ -103,14 +109,35 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService) {
   $scope.endTurn = function() {
     if ($scope.currentTile.x !== null) {
       $scope.tilePlaced = false;
+      // Need to pass state of meeple placement to others
       socket.emit('endTurn', $scope.currentTile);
     } else {
       console.log('Cannot end your turn');
     }
   };
 
-  var setMeeple = function() {
-    console.log('meeple has been set');
+  var setMeeple = function(event, x, y) {
+    console.log('Entering setMeeple', $scope.numMeeps);
+    if ($scope.numMeeps > 0) {
+      var meepClass = 'meep-x-' + x + '-y-' + y;
+      angular.element(event.target).append('<img class="'+meepClass+'" src="'+ $scope.meepmeep +'">');
+      $scope.currentMeeple = angular.element(document.querySelector('.'+meepClass));
+      console.log($scope.currentMeeple);
+      $scope.numMeeps--;
+      socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: $scope.numMeeps });
+      console.log('Exiting setMeeple', $scope.numMeeps);
+    } else {
+      console.log('All outta meeps');
+    }
+  };
+
+  $scope.cycleMeeple = function(item) {
+    if ($scope.currentMeeple) {
+      var itemID = angular.element(item.target).attr('id');
+      // var itemID = angular.element(item).attr('id');
+      console.log(itemID);
+      $scope.currentMeeple.attr('class', itemID);
+    }
   };
 
   var setTile = function(x, y) {

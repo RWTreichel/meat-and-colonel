@@ -129,10 +129,13 @@ io.on('connection', function(socket) {
   // send num of meeps and meep color to client side
   socket.on('meepDataReq', function(data) {
     // client side sends current username
-    var numMeeps = players[data.username].numMeeps;
+    if (data.numMeeps) {
+      players[data.username].numMeeps = data.numMeeps;
+      socket.emit('meepDataRes', { numMeeps: data.numMeeps });
+    } else {
+      socket.emit('meepDataRes', { numMeeps: players[data.username].numMeeps });
+    }
     // var meepColor = players[data.username].color;
-
-    socket.emit('meepDataRes', { numMeeps: numMeeps });
   });
 });
 
