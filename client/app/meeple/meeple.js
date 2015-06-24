@@ -22,6 +22,12 @@ meeple.controller('meepleCtrl', function($scope, Player){
   // $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';
   // $scope.numMeeps = 0;
 
+  // $scope.$watch(function(scope) {return scope.numMeeps}, function(scope) {
+  //   console.log("Num Meeps changed...running$apply()");
+  //   scope.$apply();
+  // });
+
+
   $scope.init = function() {
     // grab current player's meeple color & num of meeples from server
     socket.on('meepDataRes', function(data) {
