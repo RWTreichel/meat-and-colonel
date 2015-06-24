@@ -5,6 +5,8 @@ var concat = require('gulp-concat');
 var jshint = require('gulp-jshint');
 var nodemon = require('gulp-nodemon');
 var sourcemaps = require('gulp-sourcemaps');
+var sass = require('gulp-sass');
+var rename = require('gulp-rename');
 
 // We store the files we want to watch in an object for easy reference
 var paths = {
@@ -21,6 +23,9 @@ var paths = {
     './client/assets/css/grid.css',
     './client/assets/css/deck.css',
     './client/assets/css/home.css'
+  ],
+  sass: [
+    './client/assets/sass/*.scss'
   ]
 };
 
@@ -35,11 +40,16 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('stylesheets', function() {
-  return gulp.src(paths.stylesheets)
+  return gulp.src(paths.sass)
     .pipe(sourcemaps.init())
-      .pipe(concat('main.css'))
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('./client/assets/dist'));
+      .pipe(sass().on('error', sass.logError))
+      .pipe(gulp.dest('./client/assets/css'))
+        .pipe(concat('main.css'))
+        .pipe(gulp.dest('./client/assets/dist'))
+          .pipe(cssMin())
+          .pipe(rename('main.min.css'))
+          .pipe(sourcemaps.write())
+          .pipe(gulp.dest('./client/assets/dist'));
 });
 
 gulp.task('test', function() {
@@ -57,17 +67,17 @@ gulp.task('deploy', function() {
 
 gulp.task('watch', function() {
   gulp.watch(paths.scripts, ['scripts']);
-  gulp.watch(paths.stylesheets, ['stylesheets']);
+  gulp.watch(paths.sass, ['stylesheets']);
 });
 
 gulp.task('develop', function() {
   nodemon({
     script: 'app.js',
-    ext: 'html js',
+    ext: 'html js css scss',
     tasks: ['scripts', 'stylesheets']
   }).on('restart', function() {
     console.log('restarted nodemon');
   });
 });
 
-gulp.task('default', ['develop']);
+gulp.task('default', ['develop', 'watch']);
