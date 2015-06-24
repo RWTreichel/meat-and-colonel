@@ -67,6 +67,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService) {
   $scope.init = function() {
     // Create board
     $scope.grid = GridService.createEmptyGameBoard(gridSize);
+    $scope.tilePlaced = false;
     placeInitialTile();
 
     // Dynamically size grid
@@ -92,6 +93,27 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService) {
   };
 
   $scope.clickCell = function(x, y) {
+    if ($scope.tilePlaced) {
+      setMeeple();
+    } else {
+      setTile(x, y);
+    }
+  };
+
+  $scope.endTurn = function() {
+    if ($scope.currentTile.x !== null) {
+      $scope.tilePlaced = false;
+      socket.emit('endTurn', $scope.currentTile);
+    } else {
+      console.log('Cannot end your turn');
+    }
+  };
+
+  var setMeeple = function() {
+    console.log('meeple has been set');
+  };
+
+  var setTile = function(x, y) {
     // Check if it's current player's turn
     if ($scope.playerId === socket.id) {     
       if (!cellAlreadyExists(x, y)) {
@@ -101,15 +123,17 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService) {
         tile.y = y;
         
         if (validPlacement(tile)) {
+          var tilePlaced = true;
+          var meeplePlaced = false;
           // We push a new tile onto the grid at xy
           updateGrid(x, y, tile);
           // Set the background image of grid cell
           setCell(tile);
           // emit endturn
           $scope.orientation = 0;
-
+          $scope.tilePlaced = true;
           // Call function place meeples
-          socket.emit('endTurn', tile);
+
         } else {
           console.log('Not a valid placement.')
         }
