@@ -1,5 +1,8 @@
+$cell-size: 52px;
+$grid-size: 19;
+
 .grid-container {
-  width: 676px;
+  width: $cell-size * $grid-size;
 }
 .row {
   display: inline;
