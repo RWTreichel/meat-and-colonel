@@ -98,14 +98,12 @@ io.on('connection', function(socket) {
 
     // mark each player as ready as they emit this. 
     // when all players are ready emit an 'all players ready'
+
     players[ username ].ready = true;
+    readyCount++;
 
     var allReady = true;
-
     for(var player in players){
-      if (players[player].ready) {
-        readyCount++;
-      }
       allReady = allReady && players[player].ready;
     }
 
