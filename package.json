@@ -19,6 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.13.1",
+    "bower": "^1.4.1",
     "express": "^4.12.4",
     "express-session": "^1.11.3",
     "express-socket.io-session": "^1.2.6",
