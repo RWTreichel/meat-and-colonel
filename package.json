@@ -11,6 +11,9 @@
     "type": "git",
     "url": "https://github.com/meat-and-colonel/meat-and-colonel.git"
   },
+  "engines": {
+    "node": "^0.12.x"
+  },
   "author": "",
   "license": "MIT",
   "dependencies": {
