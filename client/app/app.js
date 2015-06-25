@@ -19,9 +19,18 @@ var app = angular.module('game', [
 
 app.service('Player', function() {
   this.playerData = {};
+  var self = this;
+  
+  socket.on('nextTurn', function(gamestate) {
+    self.playerData.playerId = gamestate.nextPlayer; 
+  });
 
   this.player = function() {
     return this.playerData;
+  };
+
+  this.isCurrentPlayer = function() {
+    return this.playerData.playerId === socket.id;
   };
 
   this.setUsername = function(username) {

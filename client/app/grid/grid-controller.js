@@ -10,12 +10,31 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   $scope.orientation = 0;
   $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';   
 
+  socket.on('nextTurn', function(gamestate) {
+    if (!gamestate.lastTile) {
+      $scope.currentTile = new TileModel(gamestate.nextTile);
+    } else {
+      $scope.currentTile = new TileModel(gamestate.nextTile);
+      GridService.updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
+      // Modify set cell for meeples
+      GridService.setCell(gamestate.lastTile, 'lastTile');
+    }
+    // Create a tile model
+    // $scope.playerId = gamestate.nextPlayer; 
+    $scope.src = $scope.currentTile.img;
+    $scope.$apply();
+  });
+
+  socket.on('meepDataRes', function(data) {
+    $scope.numMeeps = data.numMeeps;
+  });
+
   $scope.range = function() {
     return new Array(gridSize);
   };
 
   $scope.rotate = function() {
-    if ($scope.playerId === socket.id) {
+    if (Player.isCurrentPlayer()) {
       $scope.orientation = ($scope.orientation + 1) % 4;
       $scope.currentTile.rotateRight();
     }
@@ -41,35 +60,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
     }
   };
 
-  var init = function() {
-    GridService.placeInitialTile();
-    GridService.resizeGrid();
-    // Create board
-    // $scope.tilePlaced = false;
-    // Dynamically size grid
-
-    socket.on('nextTurn', function(gamestate) {
-      if (!gamestate.lastTile) {
-        $scope.currentTile = new TileModel(gamestate.nextTile);
-      } else {
-        $scope.currentTile = new TileModel(gamestate.nextTile);
-        GridService.updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
-        // Modify set cell for meeples
-        GridService.setCell(gamestate.lastTile, 'lastTile');
-      }
-      // Create a tile model
-      $scope.playerId = gamestate.nextPlayer; 
-      $scope.src = $scope.currentTile.img;
-      $scope.$apply();
-    });
-
-    socket.on('meepDataRes', function(data) {
-      $scope.numMeeps = data.numMeeps;
-    });
-    socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: 7 });
-  };
-
-
   var setMeeple = function(event, x, y) {
     if ($scope.numMeeps > 0 && !meeplePlaced) {
       if (!meeplePlaced) {
@@ -92,7 +82,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   };
 
   $scope.cycleMeeple = function(item) {
-    if ($scope.playerId === socket.id && $scope.currentMeeple) {     
+    if (Player.isCurrentPlayer() && $scope.currentMeeple) {     
       var itemID = angular.element(item.target).attr('id');
       $scope.currentMeeple.attr('class', itemID);
       $scope.currentTile.meeple.location = +$scope.currentMeeple.attr('class').slice(-1);
@@ -101,7 +91,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
 
   var setTile = function(x, y) {
     // Check if it's current player's turn
-    if ($scope.playerId === socket.id) {     
+    if (Player.isCurrentPlayer()) {     
       if (!GridService.cellAlreadyExists(x, y)) {
         // Get out current tile generated from nextTurn
         var tile = $scope.currentTile;
@@ -117,9 +107,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
           GridService.setCell(tile);
           // emit endturn
           $scope.orientation = 0;
-          // $scope.tilePlaced = true;
           // Call function place meeples
-
         } else {
           console.log('Not a valid placement.')
         }
@@ -129,5 +117,11 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
     }
   };
 
-  init();
+  // Initialize
+  (function() {
+    GridService.placeInitialTile();
+    GridService.resizeGrid();
+    socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: 7 });
+  })();
+
 });
