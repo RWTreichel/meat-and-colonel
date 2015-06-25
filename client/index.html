@@ -14,6 +14,7 @@
     // socket.emit('playerReady', user.username);
   </script>
   <script src='app/dist/main.js'></script>
+  <script type="text/javascript" src="http://zmangames.com/rulebooks/Carcassonne.pdf"></script>
 </head>
 <body>
   <div ng-view></div>
@@ -25,6 +26,22 @@
         document.getElementById('button').click();
     }, 1000);
   }
+</script>
+<script>
+  window.onload = function (){
+
+    var myPDF = new PDFObject({ 
+    
+      url: "http://zmangames.com/rulebooks/Carcassonne.pdf",
+      pdfOpenParams: {
+        navpanes: 1,
+        view: "FitV",
+        pagemode: "thumbs"
+      }
+    
+    }).embed("pdf");
+
+  };
 </script>
 </body>
 </html>
