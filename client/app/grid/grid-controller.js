@@ -16,6 +16,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       $scope.currentTile = new TileModel(gamestate.nextTile);
       GridService.updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
       GridService.setCell(gamestate.lastTile, 'lastTile');
+      console.log(grid[gamestate.lastTile.y][gamestate.lastTile.x]);
     }
     $scope.src = $scope.currentTile.img;
     $scope.$apply();
@@ -61,6 +62,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   var setMeeple = function(event, x, y) {
     if ($scope.numMeeps > 0 && !meeplePlaced) {
       if ($scope.currentTile.x === x && $scope.currentTile.y === y) {
+        $scope.currentTile.meeple.location = 1;
         var meepClass = 'meep-x-' + x + '-y-' + y;
         angular.element(event.target).append('<img class="'+meepClass+'" src="'+ $scope.meepmeep +'">');
         $scope.currentMeeple = angular.element(document.querySelector('.'+meepClass));
@@ -76,7 +78,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   };
 
   $scope.cycleMeeple = function(item) {
-    if (Player.isCurrentPlayer() && $scope.currentMeeple) {     
+    if (Player.isCurrentPlayer() && $scope.currentMeeple && meeplePlaced) {     
       var itemID = angular.element(item.target).attr('id');
       $scope.currentMeeple.attr('class', itemID);
       $scope.currentTile.meeple.location = +$scope.currentMeeple.attr('class').slice(-1);
