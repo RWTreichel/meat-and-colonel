@@ -17,7 +17,6 @@ grid.service('GridService', function(TileModel, Player) {
     return matrix;
   };
 
-
  this.placeInitialTile = function() {
     var x = Math.floor(this.gridSize/2), y = Math.floor(this.gridSize/2);
     // var x = 0, y = 0;
@@ -33,12 +32,17 @@ grid.service('GridService', function(TileModel, Player) {
       }, 
       orientation: 0
     });
-
-    return DTile;
+    this.updateGrid(x, y, DTile);
+    this.setCell(DTile);
+    // return DTile;
   };
 
   this.updateGrid = function(x, y, tile) {
     this.matrix[y][x] = tile;
+  };
+
+  this.cellAlreadyExists = function(x, y) {
+    return this.matrix[y][x] !== null; 
   };
 
   this.validPlacement = function(tile) {

@@ -24,9 +24,9 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   };
 
   var init = function() {
+    GridService.placeInitialTile();
     // Create board
     $scope.tilePlaced = false;
-    placeInitialTile();
     // Dynamically size grid
     angular.element(document.querySelector('.grid-container')).css('width', gridSize * 52 + 'px');
 
@@ -103,7 +103,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   var setTile = function(x, y) {
     // Check if it's current player's turn
     if ($scope.playerId === socket.id) {     
-      if (!cellAlreadyExists(x, y)) {
+      if (!GridService.cellAlreadyExists(x, y)) {
         // Get out current tile generated from nextTurn
         var tile = $scope.currentTile;
         tile.x = x;
@@ -128,16 +128,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
     } else {
       console.log('not your turn');
     }
-  };
-
-  var cellAlreadyExists = function(x, y) {
-    return grid[y][x] !== null; 
-  };
-
-  var placeInitialTile = function() {
-    var initialTile = GridService.placeInitialTile(); 
-    GridService.updateGrid(initialTile.x, initialTile.y, initialTile);
-    GridService.setCell(initialTile);
   };
 
   init();
