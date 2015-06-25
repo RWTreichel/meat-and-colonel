@@ -13,8 +13,14 @@ var paths = {
   scripts: [
     './client/lib/angular/angular.min.js',
     './client/lib/angular-route/angular-route.min.js',
+    
     './client/app/home/home.js',
-    './client/app/grid/grid.js',
+
+    './client/app/grid/grid-module.js',
+    './client/app/grid/tilemodel.js',
+    './client/app/grid/gridservice.js',
+    './client/app/grid/grid-controller.js',
+
     './client/app/deck/deck.js',
     './client/app/meeple/meeple.js',
     './client/app/app.js'
