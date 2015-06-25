@@ -4,12 +4,13 @@ var grid = angular.module('game.grid', []);
 // Returns a tile object
 grid.factory('TileModel', function() {
   var Tile = function(tilespec) {
+    this.id = tilespec.id;
     this.x = tilespec.x || null;
     this.y = tilespec.y || null;
     this.img = this.getImage(tilespec.id);
     this.val = tilespec.val || 2;
     this.orientation = tilespec.orientation;
-    this.meeples = null;
+    this.meeple = {};
     this.features = tilespec.features;
   };
   Tile.prototype.getImage = function(id) {
@@ -46,10 +47,12 @@ grid.service('GridService', function(TileModel) {
   };
 });
 
-grid.controller('gridCtrl', function($scope, TileModel, GridService) {
+grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   var gridSize = 13;
   $scope.orientation = 0;
   $scope.src = null;
+  $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';   
+  var meeplePlaced = false;
 
   $scope.range = function() {
     return new Array(gridSize);
@@ -67,6 +70,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService) {
   $scope.init = function() {
     // Create board
     $scope.grid = GridService.createEmptyGameBoard(gridSize);
+    $scope.tilePlaced = false;
     placeInitialTile();
 
     // Dynamically size grid
@@ -80,18 +84,69 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService) {
         updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
         setCell(gamestate.lastTile);
       }
-
-      $scope.currentPlayer;
-      console.log('Running deckCtrl nextTurn...', gamestate.nextPlayer);
-      $scope.currentPlayer = gamestate.nextPlayer;
       // Create a tile model
-      $scope.playerId = gamestate.playerSocket; 
+      $scope.playerId = gamestate.nextPlayer; 
       $scope.src = $scope.currentTile.img;
       $scope.$apply();
     });
+
+    socket.on('meepDataRes', function(data) {
+      $scope.numMeeps = data.numMeeps;
+    });
+    socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: 7 });
   };
 
-  $scope.clickCell = function(x, y) {
+  $scope.clickCell = function(event, x, y) {
+    if ($scope.tilePlaced) {
+      setMeeple(event, x, y);
+    } else {
+      setTile(x, y);
+    }
+  };
+
+  $scope.endTurn = function() {
+    if ($scope.currentTile.x !== null) {
+      $scope.tilePlaced = false;
+      meeplePlaced = false;
+      // Need to pass state of meeple placement to others
+      $scope.currentTile.meeple.color = Player.getColor();
+
+      socket.emit('endTurn', $scope.currentTile); 
+    } else {
+      console.log('Cannot end your turn');
+    }
+  };
+
+  var setMeeple = function(event, x, y) {
+    if ($scope.numMeeps > 0) {
+      if (!meeplePlaced) {
+        if ($scope.currentTile.x === x && $scope.currentTile.y === y) {
+          var meepClass = 'meep-x-' + x + '-y-' + y;
+          angular.element(event.target).append('<img class="'+meepClass+'" src="'+ $scope.meepmeep +'">');
+          $scope.currentMeeple = angular.element(document.querySelector('.'+meepClass));
+          $scope.numMeeps--;
+          socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: $scope.numMeeps });
+          meeplePlaced = true;
+        } else {
+          console.log('Can only place meeple on last tile');
+        }
+      } else {
+        console.log('meeple alrdy placed');
+      }
+    } else {
+      console.log('All outta meeps');
+    }
+  };
+
+  $scope.cycleMeeple = function(item) {
+    if ($scope.currentMeeple) {
+      var itemID = angular.element(item.target).attr('id');
+      $scope.currentMeeple.attr('class', itemID);
+      $scope.currentTile.meeple.location = +$scope.currentMeeple.attr('class').slice(-1);
+    }
+  };
+
+  var setTile = function(x, y) {
     // Check if it's current player's turn
     if ($scope.playerId === socket.id) {     
       if (!cellAlreadyExists(x, y)) {
@@ -101,15 +156,17 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService) {
         tile.y = y;
         
         if (validPlacement(tile)) {
+          var tilePlaced = true;
+          var meeplePlaced = false;
           // We push a new tile onto the grid at xy
           updateGrid(x, y, tile);
           // Set the background image of grid cell
           setCell(tile);
           // emit endturn
           $scope.orientation = 0;
-
+          $scope.tilePlaced = true;
           // Call function place meeples
-          socket.emit('endTurn', tile);
+
         } else {
           console.log('Not a valid placement.')
         }

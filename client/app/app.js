@@ -17,6 +17,29 @@ var app = angular.module('game', [
     });
 });
 
+app.service('Player', function() {
+  this.playerData = {};
+
+  this.player = function() {
+    return this.playerData;
+  };
+
+  this.setUsername = function(username) {
+    this.playerData.username = username;
+  };
+
+  this.getUsername = function() {
+    return this.playerData.username;
+  };
+
+  this.setColor = function(color) {
+    this.playerData.color = color;
+  };
+
+  this.getColor = function() {
+    return this.playerData.color;
+  };
+});
 // app.factory('socket', function () {
 //   // TODO: Dynamic port allocation - process.env.PORT
 //   var socket = io('http://localhost:3000');
@@ -51,29 +74,6 @@ var app = angular.module('game', [
   // };
 // });
 
-app.service('Player', function() {
-  this.playerData = {};
-
-  this.player = function() {
-    return this.playerData;
-  };
-
-  this.setUsername = function(username) {
-    this.playerData.username = username;
-  };
-
-  this.getUsername = function() {
-    return this.playerData.username;
-  };
-
-  this.setColor = function(color) {
-    this.playerData.color = color;
-  };
-
-  this.getColor = function() {
-    return this.playerData.color;
-  };
-});
 
 
 // .run(function ($rootScope, $location, Auth) {

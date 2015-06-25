@@ -4,13 +4,7 @@
 // the int in the array is part of the id, and represents how many
   // of a given card there is
 
-
 // deck spec v3, now has land features
-
-
-// I
-// K
-// L
 
 var deckSpec = {
   d: {

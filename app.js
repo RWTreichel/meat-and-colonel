@@ -67,7 +67,6 @@ io.on('connection', function(socket) {
   });
 
   socket.on('endTurn', function(data) { // data will be the tile they placed
-
    // verify that player ending turn, is actually the current player
     var name = game.players[ game.currentPlayer ];
 
@@ -76,10 +75,11 @@ io.on('connection', function(socket) {
 
       // makes 'nextPlayer' the socket id; client needs to check this
       // to decide if it is their turn;
-      gameState.playerSocket = players[ gameState.nextPlayer ].socket;
+      gameState.nextPlayer = players[ gameState.nextPlayer ].socket;
 
       // emit next turn to all connected sockets
       io.emit('nextTurn', gameState);
+
     } else {
       console.log("Not your turn!");
     }
@@ -93,7 +93,7 @@ io.on('connection', function(socket) {
     var username = data;
 
     // so if somehow the wrong username gets sent it won't crash the thing
-    if (players[username] === undefined){
+    if (players[username] === undefined || players[username].ready){
       return;
     }
 
@@ -113,9 +113,9 @@ io.on('connection', function(socket) {
       // if there are, emit that, create the game, emit the first turn stuff;
       if (Object.keys(players).length >= 2 && Object.keys(players).length <= 5) {
         io.emit('allReady', {});
-        game = new Game(72, spec, players);
+        game = new Game(13, spec, players);
         var gameState = game.initialState();
-        gameState.playerSocket = players[ gameState.nextPlayer ].socket;
+        gameState.nextPlayer = players[ gameState.nextPlayer ].socket;
         io.emit('nextTurn', gameState);
       } else {
         console.log('Invalid number of players: ', Object.keys(players).length);
@@ -129,10 +129,13 @@ io.on('connection', function(socket) {
   // send num of meeps and meep color to client side
   socket.on('meepDataReq', function(data) {
     // client side sends current username
-    var numMeeps = players[data.username].numMeeps;
+    if (data.numMeeps) {
+      players[data.username].numMeeps = data.numMeeps;
+      socket.emit('meepDataRes', { numMeeps: data.numMeeps });
+    } else {
+      socket.emit('meepDataRes', { numMeeps: players[data.username].numMeeps });
+    }
     // var meepColor = players[data.username].color;
-
-    socket.emit('meepDataRes', { numMeeps: numMeeps });
   });
 });
 

@@ -7,10 +7,8 @@
   <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
   <script>
     var socket = io.connect('http://localhost:3000');
+
     // // Log players in
-    // function randomName() {
-    //   return {username: Math.random().toString(), password: Math.random().toString()}
-    // }
     // var user = randomName();
     // socket.emit('login', user);
     // socket.emit('playerReady', user.username);
@@ -19,5 +17,10 @@
 </head>
 <body>
   <div ng-view></div>
+<script>
+  setTimeout(function(){
+      document.getElementById('button').click();
+  }, 1000);
+</script>
 </body>
 </html>

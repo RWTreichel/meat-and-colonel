@@ -10,3 +10,60 @@
   width: 50px;
   height: 50px;
   border: solid 1px black; }
+
+.pos-1 {
+  position: relative;
+  top: 0;
+  left: 0; }
+
+.pos-2 {
+  position: relative;
+  top: 0;
+  left: 15px; }
+
+.pos-3 {
+  position: relative;
+  top: 0;
+  left: 30px; }
+
+.pos-4 {
+  position: relative;
+  top: 15px;
+  left: 0px; }
+
+.pos-5 {
+  position: relative;
+  top: 15px;
+  left: 15px; }
+
+.pos-6 {
+  position: relative;
+  top: 15px;
+  left: 30px; }
+
+.pos-7 {
+  position: relative;
+  top: 30px;
+  left: 0; }
+
+.pos-8 {
+  position: relative;
+  top: 30px;
+  left: 15px; }
+
+.pos-9 {
+  position: relative;
+  top: 30px;
+  left: 30px; }
+
+.button-grid {
+  float: right;
+  margin-right: 10px; }
+
+.button-grid button {
+  width: 5px;
+  height: 5px;
+  padding: 8px;
+  margin-left: 2px;
+  margin-bottom: 2px;
+  border: 1px solid black; }
