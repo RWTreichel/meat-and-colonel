@@ -122,7 +122,8 @@ grid.service('GridService', function(TileModel, Player) {
 
       if (option === 'lastTile' && 
           tile.meeple.color !== undefined && 
-          tile.meeple.color !== Player.getColor()
+          tile.meeple.color !== Player.getColor() &&
+          tile.meeple.location !== undefined
         ) {
         var meepleSource = 'assets/img/Meeples/meeple_' + tile.meeple.color + '.png'
         var meepleClass = 'pos-' + tile.meeple.location;
