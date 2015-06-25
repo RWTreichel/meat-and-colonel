@@ -78,7 +78,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   };
 
   $scope.cycleMeeple = function(item) {
-    if (Player.isCurrentPlayer() && $scope.currentMeeple) {     
+    if (Player.isCurrentPlayer() && $scope.currentMeeple && meeplePlaced) {     
       var itemID = angular.element(item.target).attr('id');
       $scope.currentMeeple.attr('class', itemID);
       $scope.currentTile.meeple.location = +$scope.currentMeeple.attr('class').slice(-1);
