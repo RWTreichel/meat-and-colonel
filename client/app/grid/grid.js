@@ -10,7 +10,7 @@ grid.factory('TileModel', function() {
     this.img = this.getImage(tilespec.id);
     this.val = tilespec.val || 2;
     this.orientation = tilespec.orientation;
-    this.meeples = null;
+    this.meeple = {};
     this.features = tilespec.features;
   };
   Tile.prototype.getImage = function(id) {
@@ -109,6 +109,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       $scope.tilePlaced = false;
       meeplePlaced = false;
       // Need to pass state of meeple placement to others
+      $scope.currentTile.meeple.color = Player.getColor();
+
       socket.emit('endTurn', $scope.currentTile); 
     } else {
       console.log('Cannot end your turn');
@@ -140,6 +142,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
     if ($scope.currentMeeple) {
       var itemID = angular.element(item.target).attr('id');
       $scope.currentMeeple.attr('class', itemID);
+      $scope.currentTile.meeple.location = +$scope.currentMeeple.attr('class').slice(-1);
     }
   };
 

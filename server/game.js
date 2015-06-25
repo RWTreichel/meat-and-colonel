@@ -45,7 +45,7 @@ Game.prototype.update = function(tile) {
   var gameState = {};
   var serverTile = new Tile(tile.id, tile.features, tile.x, tile.y, tile.meeple.color, tile.meeple.location);
   this.placeTile(serverTile);
-  gameState.lastTile = serverTile;
+  gameState.lastTile = tile;
   gameState.nextPlayer = this.nextPlayer();
   gameState.nextTile = this.deck.pop();
   gameState.board = this.board;

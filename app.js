@@ -67,7 +67,6 @@ io.on('connection', function(socket) {
   });
 
   socket.on('endTurn', function(data) { // data will be the tile they placed
-
    // verify that player ending turn, is actually the current player
     var name = game.players[ game.currentPlayer ];
 
@@ -80,6 +79,7 @@ io.on('connection', function(socket) {
 
       // emit next turn to all connected sockets
       io.emit('nextTurn', gameState);
+
     } else {
       console.log("Not your turn!");
     }
