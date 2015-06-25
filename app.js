@@ -93,7 +93,7 @@ io.on('connection', function(socket) {
     var username = data;
 
     // so if somehow the wrong username gets sent it won't crash the thing
-    if (players[username] === undefined){
+    if (players[username] === undefined || players[username].ready){
       return;
     }
 
