@@ -86,8 +86,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       }
 
       $scope.currentPlayer;
-      console.log('Running deckCtrl nextTurn...', gamestate.nextPlayer);
-      $scope.currentPlayer = gamestate.nextPlayer;
+      console.log('Running deckCtrl nextTurn...', gamestate.playerSocket);
+      $scope.currentPlayer = gamestate.playerSocket;
       // Create a tile model
       $scope.playerId = gamestate.playerSocket; 
       $scope.src = $scope.currentTile.img;
