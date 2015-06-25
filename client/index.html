@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <title>Carcassonne</title>
   <link rel="stylesheet" href="assets/dist/main.min.css">
-  <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
+  <script src="//cdn.socket.io/socket.io-1.3.5.js"></script>
   <script>
-    var socket = io.connect('http://localhost:3000');
-
+    // var socket = io.connect('http://localhost:3000');
+    var socket = io.connect('https://radiant-coast-9919.herokuapp.com/');
     // // Log players in
     // var user = randomName();
     // socket.emit('login', user);

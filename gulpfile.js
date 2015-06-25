@@ -71,9 +71,7 @@ gulp.task('test', function() {
 });
 
 
-gulp.task('deploy', function() {
-  // TODO
-});
+gulp.task('deploy', ['scripts', 'stylsheets']);
 
 gulp.task('watch', function() {
   gulp.watch(paths.scripts, ['scripts']);
