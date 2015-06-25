@@ -4,7 +4,6 @@ var grid = angular.module('game.grid', []);
 // Returns a tile object
 grid.factory('TileModel', function() {
   var Tile = function(tilespec) {
-    this.id = tilespec.id;
     this.x = tilespec.x || null;
     this.y = tilespec.y || null;
     this.img = this.getImage(tilespec.id);
@@ -84,12 +83,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
         updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
         setCell(gamestate.lastTile);
       }
-
-      $scope.currentPlayer;
-      console.log('Running deckCtrl nextTurn...', gamestate.playerSocket);
-      $scope.currentPlayer = gamestate.playerSocket;
       // Create a tile model
-      $scope.playerId = gamestate.playerSocket; 
+      $scope.playerId = gamestate.nextPlayer; 
       $scope.src = $scope.currentTile.img;
       $scope.$apply();
     });
