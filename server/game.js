@@ -1,6 +1,5 @@
 var Tile = require('./tile');
 var Deck = require('./deck');
-var Meeples = require('./meeples');
 var spec = require('./deckSpec');
 
 // players argument should be `players` from app.js
@@ -12,7 +11,6 @@ var Game = function(boardSize, deckSpec, players){
       this.board.push( new Array(boardSize) );
     }
   this.deck = new Deck(deckSpec);
-  this.meeples = new Meeples();
   this.players = Object.keys(players);
   this.currentPlayer = 0;
 };
@@ -45,10 +43,12 @@ Game.prototype.initialState = function() {
 // generates game state for next turn
 Game.prototype.update = function(tile) {
   var gameState = {};
-  this.placeTile(tile);
-  gameState.lastTile = tile;
+  var serverTile = new Tile(tile.id, tile.features, tile.x, tile.y, tile.meeple.color, tile.meeple.location);
+  this.placeTile(serverTile);
+  gameState.lastTile = serverTile;
   gameState.nextPlayer = this.nextPlayer();
   gameState.nextTile = this.deck.pop();
+  gameState.board = this.board;
   return gameState;
 };
 

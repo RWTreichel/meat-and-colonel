@@ -113,7 +113,7 @@ io.on('connection', function(socket) {
       // if there are, emit that, create the game, emit the first turn stuff;
       if (Object.keys(players).length >= 2 && Object.keys(players).length <= 5) {
         io.emit('allReady', {});
-        game = new Game(72, spec, players);
+        game = new Game(13, spec, players);
         var gameState = game.initialState();
         gameState.nextPlayer = players[ gameState.nextPlayer ].socket;
         io.emit('nextTurn', gameState);

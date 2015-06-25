@@ -4,6 +4,7 @@ var grid = angular.module('game.grid', []);
 // Returns a tile object
 grid.factory('TileModel', function() {
   var Tile = function(tilespec) {
+    this.id = tilespec.id;
     this.x = tilespec.x || null;
     this.y = tilespec.y || null;
     this.img = this.getImage(tilespec.id);
