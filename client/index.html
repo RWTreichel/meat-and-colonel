@@ -18,9 +18,13 @@
 <body>
   <div ng-view></div>
 <script>
-  setTimeout(function(){
-      document.getElementById('button').click();
-  }, 1000);
+  var DEV = false;
+
+  if (DEV) {
+    setTimeout(function(){
+        document.getElementById('button').click();
+    }, 1000);
+  }
 </script>
 </body>
 </html>
