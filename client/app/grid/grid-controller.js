@@ -10,6 +10,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';   
 
   socket.on('nextTurn', function(gamestate) {
+    console.log(gamestate.board);
     if (!gamestate.lastTile) {
       $scope.currentTile = new TileModel(gamestate.nextTile);
     } else {
