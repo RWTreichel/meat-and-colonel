@@ -45,6 +45,10 @@ grid.service('GridService', function(TileModel, Player) {
     return this.matrix[y][x] !== null; 
   };
 
+  this.resizeGrid = function() {
+    angular.element(document.querySelector('.grid-container')).css('width', this.gridSize * 52 + 'px');
+  };
+
   this.validPlacement = function(tile) {
     var canPlace = 0, northernTile, southernTile, easternTile, westernTile;
 

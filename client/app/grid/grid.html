@@ -1,7 +1,6 @@
 <div class='game-container'>
   
   <div class='grid-container' >
-  
     <ul class='row' ng-repeat="i in range() track by $index">
       <li class='cell' id='x-{{$index}}-y-{{$parent.$index}}' ng-repeat="i in range() track by $index" ng-click='clickCell($event, $index, $parent.$index)'>
       </li>

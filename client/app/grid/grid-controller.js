@@ -7,7 +7,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   var meeplePlaced = false;
   
   $scope.orientation = 0;
-  $scope.src = null;
   $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';   
 
   $scope.range = function() {
@@ -18,17 +17,35 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
     if ($scope.playerId === socket.id) {
       $scope.orientation = ($scope.orientation + 1) % 4;
       $scope.currentTile.rotateRight();
-      // console.log($scope.currentTile);
     }
-    // console.log(grid[$scope.currentTile.y][$scope.currentTile.x]);
+  };
+
+  $scope.clickCell = function(event, x, y) {
+    if ($scope.tilePlaced) {
+      setMeeple(event, x, y);
+    } else {
+      setTile(x, y);
+    }
+  };
+
+  $scope.endTurn = function() {
+    if ($scope.tilePlaced) {
+      $scope.tilePlaced = false;
+      meeplePlaced = false;
+      // Need to pass state of meeple placement to others
+      $scope.currentTile.meeple.color = Player.getColor();
+      socket.emit('endTurn', $scope.currentTile); 
+    } else {
+      console.log('Cannot end your turn');
+    }
   };
 
   var init = function() {
     GridService.placeInitialTile();
+    GridService.resizeGrid();
     // Create board
     $scope.tilePlaced = false;
     // Dynamically size grid
-    angular.element(document.querySelector('.grid-container')).css('width', gridSize * 52 + 'px');
 
     socket.on('nextTurn', function(gamestate) {
       if (!gamestate.lastTile) {
@@ -51,25 +68,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
     socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: 7 });
   };
 
-  $scope.clickCell = function(event, x, y) {
-    if ($scope.tilePlaced) {
-      setMeeple(event, x, y);
-    } else {
-      setTile(x, y);
-    }
-  };
-
-  $scope.endTurn = function() {
-    if ($scope.tilePlaced) {
-      $scope.tilePlaced = false;
-      meeplePlaced = false;
-      // Need to pass state of meeple placement to others
-      $scope.currentTile.meeple.color = Player.getColor();
-      socket.emit('endTurn', $scope.currentTile); 
-    } else {
-      console.log('Cannot end your turn');
-    }
-  };
 
   var setMeeple = function(event, x, y) {
     if ($scope.numMeeps > 0 && !meeplePlaced) {
