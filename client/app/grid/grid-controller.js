@@ -2,7 +2,6 @@ var grid = angular.module('game.grid');
 
 grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   // Declare our controller wide dependencies
-  var gridSize = 13;
   var grid = GridService.matrix;
   var meeplePlaced = false;
   var tilePlaced = false;
@@ -27,7 +26,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   });
 
   $scope.range = function() {
-    return new Array(gridSize);
+    return new Array(GridService.gridSize);
   };
 
   $scope.rotate = function() {
@@ -45,13 +44,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
     }
   };
 
-  var setTile = function(x, y, tile) {
-    GridService.setTile(x, y, tile, function() {
-      tilePlaced = true;
-      meeplePlaced = false;
-    });
-  };
-
   $scope.endTurn = function() {
     if (tilePlaced) {
       tilePlaced = false;
@@ -65,6 +57,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
     }
   };
 
+  // TODO: Factor out meeple stuff
   var setMeeple = function(event, x, y) {
     if ($scope.numMeeps > 0 && !meeplePlaced) {
       if ($scope.currentTile.x === x && $scope.currentTile.y === y) {
@@ -88,6 +81,13 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       $scope.currentMeeple.attr('class', itemID);
       $scope.currentTile.meeple.location = +$scope.currentMeeple.attr('class').slice(-1);
     }
+  };
+
+  var setTile = function(x, y, tile) {
+    GridService.setTile(x, y, tile, function() {
+      tilePlaced = true;
+      meeplePlaced = false;
+    });
   };
 
   // Initialize
