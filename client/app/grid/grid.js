@@ -108,7 +108,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   };
 
   $scope.endTurn = function() {
-    if ($scope.currentTile.x !== null) {
+    if ($scope.tilePlaced) {
       $scope.tilePlaced = false;
       meeplePlaced = false;
       // Need to pass state of meeple placement to others
