@@ -5,7 +5,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   var gridSize = 13;
   var grid = GridService.matrix;
   var meeplePlaced = false;
-  
+  var tilePlaced = false;
+
   $scope.orientation = 0;
   $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';   
 
@@ -21,7 +22,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   };
 
   $scope.clickCell = function(event, x, y) {
-    if ($scope.tilePlaced) {
+    if (tilePlaced) {
       setMeeple(event, x, y);
     } else {
       setTile(x, y);
@@ -29,8 +30,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   };
 
   $scope.endTurn = function() {
-    if ($scope.tilePlaced) {
-      $scope.tilePlaced = false;
+    if (tilePlaced) {
+      tilePlaced = false;
       meeplePlaced = false;
       // Need to pass state of meeple placement to others
       $scope.currentTile.meeple.color = Player.getColor();
@@ -44,7 +45,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
     GridService.placeInitialTile();
     GridService.resizeGrid();
     // Create board
-    $scope.tilePlaced = false;
+    // $scope.tilePlaced = false;
     // Dynamically size grid
 
     socket.on('nextTurn', function(gamestate) {
@@ -108,15 +109,15 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
         tile.y = y;
         
         if (GridService.validPlacement(tile)) {
-          var tilePlaced = true;
-          var meeplePlaced = false;
+          tilePlaced = true;
+          meeplePlaced = false;
           // We push a new tile onto the grid at xy
           GridService.updateGrid(x, y, tile);
           // Set the background image of grid cell
           GridService.setCell(tile);
           // emit endturn
           $scope.orientation = 0;
-          $scope.tilePlaced = true;
+          // $scope.tilePlaced = true;
           // Call function place meeples
 
         } else {
