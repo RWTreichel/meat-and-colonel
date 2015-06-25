@@ -31,7 +31,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   };
 
   $scope.rotate = function() {
-    if (Player.isCurrentPlayer()) {
+    if (Player.isCurrentPlayer() && !tilePlaced) {
       $scope.orientation = ($scope.orientation + 1) % 4;
       $scope.currentTile.rotateRight();
     }
@@ -41,8 +41,15 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
     if (tilePlaced) {
       setMeeple(event, x, y);
     } else {
-      setTile(x, y);
+      setTile(x, y, $scope.currentTile);
     }
+  };
+
+  var setTile = function(x, y, tile) {
+    GridService.setTile(x, y, tile, function() {
+      tilePlaced = true;
+      meeplePlaced = false;
+    });
   };
 
   $scope.endTurn = function() {
@@ -51,6 +58,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       meeplePlaced = false;
       // Need to pass state of meeple placement to others
       $scope.currentTile.meeple.color = Player.getColor();
+      $scope.orientation = 0;
       socket.emit('endTurn', $scope.currentTile); 
     } else {
       console.log('Cannot end your turn');
@@ -79,34 +87,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       var itemID = angular.element(item.target).attr('id');
       $scope.currentMeeple.attr('class', itemID);
       $scope.currentTile.meeple.location = +$scope.currentMeeple.attr('class').slice(-1);
-    }
-  };
-
-  var setTile = function(x, y) {
-    // Check if it's current player's turn
-    if (Player.isCurrentPlayer()) {     
-      if (!GridService.cellAlreadyExists(x, y)) {
-        // Get out current tile generated from nextTurn
-        var tile = $scope.currentTile;
-        tile.x = x;
-        tile.y = y;
-        
-        if (GridService.validPlacement(tile)) {
-          tilePlaced = true;
-          meeplePlaced = false;
-          // We push a new tile onto the grid at xy
-          GridService.updateGrid(x, y, tile);
-          // Set the background image of grid cell
-          GridService.setCell(tile);
-          // emit endturn
-          $scope.orientation = 0;
-          // Call function place meeples
-        } else {
-          console.log('Not a valid placement.')
-        }
-      }
-    } else {
-      console.log('not your turn');
     }
   };
 

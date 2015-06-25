@@ -34,7 +34,22 @@ grid.service('GridService', function(TileModel, Player) {
     });
     this.updateGrid(x, y, DTile);
     this.setCell(DTile);
-    // return DTile;
+  };
+
+  this.validMove = function(x, y, tile) {
+    tile.x = x;
+    tile.y = y; 
+    return Player.isCurrentPlayer() && (!this.cellAlreadyExists(x, y)) && this.validPlacement(tile);
+  }
+
+  this.setTile = function(x, y, tile, cb) {
+    if (this.validMove(x, y, tile)) {
+      cb();
+      this.updateGrid(x, y, tile);
+      this.setCell(tile);
+    } else {
+      console.log('That is not a valid move');
+    }
   };
 
   this.updateGrid = function(x, y, tile) {
