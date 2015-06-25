@@ -11,6 +11,7 @@ var sharedSession = require('express-socket.io-session');
 var Game = require('./server/game.js');
 var spec = require('./server/deckSpec');
 var game, readyCount = 0;
+var _ = require('lodash');
 
 app.set('port', (process.env.PORT || 3000));
 app.use(express.static(__dirname + '/client'));
@@ -41,7 +42,8 @@ io.on('connection', function(socket) {
       // their info on the players object
       // only do this if the lobby isn't full
       if (Object.keys(players).length < 5) {
-        players[ userdata.username ] = { 
+        players[ userdata.username ] = {
+          username: userdata.username,
           password: userdata.password,
           color: userdata.color, 
           numMeeps: 7, 
@@ -56,7 +58,9 @@ io.on('connection', function(socket) {
     }
     // emit numready whenever there is a new connection
     // used to display number of users connected and ready to play on the home page
-    io.emit('numReady', {ready: readyCount, total: Object.keys(players).length});
+    io.emit('numReady', _.map( _.partition(players, {ready: true}), function(obj){
+      return _.pluck(obj, 'username');
+    }));
   });
 
   // currently unused on the client side
@@ -64,7 +68,9 @@ io.on('connection', function(socket) {
     if (socket.handshake.session.userdata) {
       delete socket.handshake.session.userdata;
       socket.handshake.session.save();
-      io.emit('numReady', {ready: readyCount, total: Object.keys(players).length});
+      io.emit('numReady', _.map( _.partition(players, {ready: true}), function(obj){
+        return _.pluck(obj, 'username');
+      }));
     }
   });
 
@@ -128,7 +134,9 @@ io.on('connection', function(socket) {
       }
     }
     // emit numReady every time someone readys up 
-    io.emit('numReady', {ready: readyCount, total: Object.keys(players).length});
+    io.emit('numReady', _.map( _.partition(players, {ready: true}), function(obj){
+      return _.pluck(obj, 'username');
+    }));
   });
 
   // send num of meeps and meep color to client side
