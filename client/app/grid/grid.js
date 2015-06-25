@@ -48,6 +48,7 @@ grid.service('GridService', function(TileModel) {
 });
 
 grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
+  console.log('grid controller');
   var gridSize = 13;
   $scope.orientation = 0;
   $scope.src = null;
@@ -68,6 +69,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   };
 
   $scope.init = function() {
+    console.log('CALLING INITIALIZE');
     // Create board
     $scope.grid = GridService.createEmptyGameBoard(gridSize);
     $scope.tilePlaced = false;
@@ -82,7 +84,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       } else {
         $scope.currentTile = new TileModel(gamestate.nextTile);
         updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
-        setCell(gamestate.lastTile);
+        // Modify set cell for meeples
+        setCell(gamestate.lastTile, 'lastTile');
       }
       // Create a tile model
       $scope.playerId = gamestate.nextPlayer; 
@@ -110,7 +113,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       meeplePlaced = false;
       // Need to pass state of meeple placement to others
       $scope.currentTile.meeple.color = Player.getColor();
-
       socket.emit('endTurn', $scope.currentTile); 
     } else {
       console.log('Cannot end your turn');
@@ -118,7 +120,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   };
 
   var setMeeple = function(event, x, y) {
-    if ($scope.numMeeps > 0) {
+    if ($scope.numMeeps > 0 && !meeplePlaced) {
       if (!meeplePlaced) {
         if ($scope.currentTile.x === x && $scope.currentTile.y === y) {
           var meepClass = 'meep-x-' + x + '-y-' + y;
@@ -139,7 +141,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   };
 
   $scope.cycleMeeple = function(item) {
-    if ($scope.currentMeeple) {
+    if ($scope.playerId === socket.id && $scope.currentMeeple) {     
       var itemID = angular.element(item.target).attr('id');
       $scope.currentMeeple.attr('class', itemID);
       $scope.currentTile.meeple.location = +$scope.currentMeeple.attr('class').slice(-1);
@@ -233,13 +235,26 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
     return $scope.grid[y][x] !== null; 
   };
 
-  var setCell = function(tile) {
+  var setCell = function(tile, option) {
     var id = '#' + 'x-' + tile.x + '-y-' + tile.y;
+
     angular.element(document).ready(function() {
       var domElement = angular.element(document.querySelector(id));
+      // Append meeple to dom element, and apply position class
       domElement.css('background-size', 'contain');
       domElement.css('background-image', 'url(' + tile.img + ')');
       domElement.css('transform', 'rotate(' + tile.orientation*90 + 'deg)');
+      // console.log( tile.meeple.color, Player.getColor());
+      if (option === 'lastTile' && 
+          tile.meeple.color !== undefined && 
+          tile.meeple.color !== Player.getColor()
+        ) {
+        var meepleSource = 'assets/img/Meeples/meeple_' + tile.meeple.color + '.png'
+        var meepleClass = 'pos-' + tile.meeple.location;
+        var meepleElement = angular.element('<img class="'+ meepleClass +'" src="' + meepleSource + '">');
+        console.log('Meeple is being appended', meepleElement);
+        domElement.append(meepleElement);
+      }
     });
   };
 
