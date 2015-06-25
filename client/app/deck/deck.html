@@ -2,10 +2,6 @@
   <img class='rotate-{{ orientation }}' src="{{src}}">
 
 
-  <div class="rulebook">
-    <a href="#rules">How to Play</a>
-  </div>
-
   <div class='rotate'>
     <button ng-click='rotate()'>Rotate: {{ orientation }}</button>
     <button class='endturn' ng-click='endTurn()'>End Turn</button>
@@ -16,14 +12,17 @@
     <button id='pos-4' ng-click='cycleMeeple($event)'></button><button id='pos-5' ng-click='cycleMeeple($event)'></button><button id='pos-6' ng-click='cycleMeeple($event)'></button><br>
     <button id='pos-7' ng-click='cycleMeeple($event)'></button><button id='pos-8' ng-click='cycleMeeple($event)'></button><button id='pos-9' ng-click='cycleMeeple($event)'></button><br>
   </div>
-  <div id="rules" class="overlay">
+
+<!--   <div id="rules" class="overlay">
     <a href="#close" title="close" class="close">Close!</a>
     <div class="content">
       Bacon ipsum dolor amet spare ribs turducken turkey corned beef kevin pastrami. Pork chop beef alcatra bresaola chuck shoulder ham hock drumstick shankle ham. Chicken andouille pastrami pork chop ground round. Salami shank chicken, tongue tail pancetta fatback. Meatloaf hamburger pork tri-tip sirloin meatball pork belly, sausage jerky brisket flank. Tongue ball tip leberkas, t-bone turkey bresaola sirloin alcatra.
 
       Chicken tongue sausage ball tip ground round rump landjaeger prosciutto filet mignon cupim porchetta. Picanha chuck meatloaf, cow shank kielbasa bresaola tri-tip pancetta. Jowl kielbasa flank chuck swine ham meatball ball tip meatloaf ground round capicola venison turkey boudin. Flank turkey leberkas cupim shankle drumstick short ribs porchetta bacon sausage ground round prosciutto landjaeger. Flank ham frankfurter, cupim leberkas chicken turducken sirloin. Flank pork chop turducken, tongue shankle andouille jerky turkey picanha swine shank rump salami.
     </div>
-  </div>
+  </div> -->
+
   <div ng-include src="'app/meeple/meeple.html'"></div>
+  <div ng-include src="'app/rules/rules.html'"></div>
 
 </div>

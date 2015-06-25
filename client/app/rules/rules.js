@@ -8,5 +8,4 @@ rules.controller('rulesCtrl', function($scope) {
 
   $scope.lightStyle = $scope.displayNone;
   $scope.fadeStyle = $scope.displayNone;
-  
 });
