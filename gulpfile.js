@@ -74,7 +74,10 @@ gulp.task('install', function() {
     .pipe(install());
 });
 
-gulp.task('deploy', ['install', 'scripts', 'stylesheets']);
+gulp.task('deploy', ['install'], function() {
+  gulp.start('stylesheets');
+  gulp.start('scripts');
+});
 
 gulp.task('watch', function() {
   gulp.watch(paths.scripts, ['scripts']);
