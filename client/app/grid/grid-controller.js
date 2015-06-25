@@ -10,6 +10,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';   
 
   socket.on('nextTurn', function(gamestate) {
+    console.log(gamestate.board);
     if (!gamestate.lastTile) {
       $scope.currentTile = new TileModel(gamestate.nextTile);
     } else {
@@ -63,7 +64,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       if ($scope.currentTile.x === x && $scope.currentTile.y === y) {
         $scope.currentTile.meeple.location = 1;
         var meepClass = 'meep-x-' + x + '-y-' + y;
-        angular.element(event.target).append('<img class="'+meepClass+'" src="'+ $scope.meepmeep +'">');
+        angular.element(event.target).append('<img class="'+meepClass+'" src="'+ $scope.meepmeep +'">')
+          .on('click',  pickupMeeple);
         $scope.currentMeeple = angular.element(document.querySelector('.'+meepClass));
         $scope.numMeeps--;
         socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: $scope.numMeeps });
@@ -73,6 +75,20 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       }
     } else {
       console.log('All outta meeps');
+    }
+  };
+
+  var pickupMeeple = function(event) {
+    event.stopPropagation();
+    if (event.ctrlKey) {
+      var imageSrc = angular.element(this).children('img').attr('src');
+      // Check player's color matches the meep 
+      if (Player.getColor() === imageSrc.match(/_(.*)\.png/)[1]) {
+        console.log('picking up a meeple');
+        angular.element(event.target).remove();
+        $scope.numMeeps++;
+        socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: $scope.numMeeps });
+      }
     }
   };
 
