@@ -1,12 +1,14 @@
 var grid = angular.module('game.grid');
 
 grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
-  console.log('grid controller');
+  // Declare our controller wide dependencies
   var gridSize = 13;
+  var grid = GridService.matrix;
+  var meeplePlaced = false;
+  
   $scope.orientation = 0;
   $scope.src = null;
   $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';   
-  var meeplePlaced = false;
 
   $scope.range = function() {
     return new Array(gridSize);
@@ -18,15 +20,13 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       $scope.currentTile.rotateRight();
       // console.log($scope.currentTile);
     }
-    // console.log($scope.grid[$scope.currentTile.y][$scope.currentTile.x]);
+    // console.log(grid[$scope.currentTile.y][$scope.currentTile.x]);
   };
 
-  $scope.init = function() {
+  var init = function() {
     // Create board
-    $scope.grid = GridService.createEmptyGameBoard(gridSize);
     $scope.tilePlaced = false;
     placeInitialTile();
-
     // Dynamically size grid
     angular.element(document.querySelector('.grid-container')).css('width', gridSize * 52 + 'px');
 
@@ -35,9 +35,9 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
         $scope.currentTile = new TileModel(gamestate.nextTile);
       } else {
         $scope.currentTile = new TileModel(gamestate.nextTile);
-        updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
+        GridService.updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
         // Modify set cell for meeples
-        setCell(gamestate.lastTile, 'lastTile');
+        GridService.setCell(gamestate.lastTile, 'lastTile');
       }
       // Create a tile model
       $scope.playerId = gamestate.nextPlayer; 
@@ -109,13 +109,13 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
         tile.x = x;
         tile.y = y;
         
-        if (validPlacement(tile)) {
+        if (GridService.validPlacement(tile)) {
           var tilePlaced = true;
           var meeplePlaced = false;
           // We push a new tile onto the grid at xy
-          updateGrid(x, y, tile);
+          GridService.updateGrid(x, y, tile);
           // Set the background image of grid cell
-          setCell(tile);
+          GridService.setCell(tile);
           // emit endturn
           $scope.orientation = 0;
           $scope.tilePlaced = true;
@@ -130,105 +130,15 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
     }
   };
 
-  var validPlacement = function(tile) {
-    var canPlace = 0, northernTile, southernTile, easternTile, westernTile;
-
-    ($scope.grid[tile.y-1] !== undefined) &&
-      (northernTile = $scope.grid[tile.y-1][tile.x]);
-
-    ($scope.grid[tile.y][tile.x+1] !== undefined) &&
-      (easternTile = $scope.grid[tile.y][tile.x+1]);
-
-    ($scope.grid[tile.y][tile.x-1] !== undefined) &&
-      (westernTile = $scope.grid[tile.y][tile.x-1]);
-
-    ($scope.grid[tile.y+1] !== undefined) &&
-      (southernTile = $scope.grid[tile.y+1][tile.x]);
-
-    if (
-      (northernTile !== undefined) && 
-      ((northernTile === null) || (tile.features.n === northernTile.features.s)) ) {
-        canPlace += 1;
-    }
-    if ( 
-      (easternTile !== undefined) &&
-      ((easternTile === null) || (tile.features.e === easternTile.features.w)) ) {
-        canPlace += 1;
-    }
-    if ( 
-      (southernTile !== undefined) &&
-      ((southernTile === null) || (tile.features.s === southernTile.features.n)) ) {
-        canPlace += 1;
-    }
-    if ( 
-      (westernTile !== undefined) &&
-      ((westernTile === null) || (tile.features.w === westernTile.features.e)) ) {
-        canPlace += 1;
-    }
-
-    if ( 
-      northernTile === null &&
-      easternTile  === null &&
-      westernTile  === null &&
-      southernTile === null ) {
-        return false;
-    } else {
-      return canPlace === 4;
-    }
-  };
-
-  // These functions should be moved into a factory/service
-  var updateGrid = function(x, y, tile) {
-    $scope.grid[y][x] = tile;
-    // console.log($scope.grid[y]);
-  };
-
   var cellAlreadyExists = function(x, y) {
-    return $scope.grid[y][x] !== null; 
-  };
-
-  var setCell = function(tile, option) {
-    var id = '#' + 'x-' + tile.x + '-y-' + tile.y;
-
-    angular.element(document).ready(function() {
-      var domElement = angular.element(document.querySelector(id));
-      // Append meeple to dom element, and apply position class
-      domElement.css('background-size', 'contain');
-      domElement.css('background-image', 'url(' + tile.img + ')');
-      domElement.css('transform', 'rotate(' + tile.orientation*90 + 'deg)');
-      // console.log( tile.meeple.color, Player.getColor());
-      if (option === 'lastTile' && 
-          tile.meeple.color !== undefined && 
-          tile.meeple.color !== Player.getColor()
-        ) {
-        var meepleSource = 'assets/img/Meeples/meeple_' + tile.meeple.color + '.png'
-        var meepleClass = 'pos-' + tile.meeple.location;
-        var meepleElement = angular.element('<img class="'+ meepleClass +'" src="' + meepleSource + '">');
-        console.log('Meeple is being appended', meepleElement);
-        domElement.append(meepleElement);
-      }
-    });
+    return grid[y][x] !== null; 
   };
 
   var placeInitialTile = function() {
-    var x = Math.floor($scope.grid.length/2), y = Math.floor($scope.grid.length/2);
-    // var x = 0, y = 0;
-    var DTile = new TileModel({
-      x: x, 
-      y: y, 
-      id: 'd', 
-      features: {
-        n: 'city',
-        e: 'road',
-        w: 'road',
-        s: 'grass'
-      }, 
-      orientation: 0
-    });
-    updateGrid(x, y, DTile);
-    setCell(DTile);
+    var initialTile = GridService.placeInitialTile(); 
+    GridService.updateGrid(initialTile.x, initialTile.y, initialTile);
+    GridService.setCell(initialTile);
   };
 
-  // Initialize game board
-  $scope.init();
+  init();
 });
