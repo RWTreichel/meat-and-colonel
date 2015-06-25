@@ -16,7 +16,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       $scope.currentTile = new TileModel(gamestate.nextTile);
       GridService.updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
       GridService.setCell(gamestate.lastTile, 'lastTile');
-      console.log(grid[gamestate.lastTile.y][gamestate.lastTile.x]);
     }
     $scope.src = $scope.currentTile.img;
     $scope.$apply();
