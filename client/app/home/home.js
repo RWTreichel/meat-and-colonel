@@ -1,9 +1,7 @@
 var home = angular.module('game.home', []);
 
 home.controller('homeCtrl', function($scope, $location, Player){
-
   // $scope.user = 'Player 1';
-  $scope.password = 'Carcassonne';
   $scope.user = Math.random().toString();
   $scope.rndNumber = Math.floor((Math.random() * 4) + 1);
 
@@ -35,11 +33,11 @@ home.controller('homeCtrl', function($scope, $location, Player){
       // save user data to app service 
       Player.setUsername($scope.user);
       Player.setColor($scope.color);
-      
-      socket.emit('login', {username: $scope.user, password: $scope.password, color: $scope.color});
+      socket.emit('login', 
+        { username: $scope.user,
+         color: $scope.color });
       socket.emit('playerReady', $scope.user);
       $scope.user = '';
-      $scope.password = '';
       $location.path('game');
     }
   };

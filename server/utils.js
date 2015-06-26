@@ -11,35 +11,27 @@ exports.game = null;
 // create a new user or overwrite their existing stuff other than socket id
 // currently useless as the client does not support revival of the lost game state
 exports.handleLogin = function(socket, players, userdata){
-
   if (!gameInProgress){
+    // if someone in the session picked that name already
     if (players[userdata.username]){
-      if (userdata.password === players[userdata.username].password) {
-        players[userdata.username].socket = socket.id;
-      } else {
-        // TODO: Invalid login handling...
-        console.log('Wrong password!');
-      }
+      // do something good if they fail
+      // don't konw what that is yet
     } else {
-      // If player is logging in for the first time, register
+      // else if they are good to go
       // their info on the players object
       // only do this if the lobby isn't full
       if (Object.keys(players).length < 5) {
         players[ userdata.username ] = {
           username: userdata.username,
-          password: userdata.password,
           color: userdata.color, 
           numMeeps: 7, 
           socket: socket.id,
           ready: false
         };
-      } else {
-        // TODO: alert that the game is full
-        console.log('game full');
       }
     }
   }
-    console.log(players);
+  console.log('players connected: ', players);
 };
 
 exports.handleLogout = function(socket, userdata, players){
@@ -57,13 +49,11 @@ exports.emitNumReady = function(io, players){
 
 exports.onPlayersReady = function(io, players, data){
   var username = data;
-
   // prevent nonexistent username from doing stuff
   // and it won't do stuff if the player is already 'ready'
   if (players[ username ] === undefined || players[username].ready){
     return;
   }
-
   players[ username ].ready = true;
   var allReady = true;
   for(var player in players){
@@ -93,13 +83,10 @@ exports.handleEndTurn = function(io, socket, players, data){
   if (Object.keys(players).length <= 1){
     return;
   }
-
   console.log(Object.keys(players));
-
   var name = exports.game.players[ exports.game.currentPlayer ];
-  
-
   if (players[ name ].socket === socket.id) {
+
     // this updates the server side game object with all of the info from the
     // player move. will be useful for implementing client reconnections
     var gameState = exports.game.update(data);
@@ -114,7 +101,6 @@ exports.handleEndTurn = function(io, socket, players, data){
 };
 
 exports.handleDisconnect = function(io, players, cb) {
-  console.log('game over');
   io.emit('gameOver', 'gameOver');
   _.forEach(io.sockets.sockets, function(s){
     if (s) {
