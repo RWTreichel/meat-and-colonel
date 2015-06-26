@@ -16,14 +16,13 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
     } else {
       $scope.currentTile = new TileModel(gamestate.nextTile);
       GridService.updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
-      /* TODO */
       GridService.setCell(gamestate.lastTile, 'lastTile');
     }
-    meepleRemoved = undefined;
-    $scope.src = $scope.currentTile.img;
     if (gamestate.meepleRemoved) {
       GridService.updateMeeples(gamestate.meepleRemoved.color, gamestate.meepleRemoved.x, gamestate.meepleRemoved.y);
     }
+    meepleRemoved = undefined;
+    $scope.src = $scope.currentTile.img;
     $scope.$apply();
   });
 
@@ -87,7 +86,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   var pickupMeeple = function(event) {
     event.stopPropagation();
     if (Player.isCurrentPlayer()) {
-      if (event.ctrlKey) {
+      if (event.shiftKey) {
         var imageSrc = angular.element(this).children('img').attr('src');
         // Check player's color matches the meep 
         if (Player.getColor() === imageSrc.match(/_(.*)\.png/)[1]) {
