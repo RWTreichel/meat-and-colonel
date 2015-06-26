@@ -13,7 +13,8 @@ var paths = {
   scripts: [
     './client/lib/angular/angular.min.js',
     './client/lib/angular-route/angular-route.min.js',
-    
+    './client/lib/angular-notify/angular-notify.js',
+
     './client/app/home/home.js',
 
     './client/app/grid/grid-module.js',
@@ -23,6 +24,7 @@ var paths = {
 
     './client/app/deck/deck.js',
     './client/app/meeple/meeple.js',
+    '.client/app/directives/*.js',
     './client/app/app.js'
   ],
   stylesheets: [

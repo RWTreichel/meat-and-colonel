@@ -2,6 +2,7 @@ var app = angular.module('game', [
   'game.home',
   'game.grid',
   'game.meeple',
+  'cgNotify',
   'ngRoute'
 ])
 .config(function($routeProvider, $httpProvider) {

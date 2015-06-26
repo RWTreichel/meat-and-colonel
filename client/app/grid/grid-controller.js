@@ -1,12 +1,13 @@
 var grid = angular.module('game.grid');
 
-grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
+grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, notify) {
   // Declare our controller wide dependencies
   var grid = GridService.matrix;
   var meepleRemoved = undefined;
   var meeplePlaced = false;
   var tilePlaced = false;
-
+  notify.config({duration: 1000, templateUrl: 'app/templates/notifications.html'});
+  
   $scope.orientation = 0;
   $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';   
 
@@ -58,13 +59,13 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       $scope.orientation = 0;
       socket.emit('endTurn', {tile: $scope.currentTile, meepleRemoved: meepleRemoved}); 
     } else {
-      console.log('Cannot end your turn');
+      notify('Cannot end your turn');
     }
   };
 
   // TODO: Factor out meeple stuff
   var setMeeple = function(event, x, y) {
-    if ($scope.numMeeps > 1 && !meeplePlaced) {
+    if ($scope.numMeeps > 0 && !meeplePlaced) {
       if ($scope.currentTile.x === x && $scope.currentTile.y === y) {
         $scope.currentTile.meeple.location = 1;
         var meepCoords = 'meep-x-' + x + '-y-' + y;
@@ -76,10 +77,10 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
         socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: $scope.numMeeps });
         meeplePlaced = true;
       } else {
-        console.log('Can only place meeple on last tile');
+        notify('Can only place meeple on last tile');
       }
     } else {
-      console.log('All outta meeps');
+      notify("Can't place meeple");
     }
   };
 
