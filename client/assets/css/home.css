@@ -20,29 +20,4 @@
   text-decoration: none; }
 
 p {
-  margin-bottom: 10px;
-  color: white; }
-
-body {
-  background-color: #48589A; }
-
-#image {
-  text-align: center; }
-
-#login {
-  text-align: center; }
-
-h1 {
-  color: #F2E48A; }
-
-h2 {
-  color: white; }
-
-#ready {
-  color: green; }
-
-#notReady {
-  color: red; }
-
-#readyStatus {
-  background-color: white; }
+  margin-bottom: 10px; }
