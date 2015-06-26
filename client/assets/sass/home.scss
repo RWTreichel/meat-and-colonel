@@ -4,9 +4,11 @@ body {
 }
 
 h1 {
-  font-family: Helvetica, Arial, sans serif;
-  font-weight: bold;
-  text-transform: uppercase;
+  // font-family: Helvetica, Arial, sans serif;
+  font-family: 'Tangerine', cursive;  
+  // font-weight: bold;
+  font-size: 78px;
+  // text-transform: uppercase;
 }
 
 p {
@@ -28,7 +30,8 @@ input {
   border: none;
   border-bottom: 3px solid #000;
   margin-bottom: 20px;
-  font-size: 12px;
+  margin-top: 5px;
+  font-size: 14px;
   width: 300px;
 }
 
@@ -37,7 +40,8 @@ select {
   color: #000;
   border-bottom: 3px solid #000;
   margin-bottom: 20px;
-  font-size: 12px;
+  margin-top: 5px;
+  font-size: 14px;
   width: 300px;
 }
 
