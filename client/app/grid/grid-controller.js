@@ -3,6 +3,7 @@ var grid = angular.module('game.grid');
 grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
   // Declare our controller wide dependencies
   var grid = GridService.matrix;
+  var meepleRemoved = undefined;
   var meeplePlaced = false;
   var tilePlaced = false;
 
@@ -15,9 +16,14 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
     } else {
       $scope.currentTile = new TileModel(gamestate.nextTile);
       GridService.updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
+      /* TODO */
       GridService.setCell(gamestate.lastTile, 'lastTile');
     }
+    meepleRemoved = undefined;
     $scope.src = $scope.currentTile.img;
+    if (gamestate.meepleRemoved) {
+      GridService.updateMeeples(gamestate.meepleRemoved.color, gamestate.meepleRemoved.x, gamestate.meepleRemoved.y);
+    }
     $scope.$apply();
   });
 
@@ -51,7 +57,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
       // Need to pass state of meeple placement to others
       $scope.currentTile.meeple.color = Player.getColor();
       $scope.orientation = 0;
-      socket.emit('endTurn', {tile: $scope.currentTile, meepleRemoved: 'dicks'}); 
+      socket.emit('endTurn', {tile: $scope.currentTile, meepleRemoved: meepleRemoved}); 
     } else {
       console.log('Cannot end your turn');
     }
@@ -59,7 +65,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
 
   // TODO: Factor out meeple stuff
   var setMeeple = function(event, x, y) {
-    if ($scope.numMeeps > 0 && !meeplePlaced) {
+    if ($scope.numMeeps > 1 && !meeplePlaced) {
       if ($scope.currentTile.x === x && $scope.currentTile.y === y) {
         $scope.currentTile.meeple.location = 1;
         var meepCoords = 'meep-x-' + x + '-y-' + y;
@@ -88,8 +94,12 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player) {
           var meep = angular.element(event.target);
           var meepData = meep.attr('data-coords');
           var meepColor = meep.attr('data-color');
-          console.log(meepData);
-          console.log(meepColor);
+          var parsedData = meepData.match(/x-(\d)+-y-(\d)+/);
+          meepleRemoved = {
+            color: meepColor,
+            x: parsedData[1],
+            y: parsedData[2]
+          };
           meep.remove();
           $scope.numMeeps++;
           socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: $scope.numMeeps });
