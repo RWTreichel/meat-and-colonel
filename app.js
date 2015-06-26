@@ -38,21 +38,6 @@ io.on('connection', function(socket) {
       players = {};
     });
   });
-
-  // send num of meeps and meep color to client side
-  // property of dick && amy
-  socket.on('meepDataReq', function(data) {
-    // client side sends current username
-    if (Object.keys(players).length < 1){
-      return;
-    }
-    if (data.numMeeps) {
-      players[ data.username ].numMeeps = data.numMeeps;
-      socket.emit('meepDataRes', { numMeeps: data.numMeeps });
-    } else {
-      socket.emit('meepDataRes', { numMeeps: players[ data.username ].numMeeps });
-    }
-  });
 });
 
 server.listen(app.get('port'), function() {

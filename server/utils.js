@@ -22,8 +22,7 @@ exports.handleLogin = function(socket, players, userdata){
       if (Object.keys(players).length < 5) {
         players[ userdata.username ] = {
           username: userdata.username,
-          color: userdata.color, 
-          numMeeps: 7, 
+          color: userdata.color,
           socket: socket.id,
           ready: false
         };

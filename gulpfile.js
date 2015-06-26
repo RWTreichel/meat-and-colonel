@@ -23,14 +23,12 @@ var paths = {
     './client/app/grid/grid-controller.js',
 
     './client/app/deck/deck.js',
-    './client/app/meeple/meeple.js',
     './client/app/app.js'
   ],
   stylesheets: [
     './client/assets/css/grid-reset.css',
     './client/assets/css/grid.css',
     './client/assets/css/deck.css',
-    './client/assets/css/meeple.css',
     './client/assets/css/home.css'
   ],
   sass: [

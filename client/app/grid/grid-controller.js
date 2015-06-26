@@ -9,7 +9,13 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
   notify.config({duration: 1000, templateUrl: 'app/templates/notifications.html'});
   
   $scope.orientation = 0;
-  $scope.meepmeep = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';   
+
+  // Set starting number of meeples on grid instantiation.
+  // numMeeps should be altered later on only by placing and taking back meeples.
+  $scope.numMeeps = 7;
+
+  // Set client's meeple color. This line should only run once (Meeple color doesn't change).
+  $scope.meepleColor = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';
 
   socket.on('nextTurn', function(gamestate) {
     if (!gamestate.lastTile) {
@@ -27,10 +33,10 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
     $scope.$apply();
   });
 
-  socket.on('meepDataRes', function(data) {
-    $scope.numMeeps = data.numMeeps;
-  });
-
+  // Needed purely so that ng-repeat works.
+  $scope.repeatMeeples = function(numMeeps) {
+    return new Array(numMeeps);
+  }
   $scope.range = function() {
     return new Array(GridService.gridSize);
   };
@@ -69,6 +75,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
   var setMeeple = function(event, x, y) {
     if ($scope.numMeeps > 0 && !meeplePlaced) {
       if ($scope.currentTile.x === x && $scope.currentTile.y === y) {
+        // Assign the meeple's default location.
         $scope.currentTile.meeple.location = 1;
         var meepCoords = 'meep-x-' + x + '-y-' + y;
         var meepColor = Player.getColor();
@@ -76,7 +83,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
           .on('click',  pickupMeeple);
         $scope.currentMeeple = angular.element(document.querySelector('img[data-coords="'+ meepCoords +'"]'));
         $scope.numMeeps--;
-        socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: $scope.numMeeps });
+        // Restrict players to only dropping one meeple per turn by setting the meeplePlaced flag to true.
         meeplePlaced = true;
       } else {
         notify('Can only place meeple on last tile');
@@ -87,6 +94,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
   };
 
   var pickupMeeple = function(event) {
+    // Avoid the click event from bubbling up through the DOM.
     event.stopPropagation();
     if (Player.isCurrentPlayer()) {
       if (event.shiftKey) {
@@ -129,7 +137,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
   (function() {
     GridService.placeInitialTile();
     GridService.resizeGrid();
-    socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: 7 });
+    //socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: 7 });
   })();
 
 });
