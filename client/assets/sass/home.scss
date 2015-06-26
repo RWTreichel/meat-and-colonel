@@ -1,3 +1,63 @@
+body {
+  background: #fff;
+  color: #000;
+}
+
+h1 {
+  font-family: Helvetica, Arial, sans serif;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+p {
+  font-family: Times, serif;
+  color: #808080;
+  letter-spacing: 1px;
+}
+
+label {
+  font-family: Helvetica, Arial, sans serif;
+  font-weight: bold;
+  margin-bottom: 20px;
+  position: block;
+}
+
+input {
+  background: transparent;
+  color: #000;
+  border: none;
+  border-bottom: 3px solid #000;
+  margin-bottom: 20px;
+  font-size: 12px;
+  width: 300px;
+}
+
+select {
+  background: transparent;
+  color: #000;
+  border-bottom: 3px solid #000;
+  margin-bottom: 20px;
+  font-size: 12px;
+  width: 300px;
+}
+
+.btn {
+  font-size: 24px;
+  font-weight: bold;
+  background: #fff;
+  border: 3px solid #000;
+  padding: 3px 10px;
+  border-radius: 5px;
+  width: 300px;
+  height: 50px;
+}
+
+.btn:hover {
+  background: transparent;
+  border: 3px solid #000;
+  cursor: pointer;
+}
+
 .container {
   position: absolute;
   top: 50%;
@@ -8,18 +68,31 @@
       -ms-transform:   translate(-50%,-50%);
        -o-transform:   translate(-50%,-50%);
           transform:   translate(-50%,-50%);
-  width: 500px;
+  width: 750px;
+  overflow: hidden;
+}
+
+.top {
+  width: 700px;
+  margin-bottom: 10px;
+}
+
+.left {
+  float: left;
+  position: block;
+  width: 380px;
+  margin-right: 20px;
+}
+
+.right {
+  float: left;
+  position: block;
+  width: 300px;
 }
 
 .wrap {
   width: 100%;
   text-align: center;
-}
-
-.btn {
-  border: 1px solid black;
-  padding: 5px;
-  text-decoration: none;
 }
 
 p {
