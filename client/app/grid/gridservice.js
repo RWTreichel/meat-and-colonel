@@ -56,6 +56,11 @@ grid.service('GridService', function(TileModel, Player) {
     this.matrix[y][x] = tile;
   };
 
+  this.updateMeeples = function(color, x, y) {
+    this.matrix[y][x].meeple = {};
+    angular.element(document.getElementById('x-'+ x +'-y-'+ y)).empty();
+  };
+
   this.cellAlreadyExists = function(x, y) {
     return this.matrix[y][x] !== null; 
   };
