@@ -36,7 +36,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
   // Needed purely so that ng-repeat works.
   $scope.repeatMeeples = function(numMeeps) {
     return new Array(numMeeps);
-  }
+  };
+  
   $scope.range = function() {
     return new Array(GridService.gridSize);
   };
@@ -79,7 +80,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
         $scope.currentTile.meeple.location = 1;
         var meepCoords = 'meep-x-' + x + '-y-' + y;
         var meepColor = Player.getColor();
-        angular.element(event.target).append('<img data-color=' + meepColor + ' data-coords="'+meepCoords+'" src="'+ $scope.meepmeep +'">')
+        angular.element(event.target).append('<img data-color=' + meepColor + ' data-coords="'+meepCoords+'" src="'+ $scope.meepleColor +'">')
           .on('click',  pickupMeeple);
         $scope.currentMeeple = angular.element(document.querySelector('img[data-coords="'+ meepCoords +'"]'));
         $scope.numMeeps--;
@@ -112,7 +113,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
           };
           meep.remove();
           $scope.numMeeps++;
-          socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: $scope.numMeeps });
         }
       }
     }
@@ -137,7 +137,6 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
   (function() {
     GridService.placeInitialTile();
     GridService.resizeGrid();
-    //socket.emit('meepDataReq', { username: Player.getUsername(), numMeeps: 7 });
   })();
 
 });
