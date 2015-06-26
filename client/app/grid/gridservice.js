@@ -2,7 +2,7 @@ var grid = angular.module('game.grid');
 
 grid.service('GridService', function(TileModel, Player) {
 
-  this.gridSize = 13;
+  this.gridSize = 15;
 
   this.createEmptyGameBoard = function(boardSize) {
     var matrix = [];
@@ -61,7 +61,7 @@ grid.service('GridService', function(TileModel, Player) {
   };
 
   this.resizeGrid = function() {
-    angular.element(document.querySelector('.grid-container')).css('width', this.gridSize * 52 + 'px');
+    angular.element(document.querySelector('.grid-container')).css('width', this.gridSize * 51 + 'px');
   };
 
   this.validPlacement = function(tile) {

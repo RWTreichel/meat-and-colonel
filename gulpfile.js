@@ -7,7 +7,7 @@ var nodemon = require('gulp-nodemon');
 var sourcemaps = require('gulp-sourcemaps');
 var sass = require('gulp-sass');
 var rename = require('gulp-rename');
-
+var install = require('gulp-install');
 // We store the files we want to watch in an object for easy reference
 var paths = {
   scripts: [
@@ -69,10 +69,14 @@ gulp.task('test', function() {
   ]).pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
+gulp.task('install', function() {
+  return gulp.src(['./bower.json'])
+    .pipe(install());
+});
 
-
-gulp.task('deploy', function() {
-  // TODO
+gulp.task('deploy', ['install'], function() {
+  gulp.start('stylesheets');
+  gulp.start('scripts');
 });
 
 gulp.task('watch', function() {
