@@ -33,7 +33,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
     $scope.$apply();
   });
 
-  // Needed purely so that ng-repeat works.
+  // Needed purely so that ng-repeat works for the meeples display.
   $scope.repeatMeeples = function(numMeeps) {
     return new Array(numMeeps);
   };
@@ -113,6 +113,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
           };
           meep.remove();
           $scope.numMeeps++;
+          meeplePlaced = false;
+          $scope.$apply();
         }
       }
     }
