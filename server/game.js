@@ -16,6 +16,12 @@ var Game = function(boardSize, deckSpec, players){
 };
 
 // TODO: decide where to place start tile on the board;
+// TODO: communicate initial board sizes between server and client
+// the whole board is not super important right now
+// but is arround to support reconnects mid game in the future
+// because the client will need an entire game state to redraw
+// if you ever want to grow the board size there are some old commits with
+// functions to support that
 
 // arg should be a parsed tile from the client post request
 Game.prototype.placeTile = function(tile) {
@@ -41,14 +47,15 @@ Game.prototype.initialState = function() {
 };
 
 // generates game state for next turn
-Game.prototype.update = function(tile) {
+Game.prototype.update = function(data) {
   var gameState = {};
-  var serverTile = new Tile(tile.id, tile.features, tile.x, tile.y, tile.meeple.color, tile.meeple.location);
+  var serverTile = new Tile(data.tile.id, data.tile.features, data.tile.x, data.tile.y, data.tile.meeple.color, data.tile.meeple.location);
   this.placeTile(serverTile);
-  gameState.lastTile = tile;
+  gameState.lastTile = data.tile;
   gameState.nextPlayer = this.nextPlayer();
   gameState.nextTile = this.deck.pop();
   gameState.board = this.board;
+  gameState.meepleRemoved = data.meepleRemoved;
   return gameState;
 };
 
