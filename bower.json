@@ -20,5 +20,8 @@
     "angular-route": "~1.4.1",
     "bootstrap-sass": "~3.3.5",
     "angular-notify": "~2.5.0"
+  },
+  "resolutions": {
+    "angular": "~1.4.1"
   }
 }
