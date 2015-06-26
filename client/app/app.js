@@ -25,6 +25,10 @@ app.service('Player', function() {
     self.playerData.playerId = gamestate.nextPlayer; 
   });
 
+  socket.on('disconnect', function(){
+    window.location = '/';
+  });
+
   this.player = function() {
     return this.playerData;
   };
