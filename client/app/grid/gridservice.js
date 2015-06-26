@@ -1,6 +1,6 @@
 var grid = angular.module('game.grid');
 
-grid.service('GridService', function(TileModel, Player) {
+grid.service('GridService', function(TileModel, Player, notify) {
 
   this.gridSize = 15;
 
@@ -12,7 +12,6 @@ grid.service('GridService', function(TileModel, Player) {
         matrix[x][y] = null;
       }
     }
-
     this.gridSize = boardSize;
     return matrix;
   };
@@ -48,7 +47,7 @@ grid.service('GridService', function(TileModel, Player) {
       this.updateGrid(x, y, tile);
       this.setCell(tile);
     } else {
-      console.log('That is not a valid move');
+      notify('Cannot place tile there');
     }
   };
 
