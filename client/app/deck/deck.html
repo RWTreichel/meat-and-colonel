@@ -12,7 +12,9 @@
     <button id='pos-7' ng-click='cycleMeeple($event)'></button><button id='pos-8' ng-click='cycleMeeple($event)'></button><button id='pos-9' ng-click='cycleMeeple($event)'></button><br>
   </div>
 
-  <div ng-include src="'app/meeple/meeple.html'"></div>
+  <div class="meeple-wrap">
+    <img ng-repeat="i in repeatMeeples(numMeeps) track by $index" ng-src="{{meepleColor}}">
+  </div>
 
   <div class="rules">
     <a href="#" onclick="window.open('http://zmangames.com/rulebooks/Carcassonne.pdf', 'newwindow', 'width=600, height=650'); return false;">How to Play</a>
