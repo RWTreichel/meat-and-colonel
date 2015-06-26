@@ -24,7 +24,6 @@ var paths = {
 
     './client/app/deck/deck.js',
     './client/app/meeple/meeple.js',
-    '.client/app/directives/*.js',
     './client/app/app.js'
   ],
   stylesheets: [
