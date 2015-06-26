@@ -1,5 +1,5 @@
 <div class="container" ng-controller="homeCtrl">
-  <p id="image"><img src="../assets/img/logo.jpg"></p>
+  <h1>Carcassonne</h1>
   <p>Carcassonne, the world-famous French city, known for its imposing fortifications erected during the Antiquity and the Middle Ages. This fortress, surrounded by magnificent walls, still stands today as one of the most unique French cities.</p>
 
   <p>In this game, players must develop the area around Carcassonne. They will place their followers onto roads and into cities, monasteries and fields. Only those who make the most judicious placements will gain the points required to win the game.</p>
@@ -7,14 +7,10 @@
 <!--   <div class="wrap">
     <a class="btn" href="#/game">Let's Play!</a>
   </div> -->
-  <div id="playersReady"></div>
-  <form id="form" name="userForm" method="POST" ng-submit="createUser()" novalidate>
-    <input type="text" name="user" ng-model="user" placeholder="username" required>
-    <select ng-model="color" ng-init="color = color || options[0].value" ng-options="option.value as option.name for option in options"></select>
-    <button ng-disabled="userForm.$invalid">Log-In</button>
+
+  <form name="userForm" method="POST" ng-submit="createUser()" novalidate id='userForm'>
+    <input type="text" name="user" ng-model="user" placeholder="username" required id='user'>
+    <select ng-model="color" ng-init="color = color || options[rndNumber].value" ng-options="option.value as option.name for option in options" id='color'></select>
+    <button ng-disabled="userForm.$invalid" id='button'>Let's Play!</button>
   </form>
-  <p id="readyButton" class="wrap" ng-hide="userForm"><button ng-click="wait()">Ready</button></p>
-    <h1 class="wrap" ng-hide="userForm"><u>PLAYERS</u></h1>
-    <div id="readyStatus"><h2 id="ready" class="wrap" ng-hide="userForm" ng-repeat="readyPlayer in ready">{{ readyPlayer }} is ready</h2>
-    <h2 id="notReady" class="wrap" ng-hide="userForm" ng-repeat="notReadyPlayer in notReady">{{ notReadyPlayer }} is not ready yet</h2></div>
 </div>
