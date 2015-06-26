@@ -3,7 +3,7 @@ var io = server.io;
 var _ = require('lodash');
 var Game = require('./game');
 var spec = require('./deckSpec');
-// var players = server.players;
+var playersRef = server.players;
 
 exports.game = null;
 // if player already exists in players obj we want to log them back in and not
@@ -89,7 +89,14 @@ exports.onPlayersReady = function(io, players, data){
 exports.handleEndTurn = function(io, socket, players, data){
     // verify that player ending turn, is actually the current player
    // there might be a better way to do this using the session
+  if (Object.keys(players).length <= 1){
+    return;
+  }
+
+  console.log(Object.keys(players));
+
   var name = exports.game.players[ exports.game.currentPlayer ];
+  
 
   if (players[ name ].socket === socket.id) {
     // this updates the server side game object with all of the info from the
@@ -103,4 +110,11 @@ exports.handleEndTurn = function(io, socket, players, data){
     // emit next turn to all connected sockets
     io.emit('nextTurn', gameState);
   }
+};
+
+exports.handleDisconnect = function(io, players, cb) {
+  console.log('game over');
+  io.emit('gameOver', 'gameOver');
+  cb();
+  exports.game = null;
 };

@@ -43,10 +43,21 @@ io.on('connection', function(socket) {
     utils.emitNumReady(io, players);
   });
 
+  socket.on('disconnect', function(data){
+    utils.handleDisconnect(io, players, function(){
+      players = {};
+    });
+  });
+
   // send num of meeps and meep color to client side
   // property of dick && amy
   socket.on('meepDataReq', function(data) {
     // client side sends current username
+
+    if (Object.keys(players).length <= 1){
+      return;
+    }
+    
     if (data.numMeeps) {
       players[ data.username ].numMeeps = data.numMeeps;
       socket.emit('meepDataRes', { numMeeps: data.numMeeps });
