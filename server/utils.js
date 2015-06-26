@@ -4,46 +4,46 @@ var _ = require('lodash');
 var Game = require('./game');
 var spec = require('./deckSpec');
 var playersRef = server.players;
+var gameInProgress = false;
 
 exports.game = null;
 // if player already exists in players obj we want to log them back in and not
 // create a new user or overwrite their existing stuff other than socket id
 // currently useless as the client does not support revival of the lost game state
 exports.handleLogin = function(socket, players, userdata){
-  if (players[userdata.username]){
-    if (userdata.password === players[userdata.username].password) {
-      players[userdata.username].socket = socket.id;
+
+  if (!gameInProgress){
+    if (players[userdata.username]){
+      if (userdata.password === players[userdata.username].password) {
+        players[userdata.username].socket = socket.id;
+      } else {
+        // TODO: Invalid login handling...
+        console.log('Wrong password!');
+      }
     } else {
-      // TODO: Invalid login handling...
-      console.log('Wrong password!');
+      // If player is logging in for the first time, register
+      // their info on the players object
+      // only do this if the lobby isn't full
+      if (Object.keys(players).length < 5) {
+        players[ userdata.username ] = {
+          username: userdata.username,
+          password: userdata.password,
+          color: userdata.color, 
+          numMeeps: 7, 
+          socket: socket.id,
+          ready: false
+        };
+      } else {
+        // TODO: alert that the game is full
+        console.log('game full');
+      }
     }
-  } else {
-    // If player is logging in for the first time, register
-    // their info on the players object
-    // only do this if the lobby isn't full
-    if (Object.keys(players).length < 5) {
-      players[ userdata.username ] = {
-        username: userdata.username,
-        password: userdata.password,
-        color: userdata.color, 
-        numMeeps: 7, 
-        socket: socket.id,
-        ready: false
-      };
-    } else {
-      // TODO: alert that the game is full
-      console.log('game full');
-    }
-    console.log(players);
   }
+    console.log(players);
 };
 
 exports.handleLogout = function(socket, userdata, players){
-  if (socket.handshake.session.userdata) {
-    delete socket.handshake.session.userdata;
-    socket.handshake.session.save();
-    exports.numReady(players);
-  }
+  socket.disconnect(true);
 };
 
 // used to display number of users connected and ready to play on the home page
@@ -74,6 +74,7 @@ exports.onPlayersReady = function(io, players, data){
     // if there are, emit that, create the game, emit the first turn stuff;
     if (Object.keys(players).length >= 2 && Object.keys(players).length <= 5) {
       io.emit('allReady', {});
+      gameInProgress = true;
       exports.game = new Game(13, spec, players);
       var gameState = exports.game.initialState();
       gameState.nextPlayer = players[ gameState.nextPlayer ].socket;
@@ -115,6 +116,12 @@ exports.handleEndTurn = function(io, socket, players, data){
 exports.handleDisconnect = function(io, players, cb) {
   console.log('game over');
   io.emit('gameOver', 'gameOver');
+  _.forEach(io.sockets.sockets, function(s){
+    if (s) {
+      s.disconnect(true);
+    }
+  });
   cb();
   exports.game = null;
+  gameInProgress = false;
 };

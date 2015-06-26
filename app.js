@@ -2,18 +2,10 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-var session = require('express-session')({
-  secret: 'my-secret',
-  resave: true,
-  saveUninitialized: true
-});
-var sharedSession = require('express-socket.io-session');
-var utils = require('./server/utils')
+var utils = require('./server/utils');
 
 app.set('port', (process.env.PORT || 3000));
 app.use(express.static(__dirname + '/client'));
-app.use(session);
-io.use(sharedSession(session));
 
 // object holds player username, socket id, and password
 var players = {};
@@ -21,8 +13,6 @@ var players = {};
 io.on('connection', function(socket) {
   // Accept a login event with user's data
   socket.on('login', function(userdata) {
-    socket.handshake.session.userdata = userdata;
-    socket.handshake.session.save();
     utils.handleLogin(socket, players, userdata);
     utils.emitNumReady(io, players);
   });
@@ -53,11 +43,9 @@ io.on('connection', function(socket) {
   // property of dick && amy
   socket.on('meepDataReq', function(data) {
     // client side sends current username
-
-    if (Object.keys(players).length <= 1){
+    if (Object.keys(players).length < 1){
       return;
     }
-    
     if (data.numMeeps) {
       players[ data.username ].numMeeps = data.numMeeps;
       socket.emit('meepDataRes', { numMeeps: data.numMeeps });
