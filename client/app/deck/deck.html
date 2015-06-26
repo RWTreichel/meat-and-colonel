@@ -1,5 +1,6 @@
 <div class="control-panel">
   <img class='rotate-{{ orientation }}' src="{{src}}">
+
   <div class='rotate'>
     <button ng-click='rotate()'>Rotate: {{ orientation }}</button>
     <button class='endturn' ng-click='endTurn()'>End Turn</button>
@@ -11,6 +12,6 @@
     <button id='pos-7' ng-click='cycleMeeple($event)'></button><button id='pos-8' ng-click='cycleMeeple($event)'></button><button id='pos-9' ng-click='cycleMeeple($event)'></button><br>
   </div>
 
-
   <div ng-include src="'app/meeple/meeple.html'"></div>
+
 </div>

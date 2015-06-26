@@ -23,6 +23,7 @@ var paths = {
 
     './client/app/deck/deck.js',
     './client/app/meeple/meeple.js',
+    './client/app/rules/rules.js',
     './client/app/app.js'
   ],
   stylesheets: [
@@ -30,6 +31,7 @@ var paths = {
     './client/assets/css/grid.css',
     './client/assets/css/deck.css',
     './client/assets/css/meeple.css',
+    './client/assets/css/rules.css',
     './client/assets/css/home.css'
   ],
   sass: [
