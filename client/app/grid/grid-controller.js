@@ -43,10 +43,12 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
   };
 
   $scope.clickCell = function(event, x, y) {
-    if (tilePlaced) {
-      setMeeple(event, x, y);
-    } else {
-      setTile(x, y, $scope.currentTile);
+    if (!event.shiftKey) {
+      if (tilePlaced) {
+        setMeeple(event, x, y);
+      } else {
+        setTile(x, y, $scope.currentTile);
+      }
     }
   };
 
