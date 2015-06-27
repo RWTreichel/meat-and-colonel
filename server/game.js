@@ -55,7 +55,7 @@ Game.prototype.update = function(data) {
   gameState.nextPlayer = this.nextPlayer();
   gameState.nextTile = this.deck.pop();
   gameState.board = this.board;
-  gameState.meepleRemoved = data.meepleRemoved;
+  gameState.meeplesRemoved = data.meeplesRemoved;
   return gameState;
 };
 
