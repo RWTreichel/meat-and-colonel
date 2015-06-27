@@ -38,6 +38,16 @@ io.on('connection', function(socket) {
       players = {};
     });
   });
+
+  socket.on('placeMeeple', function(data) {
+    // Notify all clients to place a meeple based on 'data'
+    io.emit('placeMeeple', data);
+  });
+
+  socket.on('removeMeeple', function(data) {
+    // Notify all clients to remove a meeple based on 'data'
+    io.emit('removeMeeple', data);
+  });
 });
 
 server.listen(app.get('port'), function() {
