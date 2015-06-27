@@ -1,27 +1,36 @@
-<div class="control-panel">
-  <img class='rotate-{{ orientation }}' src="{{src}}">
+<div class="control-panel slideout">
 
-  <div class='rotate'>
-    <button ng-click='rotate()'>Rotate: {{ orientation }}</button>
-    <button class='endturn' ng-click='endTurn()'>End Turn</button>
+  <div id="player-tile">
+    <h5 class="">Tile</h5>
+    <div class="tile-img">
+      <img class='rotate-{{ orientation }}' src="{{src}}">
+    </div> 
+    <div class='rotate'>
+      <button class="button" ng-click='rotate()'>&#8635; Rotate: {{ orientation }}</button>
+      <button class='endturn button' ng-click='endTurn()'>End Turn</button>
+    </div>    
   </div>
-
-  <div class='button-grid'>
-    <button id='pos-1' ng-click='cycleMeeple($event)'></button><button id='pos-2' ng-click='cycleMeeple($event)'></button><button id='pos-3' ng-click='cycleMeeple($event)'></button><br>
-    <button id='pos-4' ng-click='cycleMeeple($event)'></button><button id='pos-5' ng-click='cycleMeeple($event)'></button><button id='pos-6' ng-click='cycleMeeple($event)'></button><br>
-    <button id='pos-7' ng-click='cycleMeeple($event)'></button><button id='pos-8' ng-click='cycleMeeple($event)'></button><button id='pos-9' ng-click='cycleMeeple($event)'></button><br>
+  <hr>
+  <div>
+    <h5>Meeples</h5>
+    <div class="meeple-wrap">
+      <img ng-repeat="i in repeatMeeples(numMeeps) track by $index" ng-src="{{meepleColor}}">
+    </div>
+    <div class='button-grid'>
+      <button id='pos-1' ng-click='cycleMeeple($event)'>&#8598;</button>
+      <button id='pos-2' ng-click='cycleMeeple($event)'>&uarr;</button>
+      <button id='pos-3' ng-click='cycleMeeple($event)'>&#8599;</button><br>
+      <button id='pos-4' ng-click='cycleMeeple($event)'>&larr;</button>
+      <button id='pos-5' ng-click='cycleMeeple($event)'>&middot;</button>
+      <button id='pos-6' ng-click='cycleMeeple($event)'>&rarr;</button><br>
+      <button id='pos-7' ng-click='cycleMeeple($event)'>&#8601;</button>
+      <button id='pos-8' ng-click='cycleMeeple($event)'>&darr;</button>
+      <button id='pos-9' ng-click='cycleMeeple($event)'>&#8600;</button><br>
+    </div>
   </div>
-
-  <div class="">
-    <button id="ready" ng-click='ready()'>ready to play</button>
-  </div>
-
-  <div class="meeple-wrap">
-    <img ng-repeat="i in repeatMeeples(numMeeps) track by $index" ng-src="{{meepleColor}}">
-  </div>
-
-  <div class="rules">
-    <a href="#" onclick="window.open('http://zmangames.com/rulebooks/Carcassonne.pdf', 'newwindow', 'width=600, height=650'); return false;">How to Play</a>
-  </div>
-
+  <hr>
+    <div class="">
+      <button class="button" onclick="window.open('http://zmangames.com/rulebooks/Carcassonne.pdf', 'newwindow', 'width=600, height=650'); return false;">How to Play</button>
+      <button class="button" id="ready" ng-click='ready()'>ready to play</button>
+    </div>
 </div>

@@ -17,7 +17,7 @@
             <input type="text" name="user" ng-model="user" placeholder="username" required id='user'>
             <label>Color</label>
             <select ng-model="color" ng-init="color = color || options[rndNumber].value" ng-options="option.value as option.name for option in options" id='color'></select>
-            <button class="btn" ng-disabled="userForm.$invalid" id='btn'>Let's Play!</button>
+            <button class="button" ng-disabled="userForm.$invalid" id='btn'>Let's Play!</button>
           </form>
         </div>
       </div>

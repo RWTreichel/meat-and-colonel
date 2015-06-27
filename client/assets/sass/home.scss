@@ -95,7 +95,7 @@ p {
   font-size: 0.9em
 }
 
-#btn {
+.button {
   display: inline-block;
   margin-top: 1rem;
   height: 38px;
@@ -114,10 +114,11 @@ p {
   border: 1px solid #bbb;
   cursor: pointer;
   box-sizing: border-box; }
-#btn:hover,
-#btn:focus {
-  color: #333;
-  border-color: #33C3F0;
+.button:hover,
+.button:focus {
+  background-color: #2FAD90;
+  color: white;
+  border-color: #2FAD90;
   outline: 0; }
 
 input,
@@ -143,7 +144,7 @@ textarea {
 
 input:focus,
 select:focus {
-  border-bottom: 3px solid #33C3F0;
+  border-bottom: 3px solid #2FAD90;
   outline: 0px; }
 label,
 legend {
@@ -151,7 +152,7 @@ legend {
   margin-bottom: .5rem;
   font-weight: 600; }
 
-#btn {
+.button {
   margin-bottom: 1rem; }
 input,
 select {
