@@ -29,7 +29,6 @@ exports.handleLogin = function(socket, players, userdata){
       }
     }
   }
-  console.log('players connected: ', players);
 };
 
 exports.handleLogout = function(socket, userdata, players){
@@ -88,7 +87,6 @@ exports.handleEndTurn = function(io, socket, players, data){
   if (Object.keys(players).length <= 1){
     return;
   }
-  console.log(Object.keys(players));
   var name = exports.game.players[ exports.game.currentPlayer ];
   if (players[ name ].socket === socket.id) {
 
