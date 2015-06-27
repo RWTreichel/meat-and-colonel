@@ -26,7 +26,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
       GridService.setCell(gamestate.lastTile, 'lastTile');
     }
     if (gamestate.meeplesRemoved && gamestate.meeplesRemoved.length > 0) {
-      GridService.updateMeeples(meeplesRemoved);
+      GridService.updateMeeples(gamestate.meeplesRemoved);
     }
     meeplesRemoved = []; // Clear the list of meeples removed this turn.
     $scope.src = $scope.currentTile.img;
@@ -76,7 +76,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
       tilePlaced = false;
       meeplePlaced = false;
       $scope.orientation = 0;
-      socket.emit('endTurn', {tile: $scope.currentTile, meeplesRemoved: meeplesRemoved}); 
+      var transmission = {tile: $scope.currentTile, meeplesRemoved: meeplesRemoved}
+      socket.emit('endTurn', transmission); 
     } else {
       notify('Cannot end your turn');
     }
@@ -131,7 +132,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
       if (event.shiftKey) {
         var meep = angular.element(event.target);
         var meepData = meep.attr('data-coords');
-        var parsedData = meepData.match(/x-(\d)+-y-(\d)+/);
+        var parsedData = meepData.match(/x-(\d+)-y-(\d+)/);
 
         // Add this meeple to the list of meeples removed this turn.
         // Need to add the unary operator to convert parsedData to numbers.
