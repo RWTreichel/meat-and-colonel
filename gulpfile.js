@@ -8,6 +8,8 @@ var sourcemaps = require('gulp-sourcemaps');
 var sass = require('gulp-sass');
 var rename = require('gulp-rename');
 var install = require('gulp-install');
+var ngAnnotate = require('gulp-ng-annotate');
+
 // We store the files we want to watch in an object for easy reference
 var paths = {
   scripts: [
@@ -41,6 +43,9 @@ gulp.task('scripts', function() {
   return gulp.src(paths.scripts)
     .pipe(sourcemaps.init())
       .pipe(concat('main.js'))
+      .pipe(ngAnnotate())
+      .pipe(uglify())
+      .pipe(rename('main.min.js'))
     .pipe(sourcemaps.write())
     // Output to app/dist
     // TODO: UGLIFY AND RENAME FILE FOR MINIFY VERSION
