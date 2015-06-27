@@ -76,8 +76,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
       tilePlaced = false;
       meeplePlaced = false;
       $scope.orientation = 0;
-      var transmission = {tile: $scope.currentTile, meeplesRemoved: meeplesRemoved}
-      socket.emit('endTurn', transmission); 
+      socket.emit('endTurn', {tile: $scope.currentTile, meeplesRemoved: meeplesRemoved}); 
     } else {
       notify('Cannot end your turn');
     }
