@@ -3,7 +3,6 @@ var grid = angular.module('game.grid');
 grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, notify) {
   // Declare our controller wide dependencies
   var grid = GridService.matrix;
-  var meeplesRemoved = [];
   var meeplePlaced = false;
   var tilePlaced = false;
   notify.config({duration: 1000, templateUrl: 'app/templates/notifications.html'});
@@ -25,10 +24,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
       GridService.updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
       GridService.setCell(gamestate.lastTile, 'lastTile');
     }
-    if (gamestate.meeplesRemoved && gamestate.meeplesRemoved.length > 0) {
-      GridService.updateMeeples(gamestate.meeplesRemoved);
-    }
-    meeplesRemoved = []; // Clear the list of meeples removed this turn.
+
     $scope.src = $scope.currentTile.img;
     $scope.$apply();
   });
@@ -36,6 +32,64 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
   socket.on('numReady', function(data){
     if(_.includes(data.users[0], Player.getUsername())){
       angular.element(document.getElementById('ready')).remove();
+    }
+  });
+
+  socket.on('placeTile', function(tile) {
+    // Incoming tile object properties: {x, y, img, orientation}
+
+    // Locate the proper tile element.
+    var id = 'x-' + tile.x + '-y-' + tile.y;
+    var tileElement = angular.element(document.getElementById(id));
+
+    // Set the tile at that location.
+    tileElement.css('background-size', 'contain');
+    tileElement.css('background-image', 'url(' + tile.img + ')');
+    tileElement.css('transform', 'rotate(' + tile.orientation*90 + 'deg)');
+  });
+
+  socket.on('placeMeeple', function(data) {
+    // Incoming data object properties: {tileX, tileY, pos, colorPath}
+
+    // Locate the proper tile.
+    var id = 'x-' + data.tileX + '-y-' + data.tileY;
+    var tileElement = angular.element(document.getElementById(id));
+
+    // Append the placed meeple at that location.
+    var meeple = '<img id="meep-' + id + '" class="pos-' + data.pos + '" src="' + data.colorPath + '">';
+    angular.element(tileElement).append(meeple);
+
+    // Only enable a click handler on the current player's tile.
+    // Other clients get the meeple, but they can't pick it up because
+    // their tiles never register a click handler.
+    if (Player.isCurrentPlayer()) {
+      angular.element(tileElement).on('click', function(event) {
+        event.preventDefault();
+        socket.emit('removeMeeple', { tileX: data.tileX, tileY: data.tileY });
+        angular.element(this).off('click');
+      });
+    }
+  });
+
+  socket.on('removeMeeple', function(data) {
+    // Incoming data object properties: {tileX, tileY}
+
+    // Locate the proper meeple <img> element and remove it.
+    var id = 'meep-x-' + data.tileX + '-y-' + data.tileY;
+    var meepleElement = angular.element(document.getElementById(id));
+
+    // Identify the removed meeple's color to determine if the player
+    // should have their meeple count incremented.
+    var colorPath = angular.element(meepleElement).attr('src');
+    // Index 1 is the match produced by the capturing parentheses.
+    var color = /_(.*)\./.exec(colorPath)[1];
+
+    meepleElement.remove();
+
+    // Update the current player's meeple total and view if needed.
+    if (Player.getColor() ===  color) {
+      $scope.numMeeps++;
+      $scope.$apply();
     }
   });
 
@@ -60,14 +114,10 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
   };
 
   $scope.clickCell = function(event, x, y) {
-    if (!event.shiftKey) {
-      if (tilePlaced) {
-        setMeeple(event, x, y);
-        angular.element(document.getElementById('button-grid'))
-          .addClass('rotate-' + $scope.orientation);
-      } else {
-        setTile(x, y, $scope.currentTile);
-      }
+    if (tilePlaced) {
+      setMeeple(event, x, y);
+    } else {
+      setTile(x, y, $scope.currentTile);
     }
   };
 
@@ -76,7 +126,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
       tilePlaced = false;
       meeplePlaced = false;
       $scope.orientation = 0;
-      socket.emit('endTurn', {tile: $scope.currentTile, meeplesRemoved: meeplesRemoved}); 
+      socket.emit('endTurn', {tile: $scope.currentTile}); 
     } else {
       notify('Cannot end your turn');
     }
@@ -90,79 +140,29 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
       notify('You have already placed a meeple this turn.');
 
     } else if ($scope.currentTile.x === x && $scope.currentTile.y === y) {
-        // Assign the meeple's default location.
-        $scope.currentTile.meeple.location = 1;
-        $scope.currentTile.meeple.color = Player.getColor();
         $scope.numMeeps--;
         // Restrict players to only dropping one meeple per turn by setting the meeplePlaced flag to true.
         meeplePlaced = true;
-        
-        var meepCoords = 'meep-x-' + x + '-y-' + y;
 
-        angular.element(event.target).append('<img data-coords="'+meepCoords+'" src="'+ $scope.meepleColor +'">');
-        $scope.currentMeeple = angular.element(document.querySelector('img[data-coords="'+ meepCoords +'"]'));
-        $scope.currentMeeple.on('click',  pickupMeeple);
-
-        // Remove the recently placed meeple from the meeplesRemoved array if necessary.
-        // Using an IFFE to ensure the assignment of i to 0 doesn't conflict with anything else.
-        (function() {
-          for (var i = 0; i < meeplesRemoved.length; i++) {
-            // If the recently placed meeple's x and y values match the x/y
-            // values of a removed meeple, they are the same meeple. Get it
-            // outta there.
-            if (meeplesRemoved[i].x === x &&
-                meeplesRemoved[i].y === y ) {
-
-              // Remove one meeple from meeplesRemoved, at location i.
-              meeplesRemoved.splice(i, 1);
-            }
-          }
-        })();
-
+        // Tiles are subdivided into 9 clickable areas indexed as shown below:
+        //      C[1] C[2] C[3]
+        // R[0]:  1    2    3
+        // R[1]:  4    5    6
+        // R[2]:  7    8    9
+        // Identify the row and column where the click occurred, and offset
+        // the placed meeple by (column + 3 * row) so it displays in the right
+        // cell of the tile's 3x3 clickable grid.
+        var row = Math.floor(event.offsetY / (event.target.clientHeight / 3));
+        var column = 1 + Math.floor(event.offsetX / (event.target.clientWidth / 3));
+        socket.emit('placeMeeple', {
+          tileX: x,
+          tileY: y,
+          pos: (column + 3*row),
+          colorPath: $scope.meepleColor
+        });
       } else {
         notify('Can only place meeple on last tile');
       }
-  };
-
-  var pickupMeeple = function(event) {
-    // Stop the click event from bubbling up through the DOM.
-    event.stopPropagation();
-    if (Player.isCurrentPlayer()) {
-      if (event.shiftKey) {
-        var meep = angular.element(event.target);
-        var meepData = meep.attr('data-coords');
-        var parsedData = meepData.match(/x-(\d+)-y-(\d+)/);
-
-        // Add this meeple to the list of meeples removed this turn.
-        // Need to add the unary operator to convert parsedData to numbers.
-        meeplesRemoved.push({
-          color: Player.getColor(),
-          x: +parsedData[1],
-          y: +parsedData[2]
-        });
-
-        // Compare the recently picked up meeple to the current meeple using their
-        // data-coords attributes. If they are identical, remove that meeple from
-        // the current tile's meeple property so it does not persist to other
-        // clients after removal.
-        if (meep.attr('data-coords') === $scope.currentMeeple.attr('data-coords')) {
-          $scope.currentTile.meeple = {color: undefined, location: undefined};
-        }
-
-        meep.remove();
-        $scope.numMeeps++;
-        meeplePlaced = false;
-        $scope.$apply();
-      }
-    }
-  };
-
-  $scope.cycleMeeple = function(item) {
-    if (Player.isCurrentPlayer() && $scope.currentMeeple && meeplePlaced) {     
-      var itemID = angular.element(item.target).attr('id');
-      $scope.currentMeeple.attr('class', itemID);
-      $scope.currentTile.meeple.location = +$scope.currentMeeple.attr('class').slice(-1);
-    }
   };
 
   var setTile = function(x, y, tile) {

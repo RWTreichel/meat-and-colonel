@@ -14,13 +14,12 @@
     } 
 */
 
-var Tile = function(id, features, x, y, meepleColor, meepleLocation){
+var Tile = function(id, features, x, y){
   this.id = id;
   this.x = x;
   this.y = y;
   this.orientation = 0;
   this.features = features;
-  this.meeple = { color: meepleColor, location: meepleLocation };
 };
 
 module.exports = Tile;
