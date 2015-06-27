@@ -57,6 +57,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
     if (!event.shiftKey) {
       if (tilePlaced) {
         setMeeple(event, x, y);
+        angular.element(document.getElementById('button-grid'))
+          .addClass('rotate-' + $scope.orientation);
       } else {
         setTile(x, y, $scope.currentTile);
       }

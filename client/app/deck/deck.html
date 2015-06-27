@@ -7,7 +7,7 @@
     </div> 
     <div class='rotate'>
       <button class="button" ng-click='rotate()'>&#8635; Rotate: {{ orientation }}</button>
-      <button class='endturn button' ng-click='endTurn()'>End Turn</button>
+      <button class='endturn button' id="endturn" ng-click='endTurn()'>End Turn</button>
     </div>    
   </div>
   <hr>
@@ -16,7 +16,7 @@
     <div class="meeple-wrap">
       <img ng-repeat="i in repeatMeeples(numMeeps) track by $index" ng-src="{{meepleColor}}">
     </div>
-    <div class='button-grid'>
+    <div class='button-grid' id="button-grid">
       <button id='pos-1' ng-click='cycleMeeple($event)'>&#8598;</button>
       <button id='pos-2' ng-click='cycleMeeple($event)'>&uarr;</button>
       <button id='pos-3' ng-click='cycleMeeple($event)'>&#8599;</button><br>

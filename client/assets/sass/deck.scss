@@ -32,6 +32,17 @@
   color: white;
 }
 
+#endturn {
+    background-color: #FF3300;
+  color: white;
+  border: 1px solid #FF3300;
+}
+#endturn:hover {
+    background-color: white;
+  color: #FF3300;
+  border: 1px solid #FF3300;
+}
+
 .rotate-0 {
   transform: rotate(0deg);
 }
@@ -50,14 +61,14 @@
 }
 
 #ready{
-  background-color: #FF3300;
+  background-color: #2FAD90;
   color: white;
-  border: 1px solid #FF3300;
+  border: 1px solid #2FAD90;
 }
 #ready:hover{
   background-color: white;
-  color: #FF3300;
-  border: 1px solid #FF3300;
+  color: #2FAD90;
+  border: 1px solid #2FAD90;
 }
 
 .slideout {
