@@ -11,6 +11,7 @@ var install = require('gulp-install');
 // We store the files we want to watch in an object for easy reference
 var paths = {
   scripts: [
+    './client/lib/lodash/lodash.min.js',
     './client/lib/angular/angular.min.js',
     './client/lib/angular-route/angular-route.min.js',
     './client/lib/angular-notify/angular-notify.js',
