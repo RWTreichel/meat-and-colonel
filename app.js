@@ -47,5 +47,3 @@ server.listen(app.get('port'), function() {
 exports.app = app;
 exports.io = io;
 exports.players = players;
-
-
