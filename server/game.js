@@ -49,13 +49,12 @@ Game.prototype.initialState = function() {
 // generates game state for next turn
 Game.prototype.update = function(data) {
   var gameState = {};
-  var serverTile = new Tile(data.tile.id, data.tile.features, data.tile.x, data.tile.y, data.tile.meeple.color, data.tile.meeple.location);
+  var serverTile = new Tile(data.tile.id, data.tile.features, data.tile.x, data.tile.y);
   this.placeTile(serverTile);
   gameState.lastTile = data.tile;
   gameState.nextPlayer = this.nextPlayer();
   gameState.nextTile = this.deck.pop();
   gameState.board = this.board;
-  gameState.meeplesRemoved = data.meeplesRemoved;
   return gameState;
 };
 

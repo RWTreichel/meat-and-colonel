@@ -1,7 +1,6 @@
 var home = angular.module('game.home', []);
 
 home.controller('homeCtrl', function($scope, $location, Player){
-  // $scope.user = 'Player 1';
   $scope.user = Math.random().toString();
   $scope.rndNumber = Math.floor((Math.random() * 4) + 1);
 
@@ -30,14 +29,11 @@ home.controller('homeCtrl', function($scope, $location, Player){
 
   socket.on('numReady', function(data){
     // data.colorsLeft
-    console.log(data.colorsLeft);
-    console.log($scope.options);
     $scope.options = _.filter(_.map($scope.options, function(item){
       if( _.includes(data.colorsLeft, item.value) ){
         return item;
       }
     }), undefined);
-    console.log($scope.options);
     $scope.$apply();
   });
 

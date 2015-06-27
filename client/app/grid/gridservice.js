@@ -55,11 +55,11 @@ grid.service('GridService', function(TileModel, Player, notify) {
     this.matrix[y][x] = tile;
   };
 
-  this.updateMeeples = function(meeplesRemoved) {
-    meeplesRemoved.forEach(function(meeple) {
-      angular.element(document.getElementById('x-'+ meeple.x +'-y-'+ meeple.y)).empty();
-    }, this);
-  };
+  // this.updateMeeples = function(meeplesRemoved) {
+  //   meeplesRemoved.forEach(function(meeple) {
+  //     angular.element(document.getElementById('x-'+ meeple.x +'-y-'+ meeple.y)).empty();
+  //   }, this);
+  // };
 
   this.cellAlreadyExists = function(x, y) {
     return this.matrix[y][x] !== null; 
@@ -125,16 +125,16 @@ grid.service('GridService', function(TileModel, Player, notify) {
       domElement.css('background-image', 'url(' + tile.img + ')');
       domElement.css('transform', 'rotate(' + tile.orientation*90 + 'deg)');
 
-      if (option === 'lastTile' && 
-          tile.meeple.color !== undefined && 
-          tile.meeple.color !== Player.getColor() &&
-          tile.meeple.location !== undefined
-        ) {
-        var meepleSource = 'assets/img/Meeples/meeple_' + tile.meeple.color + '.png'
-        var meepleClass = 'pos-' + tile.meeple.location;
-        var meepleElement = angular.element('<img class="'+ meepleClass +'" src="' + meepleSource + '">');
-        domElement.append(meepleElement);
-      }
+      // if (option === 'lastTile' && 
+      //     tile.meeple.color !== undefined && 
+      //     tile.meeple.color !== Player.getColor() &&
+      //     tile.meeple.location !== undefined
+      //   ) {
+      //   var meepleSource = 'assets/img/Meeples/meeple_' + tile.meeple.color + '.png'
+      //   var meepleClass = 'pos-' + tile.meeple.location;
+      //   var meepleElement = angular.element('<img class="'+ meepleClass +'" src="' + meepleSource + '">');
+      //   domElement.append(meepleElement);
+      // }
     });
   };
 
