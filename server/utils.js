@@ -46,7 +46,7 @@ exports.emitNumReady = function(io, players){
         return _.pluck(obj, 'username');
       }),
     colorsLeft: 
-      _.difference(['red', 'yellow', 'black', 'blue', 'red'], 
+      _.difference(['red', 'yellow', 'black', 'blue', 'green'], 
         _.pluck(players, 'color'))
   });
 };

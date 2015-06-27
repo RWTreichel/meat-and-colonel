@@ -30,11 +30,14 @@ home.controller('homeCtrl', function($scope, $location, Player){
 
   socket.on('numReady', function(data){
     // data.colorsLeft
+    console.log(data.colorsLeft);
+    console.log($scope.options);
     $scope.options = _.filter(_.map($scope.options, function(item){
       if( _.includes(data.colorsLeft, item.value) ){
         return item;
       }
     }), undefined);
+    console.log($scope.options);
     $scope.$apply();
   });
 
