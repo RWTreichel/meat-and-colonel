@@ -1,4 +1,5 @@
 var Tile = require('./tile');
+var _ = require('lodash');
 // var spec = require('./deckSpec');
 
 // this is what a deck should look like
@@ -9,7 +10,8 @@ var Tile = require('./tile');
 // the spec is an object, it contains a letter keys which represent the type of card
   // a quantity property which is the number of cards for each type
   // and a features property, which describes the features on each direction of the tile
-// if that is confusing, require('./deckSpec') and make a deck. 
+// if that is confusing, require('./deckSpec'), make a deck, and check it out
+
 var Deck = function(spec){
   this.deck = [];
   for (var key in spec){
@@ -18,23 +20,7 @@ var Deck = function(spec){
     }
   }
   this.startTile = this.deck.pop();
-  Deck.prototype.shuffle.call(this);
-};
-
-// classic fisher-yates shuffle
-// operates on this.deck
-Deck.prototype.shuffle = function() {
-  if (this.deck.length === 0) {
-    console.log('you dun goofed, your deck is empty');
-  }
-  var currentIndex = this.deck.length, temporaryValue, randomIndex;
-  while (0 !== currentIndex){
-    randomIndex = Math.floor( Math.random () * currentIndex );
-    currentIndex -= 1;
-    temporaryValue = this.deck[currentIndex];
-    this.deck[currentIndex] = this.deck[randomIndex];
-    this.deck[randomIndex] = temporaryValue;
-  }
+  this.deck = _.shuffle(this.deck);
 };
 
 // removes and returns the card from the top of the deck
@@ -44,7 +30,7 @@ Deck.prototype.pop = function() {
 
 // returns the card at the top of the deck without removing it
 Deck.prototype.peek = function() {
-  return this.deck[ this.deck.length - 1 ];
+  return _.last(this.deck);
 };
 
 module.exports = Deck;

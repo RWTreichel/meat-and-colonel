@@ -11,6 +11,11 @@ app.use(express.static(__dirname + '/client'));
 var players = {};
 
 io.on('connection', function(socket) {
+
+  // emit this so color choices will be limited to what's available
+  // upon connection
+  utils.emitNumReady(io, players);
+
   // Accept a login event with user's data
   socket.on('login', function(userdata) {
     utils.handleLogin(socket, players, userdata);
@@ -27,12 +32,16 @@ io.on('connection', function(socket) {
    utils.handleEndTurn(io, socket, players, data);
   });
 
-  // indicates that parties are ready to play
+  // indicates that socket is ready to play
+  // data arg is an obj with 
   socket.on('playerReady', function(data){
     utils.onPlayersReady(io, players, data);
     utils.emitNumReady(io, players);
   });
 
+  // resets the game if someone disconnects. this is necessary until
+  // reconnects are implemented. server side support for reconnect was removed
+  // because client side support was not achieved
   socket.on('disconnect', function(data){
     utils.handleDisconnect(io, players, function(){
       players = {};

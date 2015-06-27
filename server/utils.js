@@ -58,10 +58,9 @@ exports.onPlayersReady = function(io, players, data){
     return;
   }
   players[ username ].ready = true;
-  var allReady = true;
-  for(var player in players){
-    allReady = allReady && players[player].ready;
-  }
+  var allReady = _.reduce(_.pluck(players, 'ready'), function(memo, item){
+    return memo && item;
+  });
   if (allReady) {
     // Makes sure there are between 2 to 5 players logged in
     // if there are, emit that, create the game, emit the first turn stuff;
@@ -74,7 +73,6 @@ exports.onPlayersReady = function(io, players, data){
       io.emit('nextTurn', gameState);
     } else {
       // TODO: alert that there are not enough people to play the game
-      //   also be too many if the untested code to block too many logins fails
       console.log('Invalid number of players: ', Object.keys(players).length);
     }
   }
@@ -82,12 +80,13 @@ exports.onPlayersReady = function(io, players, data){
 
 // data arg is {} containing tile: {tilestuff} meeplesRemoved: '[meeple object]'
 exports.handleEndTurn = function(io, socket, players, data){
-    // verify that player ending turn, is actually the current player
-   // there might be a better way to do this using the session
   if (Object.keys(players).length <= 1){
+    console.log('womp');
     return;
   }
+  // verify that player ending turn, is actually the current player
   var name = exports.game.players[ exports.game.currentPlayer ];
+  
   if (players[ name ].socket === socket.id) {
 
     // this updates the server side game object with all of the info from the
@@ -103,6 +102,9 @@ exports.handleEndTurn = function(io, socket, players, data){
   }
 };
 
+// this disconnects all of the sockets connected
+// a not so elegant way to handle one client disconnecting, jettison the entire game
+// and disconnect all players
 exports.handleDisconnect = function(io, players, cb) {
   io.emit('gameOver', 'gameOver');
   _.forEach(io.sockets.sockets, function(s){
