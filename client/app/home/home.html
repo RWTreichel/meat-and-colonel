@@ -1,21 +1,25 @@
-<div class="container" ng-controller="homeCtrl">
-  <div class="top">
-    <h1>Carcassonne</h1>
-  </div>
+  <div class="box" ng-controller="homeCtrl">
+      <div class="row">
+        <div class="one-half column" style="margin-top: 25%">
+          <h4>Carcassonne</h4>
+          <p>Carcassonne, the world-famous French city, known for its imposing fortifications
+          erected during the Antiquity and the Middle Ages. This fortress, surrounded
+          by magnificent walls, still stands today as one of the most unique French cities.</p>
 
-  <div class="left">
-    <p>Carcassonne, the world-famous French city, known for its imposing fortifications erected during the Antiquity and the Middle Ages. This fortress, surrounded by magnificent walls, still stands today as one of the most unique French cities.</p>
-
-    <p>In this game, players must develop the area around Carcassonne. They will place their followers onto roads and into cities, monasteries and fields. Only those who make the most judicious placements will gain the points required to win the game.</p>
-  </div>
-
-  <div class="right">
-    <form name="userForm" method="POST" ng-submit="createUser()" novalidate id='userForm'>
-      <label>Username</label>
-      <input type="text" name="user" ng-model="user" placeholder="username" required id='user'>
-      <label>Color</label>
-      <select ng-model="color" ng-init="color = color || options[rndNumber].value" ng-options="option.value as option.name for option in options" id='color'></select>
-      <button class="btn" ng-disabled="userForm.$invalid" id='button'>Let's Play!</button>
-    </form>
+          <p>In this game, players must develop the area around Carcassonne. They will place their
+          followers onto roads and into cities, monasteries and fields. Only those who make the most
+          judicious placements will gain the points required to win the game.</p>
+        </div>
+          <div class="one-half column" id="login" style="margin-top: 25%">
+          <h4>Login</h4>
+          <form name="userForm" method="POST" ng-submit="createUser()" novalidate id='userForm'>
+            <label>Username</label>
+            <input type="text" name="user" ng-model="user" placeholder="username" required id='user'>
+            <label>Color</label>
+            <select ng-model="color" ng-init="color = color || options[rndNumber].value" ng-options="option.value as option.name for option in options" id='color'></select>
+            <button class="button" ng-disabled="userForm.$invalid" id='btn'>Let's Play!</button>
+          </form>
+        </div>
+      </div>
   </div>
 </div>

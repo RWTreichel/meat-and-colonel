@@ -1,5 +1,7 @@
 ### node etc ###
 
+
+
 # Logs
 logs
 *.log
@@ -21,6 +23,7 @@ coverage
 # Compiled Dirs (http://nodejs.org/api/addons.html)
 build/
 dist/
+css/
 
 # Dependency directorys
 # Deployed apps should consider commenting these lines out:

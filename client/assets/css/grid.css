@@ -65,15 +65,3 @@
   position: relative;
   top: 30px;
   left: 30px; }
-
-.button-grid {
-  float: right;
-  margin-right: 10px; }
-
-.button-grid button {
-  width: 5px;
-  height: 5px;
-  padding: 8px;
-  margin-left: 2px;
-  margin-bottom: 2px;
-  border: 1px solid black; }

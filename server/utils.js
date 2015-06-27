@@ -40,9 +40,15 @@ exports.handleLogout = function(socket, userdata, players){
 // returns array of arrays of ready and unready player names
 // [ ['ready'], ['unready', 'unready']]
 exports.emitNumReady = function(io, players){
-  io.emit('numReady', _.map( _.partition(players, {ready: true} ), function(obj){
-    return _.pluck(obj, 'username');
-  }));
+  io.emit('numReady', {
+    users: 
+      _.map( _.partition(players, {ready: true} ), function(obj){
+        return _.pluck(obj, 'username');
+      }),
+    colorsLeft: 
+      _.difference(['red', 'yellow', 'black', 'blue', 'red'], 
+        _.pluck(players, 'color'))
+  });
 };
 
 exports.onPlayersReady = function(io, players, data){

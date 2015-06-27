@@ -1,11 +1,48 @@
 .control-panel {
-  position: fixed;
-  background-color: gray;
-  width: 25%;
-  height: 200px;
-  bottom: 0;
-  right: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  border-left: 40px solid #2FAD90;
+  border-top: 1px solid #2FAD90;
+  background-color: white;
 }
+
+.tile-img {
+  background-color: #ccc;
+  width: 88px;
+  height: 88px;
+  margin: auto;
+}
+
+.control-panel .button:hover {
+  background-color: #2FAD90;
+}
+
+.button-grid {
+  margin-top: 10px;
+}
+
+.button-grid button {
+  width: 30px;
+  height: 30px;
+  margin-top: 4px;
+  padding: 0;
+
+  background-color: #2FAD90;
+  border: 1px solid black;
+  color: white;
+}
+
+#endturn {
+    background-color: #FF3300;
+  color: white;
+  border: 1px solid #FF3300;
+}
+#endturn:hover {
+    background-color: white;
+  color: #FF3300;
+  border: 1px solid #FF3300;
+}
+
 .rotate-0 {
   transform: rotate(0deg);
 }
@@ -17,4 +54,37 @@
 }
 .rotate-3 {
   transform: rotate(270deg);
+}
+
+.white {
+  color: white;
+}
+
+#ready{
+  background-color: #2FAD90;
+  color: white;
+  border: 1px solid #2FAD90;
+}
+#ready:hover{
+  background-color: white;
+  color: #2FAD90;
+  border: 1px solid #2FAD90;
+}
+
+.slideout {
+    position: fixed;
+    bottom: 0;
+    right: -400px;
+    width: 400px;
+    height: 600px;
+    padding: 12px 0;
+    text-align: center;
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+}
+
+.slideout:hover {
+    right: 0px;
 }
