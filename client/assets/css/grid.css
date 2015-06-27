@@ -1,3 +1,10 @@
+.game-container {
+  width: 80%;
+  height: 100%;
+  overflow: scroll;
+  display: inline-block;
+  float: left; }
+
 .grid-container {
   background: black; }
 
