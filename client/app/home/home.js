@@ -28,8 +28,18 @@ home.controller('homeCtrl', function($scope, $location, Player){
     }
   ];
 
+  socket.on('numReady', function(data){
+    // data.colorsLeft
+    $scope.options = _.filter(_.map($scope.options, function(item){
+      if( _.includes(data.colorsLeft, item.value) ){
+        return item;
+      }
+    }), undefined);
+    $scope.$apply();
+  });
+
   $scope.createUser = function() {
-    if ($scope.user) {
+    if ($scope.color && $scope.user) {
       // save user data to app service 
       Player.setUsername($scope.user);
       Player.setColor($scope.color);
