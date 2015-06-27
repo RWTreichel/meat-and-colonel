@@ -43,6 +43,10 @@
   color: #FF3300;
   border: 1px solid #FF3300; }
 
+.hint {
+  color: grey;
+  margin-top: -25px; }
+
 .rotate-0 {
   transform: rotate(0deg); }
 
