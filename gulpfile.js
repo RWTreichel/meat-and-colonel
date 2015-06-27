@@ -77,7 +77,7 @@ gulp.task('install', function() {
     .pipe(install());
 });
 
-gulp.task('build', ['install'], function() {
+gulp.task('deploy', ['install'], function() {
   gulp.start('stylesheets');
   gulp.start('scripts');
 });
@@ -95,6 +95,11 @@ gulp.task('develop', function() {
   }).on('restart', function() {
     console.log('restarted nodemon');
   });
+});
+
+gulp.task('build', function(){
+  gulp.start('stylesheets');
+  gulp.start('scripts');
 });
 
 gulp.task('default', ['develop', 'watch']);
