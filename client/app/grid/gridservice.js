@@ -2,7 +2,7 @@ var grid = angular.module('game.grid');
 
 grid.service('GridService', function(TileModel, Player, notify) {
 
-  this.gridSize = 15;
+  this.gridSize = 30;
 
   this.createEmptyGameBoard = function(boardSize) {
     var matrix = [];

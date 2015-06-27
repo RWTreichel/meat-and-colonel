@@ -1,7 +1,14 @@
+.player-area{
+  display: inline-block;;
+  height: 100%;
+  width: 20%;
+  float: right;
+}
 .control-panel {
   display: flex;
   flex-flow: column nowrap;
-  border-left: 40px solid #2FAD90;
+  padding: 12px;
+  border-left: 1px solid #2FAD90;
   border-top: 1px solid #2FAD90;
   background-color: white;
 }
@@ -10,7 +17,8 @@
   background-color: #ccc;
   width: 88px;
   height: 88px;
-  margin: auto;
+  margin: 10px auto;
+  // margin-bottom: 10px;
 }
 
 .control-panel .button:hover {
@@ -74,17 +82,18 @@
 .slideout {
     position: fixed;
     bottom: 0;
-    right: -400px;
-    width: 400px;
-    height: 600px;
+    right: 0%;
+    width: 20%;
+    height: 100%;
     padding: 12px 0;
     text-align: center;
+    overflow: scroll;
     -webkit-transition-duration: 0.3s;
     -moz-transition-duration: 0.3s;
     transition-duration: 0.3s;
     -o-transition-duration: 0.3s;
 }
 
-.slideout:hover {
-    right: 0px;
-}
+// .slideout:hover {
+//     right: 0px;
+// }

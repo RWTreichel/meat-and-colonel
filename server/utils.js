@@ -69,7 +69,7 @@ exports.onPlayersReady = function(io, players, data){
     if (Object.keys(players).length >= 2 && Object.keys(players).length <= 5) {
       io.emit('allReady', {});
       gameInProgress = true;
-      exports.game = new Game(13, spec, players);
+      exports.game = new Game(30, spec, players);
       var gameState = exports.game.initialState();
       gameState.nextPlayer = players[ gameState.nextPlayer ].socket;
       io.emit('nextTurn', gameState);

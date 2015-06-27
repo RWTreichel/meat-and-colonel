@@ -1,12 +1,12 @@
 <div class="control-panel slideout">
 
-  <div id="player-tile">
-    <h5 class="">Tile</h5>
+  <div id="player-tile"><br>
+    <h5 id="tile-title">Tile</h5>
     <div class="tile-img">
       <img class='rotate-{{ orientation }}' src="{{src}}">
     </div> 
     <div class='rotate'>
-      <button class="button" ng-click='rotate()'>&#8635; Rotate: {{ orientation }}</button>
+      <button class="button" ng-click='rotate()'>Rotate: {{ orientation }}</button><br>
       <button class='endturn button' id="endturn" ng-click='endTurn()'>End Turn</button>
     </div>    
   </div>
@@ -30,7 +30,7 @@
   </div>
   <hr>
     <div class="">
-      <button class="button" onclick="window.open('http://zmangames.com/rulebooks/Carcassonne.pdf', 'newwindow', 'width=600, height=650'); return false;">How to Play</button>
+      <button class="button" onclick="window.open('http://zmangames.com/rulebooks/Carcassonne.pdf', 'newwindow', 'width=600, height=650'); return false;">How to Play</button><br>
       <button class="button" id="ready" ng-click='ready()'>ready to play</button>
     </div>
 </div>
