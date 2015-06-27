@@ -81,7 +81,7 @@ exports.onPlayersReady = function(io, players, data){
   }
 };
 
-// data arg is {} containing tile: {tilestuff} meepleRemoved: '[x,y]'
+// data arg is {} containing tile: {tilestuff} meeplesRemoved: '[meeple object]'
 exports.handleEndTurn = function(io, socket, players, data){
     // verify that player ending turn, is actually the current player
    // there might be a better way to do this using the session
