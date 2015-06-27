@@ -15,8 +15,16 @@
 }
 
 .box {
-  position: relative;
+  position: absolute;
   width: 100%;
+  top: 35%;
+  left: 55%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  overflow: hidden;
   max-width: 960px;
   margin: 0 auto;
   padding: 0 20px;
