@@ -46,7 +46,6 @@ home.controller('homeCtrl', function($scope, $location, Player){
       socket.emit('login', 
         { username: $scope.user,
          color: $scope.color });
-      socket.emit('playerReady', $scope.user);
       $scope.user = '';
       $location.path('game');
     }

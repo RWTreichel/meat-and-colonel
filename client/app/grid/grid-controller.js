@@ -33,6 +33,10 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
     $scope.$apply();
   });
 
+  $scope.ready = function(){
+    socket.emit('playerReady', Player.getUsername());
+  };
+
   // Needed purely so that ng-repeat works for the meeples display.
   $scope.repeatMeeples = function(numMeeps) {
     return new Array(numMeeps);

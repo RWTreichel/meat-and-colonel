@@ -12,6 +12,10 @@
     <button id='pos-7' ng-click='cycleMeeple($event)'></button><button id='pos-8' ng-click='cycleMeeple($event)'></button><button id='pos-9' ng-click='cycleMeeple($event)'></button><br>
   </div>
 
+  <div class="">
+    <button id="ready" ng-click='ready()'>ready to play</button>
+  </div>
+
   <div class="meeple-wrap">
     <img ng-repeat="i in repeatMeeples(numMeeps) track by $index" ng-src="{{meepleColor}}">
   </div>
