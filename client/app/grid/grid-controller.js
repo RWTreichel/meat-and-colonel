@@ -35,6 +35,19 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
     }
   });
 
+  socket.on('placeTile', function(tile) {
+    // Incoming tile object properties: {x, y, img, orientation}
+
+    // Locate the proper tile element.
+    var id = 'x-' + tile.x + '-y-' + tile.y;
+    var tileElement = angular.element(document.getElementById(id));
+
+    // Set the tile at that location.
+    tileElement.css('background-size', 'contain');
+    tileElement.css('background-image', 'url(' + tile.img + ')');
+    tileElement.css('transform', 'rotate(' + tile.orientation*90 + 'deg)');
+  });
+
   socket.on('placeMeeple', function(data) {
     // Incoming data object properties: {tileX, tileY, pos, colorPath}
 
@@ -64,10 +77,17 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
     // Locate the proper meeple <img> element and remove it.
     var id = 'meep-x-' + data.tileX + '-y-' + data.tileY;
     var meepleElement = angular.element(document.getElementById(id));
+
+    // Identify the removed meeple's color to determine if the player
+    // should have their meeple count incremented.
+    var colorPath = angular.element(meepleElement).attr('src');
+    // Index 1 is the match produced by the capturing parentheses.
+    var color = /_(.*)\./.exec(colorPath)[1];
+
     meepleElement.remove();
 
-    // Update the current player's meeple total and view.
-    if (Player.isCurrentPlayer()) {
+    // Update the current player's meeple total and view if needed.
+    if (Player.getColor() ===  color) {
       $scope.numMeeps++;
       $scope.$apply();
     }
