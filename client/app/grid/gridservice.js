@@ -57,8 +57,6 @@ grid.service('GridService', function(TileModel, Player, notify) {
 
   this.updateMeeples = function(meeplesRemoved) {
     meeplesRemoved.forEach(function(meeple) {
-      // Not 100% sure about this next line...needs further testing. (Dick)
-      this.matrix[ meeple.y ][ meeple.x ].meeple = {};
       angular.element(document.getElementById('x-'+ meeple.x +'-y-'+ meeple.y)).empty();
     }, this);
   };
