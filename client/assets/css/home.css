@@ -22,13 +22,11 @@
   float: left;
   box-sizing: border-box; }
 
-/* For devices larger than 400px */
 @media (min-width: 400px) {
   .box {
     width: 85%;
     padding: 0; } }
 
-/* For devices larger than 550px */
 @media (min-width: 550px) {
   .box {
     width: 80%; }
@@ -49,14 +47,10 @@ html {
 
 body {
   font-size: 1.5em;
-  /* currently ems cause chrome bug misinterpreting rems on body element */
   line-height: 1.6;
   font-weight: 400;
   font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #222; }
-
-p {
-  margin-bottom: 2rem; }
 
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
@@ -93,7 +87,6 @@ h6 {
   line-height: 1.6;
   letter-spacing: 0; }
 
-/* Larger than phablet */
 @media (min-width: 550px) {
   h1 {
     font-size: 5.0rem; }
@@ -109,10 +102,20 @@ h6 {
     font-size: 1.5rem; } }
 
 p {
-  margin-top: 0; }
+  margin-top: 0;
+  margin-bottom: 2rem; }
+
+#color {
+  border-radius: 0px;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0px; }
+
+#color, #user {
+  font-size: 0.9em; }
 
 #btn {
   display: inline-block;
+  margin-top: 1rem;
   height: 38px;
   padding: 0 30px;
   color: #555;
@@ -125,7 +128,7 @@ p {
   text-decoration: none;
   white-space: nowrap;
   background-color: transparent;
-  border-radius: 4px;
+  border-radius: 2px;
   border: 1px solid #bbb;
   cursor: pointer;
   box-sizing: border-box; }
@@ -133,22 +136,23 @@ p {
 #btn:hover,
 #btn:focus {
   color: #333;
-  border-color: #888;
+  border-color: #33C3F0;
   outline: 0; }
 
-input[type="text"],
+input,
 select {
   height: 38px;
   padding: 6px 10px;
   /* The 6px vertically centers text on FF, ignored by Webkit */
   background-color: #fff;
-  border: 1px solid #D1D1D1;
-  border-radius: 4px;
+  border: 0px solid #D1D1D1;
+  border-bottom: 3px solid #d1d1d1;
+  border-radius: 0px !important;
   box-shadow: none;
   box-sizing: border-box; }
 
 /* Removes awkward default styles on some inputs for iOS */
-input[type="text"],
+input,
 textarea {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -159,10 +163,10 @@ textarea {
   padding-top: 6px;
   padding-bottom: 6px; }
 
-input[type="text"]:focus,
+input:focus,
 select:focus {
-  border: 1px solid #33C3F0;
-  outline: 0; }
+  border-bottom: 3px solid #33C3F0;
+  outline: 0px; }
 
 label,
 legend {
