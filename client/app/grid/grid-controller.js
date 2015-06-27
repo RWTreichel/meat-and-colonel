@@ -33,6 +33,15 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
     $scope.$apply();
   });
 
+  socket.on('numReady', function(data){
+    console.log(data.users[0]);
+    console.log(Player.getUsername());
+    console.log(angular.element(document.getElementById('ready')));
+    if(_.includes(data.users[0], Player.getUsername())){
+      angular.element(document.getElementById('ready')).remove();
+    }
+  });
+
   $scope.ready = function(){
     socket.emit('playerReady', Player.getUsername());
   };
