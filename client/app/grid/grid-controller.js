@@ -17,6 +17,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
   $scope.meepleColor = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';
 
   socket.on('nextTurn', function(gameState) {
+    gameState.nextPlayer === socket.id && notify('It\'s your turn');
     if (!gameState.lastTile) {
       $scope.currentTile = new TileModel(gameState.nextTile);
     } else {
@@ -117,7 +118,7 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
     if (tilePlaced) {
       setMeeple(event, x, y);
     } else {
-      GridService.setTile(x, y, tile, function() {
+      GridService.setTile(x, y, $scope.currentTile, function() {
         tilePlaced = true;
         meeplePlaced = false;
       });
