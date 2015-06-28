@@ -158,7 +158,8 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
           tileX: x,
           tileY: y,
           pos: (column + 3*row),
-          colorPath: $scope.meepleColor
+          colorPath: $scope.meepleColor,
+          color: Player.getColor()
         });
       } else {
         notify('Can only place meeple on last tile');

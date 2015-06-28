@@ -27,21 +27,29 @@ var Game = function(boardSize, deckSpec, players){
 
 // put a tile object in the server game board
 Game.prototype.placeTile = function(tile) {
-  this.board[tile.x][tile.y] = tile;
+  this.board[ tile.x ][ tile.y ] = 
+    new Tile(tile.id, tile.features, tile.x, tile.y);
 };
 
+Game.prototype.placeMeeple = function(data) {
+  var tile = this.board[ data.tileX ][ data.tileY ];
+  console.log(tile);
+  tile.meeple.color = data.color;
+  tile.meeple.loaction = data.pos;
+};
+
+// removes a meeple from a a tile at given coordinates
+Game.prototype.removeMeeple = function(data) {
+  var tile = this.board[ data.tileX ][ data.tileY ];
+  tile.meeple.color = null;
+  tile.meeple.loaction = null;
+};
 
 Game.prototype.nextPlayer = function() {
   this.currentPlayer = ++this.currentPlayer % this.players.length;
   return this.players[ this.currentPlayer ];
 };
 
-// removes a meeple from a a tile at given coordinates
-Game.prototype.removeMeeple = function(x, y) {
-  var tile = this.board[x][y];
-  tile.meeple.color = null;
-  tile.meeple.loaction = null;
-};
 
 // set up the first round
 Game.prototype.initialState = function() {
@@ -54,14 +62,6 @@ Game.prototype.initialState = function() {
 
 // generates game state for next turn
 Game.prototype.update = function(data) {
-  var serverTile = new Tile(data.tile.id, data.tile.features, data.tile.x, data.tile.y);
-  this.placeTile(serverTile);
-
-  // remove meeples from server board that were removed by players in last turn
-  _.forEach(data.meeplesRemoved, function(meeple, index, collection){
-    this.removeMeeple(meeple.x, meeple.y);
-  }, this);
-
   // get data for gameState emission
   var gameState = {};
   gameState.lastTile = data.tile;
