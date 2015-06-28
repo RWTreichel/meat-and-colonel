@@ -14,12 +14,18 @@ io.on('connection', function(socket) {
 
   // emit this so color choices will be limited to what's available
   // upon connection
-  utils.emitNumReady(io, players);
+  var interval = setInterval(function(){
+    utils.emitPregameStatus(io, players, socket);
+  }, 1000);
 
   // Accept a login event with user's data
-  socket.on('login', function(userdata) {
-    utils.handleLogin(socket, players, userdata);
-    utils.emitNumReady(io, players);
+  socket.on('login', function(userdata, cb) {
+    var loggedIn = utils.handleLogin(socket, players, userdata);
+    utils.emitPregameStatus(io, players);
+    loggedIn && clearInterval(interval);
+
+    cb(loggedIn);
+
   });
 
   // currently unused on the client side
@@ -36,7 +42,7 @@ io.on('connection', function(socket) {
   // data arg is an obj with 
   socket.on('playerReady', function(data){
     utils.onPlayersReady(io, players, data);
-    utils.emitNumReady(io, players);
+    utils.emitPregameStatus(io, players);
   });
 
   // resets the game if someone disconnects. this is necessary until

@@ -5,6 +5,7 @@ var Game = require('./game');
 var spec = require('./deckSpec');
 var gameInProgress = false;
 
+
 exports.game = null;
 // if player already exists in players obj we want to log them back in and not
 // create a new user or overwrite their existing stuff other than socket id
@@ -15,6 +16,9 @@ exports.handleLogin = function(socket, players, userdata){
     if (players[userdata.username]){
       // do something good if they fail
       // don't konw what that is yet
+
+      return false;
+
     } else {
       // else if they are good to go
       // their info on the players object
@@ -26,6 +30,7 @@ exports.handleLogin = function(socket, players, userdata){
           socket: socket.id,
           ready: false
         };
+        return true;
       }
     }
   }
@@ -35,11 +40,14 @@ exports.handleLogout = function(socket, userdata, players){
   socket.disconnect(true);
 };
 
-// used to display number of users connected and ready to play on the home page
-// returns array of arrays of ready and unready player names
+// sends colors left the player has to choose from
+// also
+// sends array of arrays of ready and unready player names
 // [ ['ready'], ['unready', 'unready']]
-exports.emitNumReady = function(io, players){
-  io.emit('numReady', {
+// if you pass it a socket it uses that instead of io
+exports.emitPregameStatus = function(io, players, socket){
+  var womp = socket ? socket : io;
+  womp.emit('numReady', {
     users: 
       _.map( _.partition(players, {ready: true} ), function(obj){
         return _.pluck(obj, 'username');

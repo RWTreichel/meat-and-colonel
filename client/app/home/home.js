@@ -43,10 +43,20 @@ home.controller('homeCtrl', function($scope, $location, Player){
       Player.setUsername($scope.user);
       Player.setColor($scope.color);
       socket.emit('login', 
-        { username: $scope.user,
-         color: $scope.color });
-      $scope.user = '';
-      $location.path('game');
+        { 
+          username: $scope.user,
+          color: $scope.color 
+        }, 
+        function(loggedIn){
+          if (loggedIn){
+            console.log('loggedIn');
+            $location.path('game');
+            $scope.$apply();
+          } else {
+            $scope.user = 'name already taken';
+          }
+        }
+      );
     }
   };
 });
