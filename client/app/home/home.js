@@ -1,8 +1,10 @@
 var home = angular.module('game.home', []);
 
-home.controller('homeCtrl', function($scope, $location, Player){
-  $scope.user = Math.random().toString();
-  $scope.rndNumber = Math.floor((Math.random() * 4) + 1);
+home.controller('homeCtrl', function($scope, $location, Player, notify){
+  notify.config({duration: 2000, templateUrl: 'app/templates/notifications.html'});
+  $scope.user = '';
+  // used to start person on random color
+  $scope.rndNumber = Math.floor((Math.random() * 4) + 1); 
 
   $scope.options = [
     {
@@ -43,10 +45,21 @@ home.controller('homeCtrl', function($scope, $location, Player){
       Player.setUsername($scope.user);
       Player.setColor($scope.color);
       socket.emit('login', 
-        { username: $scope.user,
-         color: $scope.color });
-      $scope.user = '';
-      $location.path('game');
+        { 
+          username: $scope.user,
+          color: $scope.color 
+        }, 
+        function(loggedIn){
+          if (loggedIn){
+            console.log('loggedIn');
+            $location.path('game');
+            $scope.$apply();
+          } else {
+            notify('That name is already taken');
+            $scope.user = '';
+          }
+        }
+      );
     }
   };
 });

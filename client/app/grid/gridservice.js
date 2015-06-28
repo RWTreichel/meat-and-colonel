@@ -39,7 +39,7 @@ grid.service('GridService', function(TileModel, Player, notify) {
     tile.x = x;
     tile.y = y; 
     return Player.isCurrentPlayer() && (!this.cellAlreadyExists(x, y)) && this.validPlacement(tile);
-  }
+  };
 
   this.setTile = function(x, y, tile, cb) {
     if (this.validMove(x, y, tile)) {
@@ -63,6 +63,7 @@ grid.service('GridService', function(TileModel, Player, notify) {
     angular.element(document.querySelector('.grid-container')).css('width', this.gridSize * 51 + 'px');
   };
 
+  // should probably break this down into several smaller functions
   this.validPlacement = function(tile) {
     var canPlace = 0, northernTile, southernTile, easternTile, westernTile;
 

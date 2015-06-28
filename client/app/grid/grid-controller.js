@@ -16,13 +16,14 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
   // Set client's meeple color. This line should only run once (Meeple color doesn't change).
   $scope.meepleColor = 'assets/img/Meeples/meeple_' + Player.getColor() + '.png';
 
-  socket.on('nextTurn', function(gamestate) {
-    if (!gamestate.lastTile) {
-      $scope.currentTile = new TileModel(gamestate.nextTile);
+  socket.on('nextTurn', function(gameState) {
+    gameState.nextPlayer === socket.id && notify('It\'s your turn');
+    if (!gameState.lastTile) {
+      $scope.currentTile = new TileModel(gameState.nextTile);
     } else {
-      $scope.currentTile = new TileModel(gamestate.nextTile);
-      GridService.updateGrid(gamestate.lastTile.x, gamestate.lastTile.y, gamestate.lastTile);
-      GridService.setCell(gamestate.lastTile, 'lastTile');
+      $scope.currentTile = new TileModel(gameState.nextTile);
+      GridService.updateGrid(gameState.lastTile.x, gameState.lastTile.y, gameState.lastTile);
+      GridService.setCell(gameState.lastTile, 'lastTile');
     }
 
     $scope.src = $scope.currentTile.img;
@@ -117,7 +118,10 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
     if (tilePlaced) {
       setMeeple(event, x, y);
     } else {
-      setTile(x, y, $scope.currentTile);
+      GridService.setTile(x, y, $scope.currentTile, function() {
+        tilePlaced = true;
+        meeplePlaced = false;
+      });
     }
   };
 
@@ -158,20 +162,13 @@ grid.controller('gridCtrl', function($scope, TileModel, GridService, Player, not
           tileX: x,
           tileY: y,
           pos: (column + 3*row),
-          colorPath: $scope.meepleColor
+          colorPath: $scope.meepleColor,
+          color: Player.getColor()
         });
       } else {
         notify('Can only place meeple on last tile');
       }
   };
-
-  var setTile = function(x, y, tile) {
-    GridService.setTile(x, y, tile, function() {
-      tilePlaced = true;
-      meeplePlaced = false;
-    });
-  };
-
   // Initialize
   (function() {
     GridService.placeInitialTile();
