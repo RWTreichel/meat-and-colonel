@@ -1,6 +1,7 @@
 var app = angular.module('game', [
   'game.home',
   'game.grid',
+  'game.chat',
   'cgNotify',
   'ngRoute'
 ])

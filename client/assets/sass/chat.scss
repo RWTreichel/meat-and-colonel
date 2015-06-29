@@ -1,0 +1,27 @@
+.chat-container {
+	width: 80%;
+  height: 200px;
+  border: 1px solid black;
+}
+
+.chatbox {
+  width: 100%;
+  min-height: 1px;
+}
+
+.chatbox > form {
+  float: left;
+  position: relative;
+}
+
+.messages {
+  width: 700px;
+  min-height: 150px;
+  max-height: 150px;
+  list-style: none;
+  overflow-y: scroll;
+  right: 0;
+  top: 0;
+  position: relative;
+  float: right;
+}

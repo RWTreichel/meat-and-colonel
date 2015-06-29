@@ -71,6 +71,10 @@ io.on('connection', function(socket) {
     utils.game && utils.game.placeTile(data);
     io.emit('placeTile', data);
   });
+
+  socket.on('sendMessage', function(message) {
+    io.emit('sendMessage', message);
+  });
 });
 
 server.listen(app.get('port'), function() {

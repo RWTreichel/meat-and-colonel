@@ -24,7 +24,7 @@ var paths = {
     './client/app/grid/tilemodel.js',
     './client/app/grid/gridservice.js',
     './client/app/grid/grid-controller.js',
-
+    './client/app/chat/chat.js',
     './client/app/deck/deck.js',
     './client/app/app.js'
   ],
