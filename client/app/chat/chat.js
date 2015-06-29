@@ -5,7 +5,7 @@ angular.module('game.chat', [])
     socket.on('sendMessage', function(message) {
       // Add the message to the front of the messages
       // array so it displays messages in reverse chronological order.
-      $scope.messages.unshift(message);
+      $scope.messages.unshift(_.unescape(message));
       $scope.$apply();
     });
 
@@ -19,3 +19,4 @@ angular.module('game.chat', [])
       $scope.message = '';
     };
   });
+  
