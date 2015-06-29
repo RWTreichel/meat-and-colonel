@@ -4,6 +4,6 @@
     <input type="submit" value="Send Message" name="submit">
   </form>
   <ul class="messages">
-    <li ng-repeat="message in messages | orderBy:'-'">{{message}}</li>
+    <li ng-repeat="message in messages track by $index">{{message}}</li>
   </ul>
 </div>
