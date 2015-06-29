@@ -1,6 +1,6 @@
 var grid = angular.module('game.grid');
 
-grid.service('GridService', function(TileModel, Player, notify) {
+grid.service('GridService', function(TileModel, Player, notify, $anchorScroll) {
 
   this.gridSize = 30;
 
@@ -36,7 +36,7 @@ grid.service('GridService', function(TileModel, Player, notify) {
 
     // Scroll the initial tile into view on ready.
     angular.element(document).ready(function() {
-      document.getElementById('x-' + x + '-y-' + y).scrollIntoView();
+      $anchorScroll('x-' + x + '-y-' + y);
     });
   };
 
