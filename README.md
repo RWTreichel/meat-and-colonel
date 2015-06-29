@@ -1,6 +1,4 @@
-# Project Name
-
-> Pithy project description
+# Carcassonne
 
 ## Team
 
@@ -20,15 +18,9 @@
 
 ## Usage
 
-> Some usage instructions
+To visit a deployed version of the app, visit [carcassonne-hr.herokuapp.com](http://carcassonne-hr.herokuapp.com/#/)
 
-## Requirements
-
-- Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+To deploy locally, run `gulp`
 
 ## Development
 
@@ -37,14 +29,12 @@
 From within the root directory:
 
 ```sh
-sudo npm install -g bower
 npm install
-bower install
 ```
 
 ### Roadmap
 
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
+View the project roadmap [here](https://waffle.io/meat-and-colonel/meat-and-colonel)
 
 
 ## Contributing
