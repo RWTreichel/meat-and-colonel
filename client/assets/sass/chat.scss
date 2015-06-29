@@ -10,12 +10,13 @@
 }
 
 .chatbox > form {
+  width: 30%;
   float: left;
   position: relative;
 }
 
 .messages {
-  width: 700px;
+  width: 70%;
   min-height: 150px;
   max-height: 150px;
   list-style: none;

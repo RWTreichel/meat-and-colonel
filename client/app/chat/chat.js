@@ -8,7 +8,7 @@ angular.module('game.chat', [])
     });
 
     $scope.sendMessage = function() {
-      var message = Player.getUsername().slice(0,10) + ': ' + $scope.message;
+      var message = Player.getUsername().slice(0,10) + ': ' + _.escape($scope.message);
 
       socket.emit('sendMessage', message);
       $scope.message = '';
