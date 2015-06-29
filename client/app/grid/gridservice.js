@@ -33,6 +33,11 @@ grid.service('GridService', function(TileModel, Player, notify) {
     });
     this.updateGrid(x, y, DTile);
     this.setCell(DTile);
+
+    // Scroll the initial tile into view on ready.
+    angular.element(document).ready(function() {
+      document.getElementById('x-' + x + '-y-' + y).scrollIntoView();
+    });
   };
 
   this.validMove = function(x, y, tile) {
